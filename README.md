@@ -1,3 +1,7 @@
+<link rel = "icon" href = 
+"https://documentation.commvault.com/static/homepage/img/favicon.ico" 
+        type = "image/x-icon">
+        
 <a href="https://commvault.github.io/helm-charts/">
     <img src="https://documentation.commvault.com/static/homepage/img/cmv-logo-full.png" alt="Commvault logo" title="Commvault" align="right" height="50" />
 </a>
