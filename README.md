@@ -1,3 +1,7 @@
+<a href="https://terraform.io">
+    <img src="https://documentation.commvault.com/static/homepage/img/cmv-logo-full.png" alt="Commvault logo" title="Commvault" align="right" height="50" />
+</a>
+
 # Commvault helm-charts
 
 ## Usage
