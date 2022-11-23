@@ -18,6 +18,8 @@ You can then run below command to see the charts.
     
 Values for different charts are present. ([Here](https://github.com/cvltmaheshp/helm-charts/tree/main/valuefiles)). This has detailed explanation for every required and optional fields. There is a common global file for all charts and a local value file for every chart. Values can also be supplied using --set command line parameter.
 
+Docker hub repository for Commvault - https://hub.docker.com/u/commvault
+
 The First chart to be installed is the Config Chart which holds the config map for all the commvault component chart installs. This needs to be installed always prior to a new chart install.
 
 To install the config chart:
