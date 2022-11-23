@@ -1,0 +1,20 @@
+# Required. host name of the Commserve or gateway
+csOrGatewayHostName:
+
+secret:
+  # Required. Plain text user name used for install
+  user: 
+  # Required. Plain text password
+  password: 
+
+namespace:
+  # Optional. set to true if namespace should be created
+  create: 
+
+# Optional. If values are specified then an image pull secret will be created.
+# The name of the secret needs to be specific in gobal.image.pullSecret
+imageCredentials:
+  registry: 
+  username: 
+  password: 
+  email: 

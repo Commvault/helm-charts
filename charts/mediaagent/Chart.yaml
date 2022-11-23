@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mediaagent
+description: A Helm chart for creating a media agent
+type: application
+version: 1
+appVersion: "1"

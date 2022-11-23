@@ -1,0 +1,54 @@
+# PVC for log files.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "cv.metadataname" . }}-logs
+  namespace: {{(.Values.global).namespace}}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  # leave this if condition alone. otherwise it can cause problem on restart if storageclassname is blank
+  {{- if or (.Values.storageClass).logs ((.Values.global).storageClass).logs }}
+  storageClassName: {{ or (.Values.storageClass).logs ((.Values.global).storageClass).logs }}
+  {{- end}}
+  resources:
+    requests:
+      storage: {{ or (.Values.storageClass).logs_size ((.Values.global).storageClass).logs_size "10Gi" }}
+
+---
+
+# PVC for registry and certificates.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "cv.metadataname" . }}-certificates
+  namespace: {{(.Values.global).namespace}}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  # leave this if condition alone. otherwise it can cause problem on restart if storageclassname is blank
+  {{- if or (.Values.storageClass).certificates ((.Values.global).storageClass).certificates }}
+  storageClassName: {{ or (.Values.storageClass).certificates ((.Values.global).storageClass).certificates }}
+  {{- end}}
+  resources:
+    requests:
+      storage: {{ or (.Values.storageClass).certificates_size ((.Values.global).storageClass).certificates_size "25M" }}
+
+---
+
+# PVC for webserver cache for uploads and downloads
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "cv.metadataname" . }}-cache
+  namespace: {{(.Values.global).namespace}}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  # leave this if condition alone. otherwise it can cause problem on restart if storageclassname is blank
+  {{- if or (.Values.storageClass).cache ((.Values.global).storageClass).cache }}
+  storageClassName: {{ or (.Values.storageClass).cache ((.Values.global).storageClass).cache }}
+  {{- end}}
+  resources:
+    requests:
+      storage: {{ or (.Values.storageClass).cache_size ((.Values.global).storageClass).cache_size "10Gi" }}

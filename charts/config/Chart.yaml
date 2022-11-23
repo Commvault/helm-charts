@@ -1,0 +1,6 @@
+apiVersion: v2
+name: config
+description: A Helm chart for creating the base consiguration and secret  for all cv applications in the namespace
+type: application
+version: 1
+appVersion: "1"

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: webserver
+description: A Helm chart for creating the webserver
+type: application
+version: 1
+appVersion: "1"

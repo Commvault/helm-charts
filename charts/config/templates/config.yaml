@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ (.Values.global).appname}}cvconfig
+  namespace: {{ (.Values.global).namespace }}
+data:  
+  # host name of the Commserve or gateway
+  CV_CSHOSTNAME: {{ tpl .Values.csOrGatewayHostName . }}
+

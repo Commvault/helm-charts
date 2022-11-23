@@ -1,0 +1,81 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: {{ include "cv.metadataname" . }}
+  namespace: {{(.Values.global).namespace}}
+  {{- include "cv.deploymentannotations" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+spec:
+  # This section contains details about the deployment. 
+  # This file should be applied on the k8s cluster, only after all the other yaml files are applied. 
+  # Because this file consumes the specifications mentioned in all the other files, and deploys the image. 
+  replicas: 1
+  strategy:
+    type: Recreate  
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cv.metadataname" . }}    
+  template:
+    metadata:
+      name: {{ include "cv.metadataname" . }}
+      labels:
+        app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+    spec:
+      {{- include "cv.imagePullSecret" . }}
+      {{- include "cv.additionalPodspecs" . }}
+      containers:
+      # This section contains details about the webserver container. 
+      # User has to substitute certain values in the section. Refer to comments on each line for more details.       
+      - name: {{ include "cv.metadataname" . }}        
+        image: {{ include "cv.image" (list .Values "webserver" ) }}
+        {{- include "cv.resources" . }}
+        envFrom:
+        - configMapRef:
+           name: {{(.Values.global).appname}}cvconfig
+        - secretRef:
+           name: {{(.Values.global).appname}}cvcreds
+        env:
+        - name: CV_CLIENT_NAME
+          # client display name
+          value: {{ tpl .Values.clientName . }}
+        - name: CV_CLIENT_HOSTNAME
+          # hostname of the client should match the service name
+          value: {{ include "cv.hostname" . }}
+        # ports can be left default
+        ports:
+        - containerPort: 5000
+        - containerPort: 8403    
+        - containerPort: 80
+        - containerPort: 8052 
+        volumeMounts:
+        # This section contains list of persistent volumes that has to be mounted onto the container.                 
+        # This can be left with default settings as mentioned in this template.
+        # If you have not applied pvc.yaml, then skip these following settings
+        - name: cv-storage-logs
+          mountPath: /var/log/commvault/Log_Files
+          subPath: Log_Files
+        - name: cv-storage-certificates
+          mountPath: /etc/CommVaultRegistry
+          subPath: Registry   
+        - name: cv-storage-certificates
+          mountPath: /opt/commvault/appdata
+          subPath: certificates
+        - name: cv-webservercache
+          mountPath: /opt/commvault/iDataAgent/jobResults/commvault/iDataAgent/jobResults/DM2CacheDir		# if you have changed Web Server Cache Directory, specify that path here. 
+          subPath: DM2CacheDir
+          
+      volumes:
+      # This section mentions the persistent volume claims that are referenced in the above container. 
+      # User can use default values from this template.
+      # If you have not applied pvc.yaml, then skip these following settings
+      - name: cv-storage-logs
+        persistentVolumeClaim:
+           claimName: {{ include "cv.metadataname" . }}-logs
+      - name: cv-storage-certificates
+        persistentVolumeClaim:
+           claimName: {{ include "cv.metadataname" . }}-certificates
+      - name: cv-webservercache
+        persistentVolumeClaim:
+           claimName:  {{ include "cv.metadataname" . }}-cache
+

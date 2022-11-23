@@ -1,0 +1,79 @@
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: {{ include "cv.metadataname" . }}
+  namespace: {{(.Values.global).namespace}}
+  {{- include "cv.csserviceannotations" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+spec:      
+  type: ClusterIP
+  ports:
+    - name: cvfwd
+      port: 8403
+      targetPort: 8403                        
+      protocol: TCP 
+    - name: webservice
+      port: 5000
+      targetPort: 5000
+    - name: javaconsole
+      port: 8401
+      targetPort: 8401             
+      protocol: TCP 
+    - name: sql
+      port: 1433
+      targetPort: 1433             
+      protocol: TCP
+    - name: mongo
+      port: 27017
+      targetPort: 27017
+      protocol: TCP
+    - name: mq
+      port: 8052
+      targetPort: 8052
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+
+---
+
+apiVersion: v1 
+kind: Service 
+metadata:
+  # this service is for the java console
+  name: {{ include "cv.metadataname" . }}console
+  namespace: {{(.Values.global).namespace}}
+  {{- include "cv.consoleserviceannotations" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}console
+spec:      
+  type: {{ if .Values.consoleServiceType }}{{ .Values.consoleServiceType }}{{ else }}LoadBalancer{{ end }}
+  ports:
+    - name: javaconsole
+      port: 8401
+      targetPort: 8401             
+      protocol: TCP 
+  selector:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+
+---
+
+apiVersion: v1 
+kind: Service 
+metadata:
+  # this service is for the firewall daemon for clients outside of the cluster to connect to the commserve
+  name: {{ include "cv.metadataname" . }}gateway
+  namespace: {{(.Values.global).namespace}}
+  {{- include "cv.serviceannotations" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}gateway
+spec:      
+  type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else }}LoadBalancer{{ end }}
+  ports:
+    - name: cvfwd
+      port: 8403
+      targetPort: 8403                        
+      protocol: TCP 
+  selector:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+
