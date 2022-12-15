@@ -7,7 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{(.Values.global).appname}}{{ tpl .Values.clientName . }}
 spec:      
-  type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else }}LoadBalancer{{ end }}
+  type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else }}ClusterIP{{ end }}
   ports:
     # This section contains the port numbers that are needed for correct functioning of the Webserver. 
     # This can be left with default settings as mentioned in this template. 

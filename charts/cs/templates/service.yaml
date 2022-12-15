@@ -13,9 +13,17 @@ spec:
       port: 8403
       targetPort: 8403                        
       protocol: TCP 
+    - name: cvd
+      port: 8400
+      targetPort: 8400
+      protocol: TCP 
     - name: webservice
       port: 5000
       targetPort: 5000
+    - name: tomcat 
+      port: 80
+      targetPort: 80      
+      protocol: TCP 
     - name: javaconsole
       port: 8401
       targetPort: 8401             
