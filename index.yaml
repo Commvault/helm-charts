@@ -25,6 +25,16 @@ entries:
   commserve:
   - apiVersion: v2
     appVersion: "1"
+    created: "2022-12-15T15:30:01.058123588Z"
+    description: A Helm chart for creating the CS component
+    digest: f6e8480bc8c4a716231c06e1b4a61671d623db4f2f595d0814016223ca7d4f60
+    name: commserve
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/commserve-1.0.2/commserve-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: "1"
     created: "2022-11-23T16:35:01.316172948Z"
     description: A Helm chart for creating the CS component
     digest: 0433ee66d401b9b32a710b9d39ee4cb6074928d8b4c43be5b1fe8eb777136125
@@ -71,6 +81,16 @@ entries:
   webserver:
   - apiVersion: v2
     appVersion: "1"
+    created: "2022-12-15T15:30:01.352650139Z"
+    description: A Helm chart for creating the webserver
+    digest: 3c6d96d970bd068eb9d34bce079efddeaa72632d50bb06470a2301a8483e61a4
+    name: webserver
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/webserver-1.0.2/webserver-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: "1"
     created: "2022-11-23T16:35:02.246730507Z"
     description: A Helm chart for creating the webserver
     digest: a770303b6b386afbd04974edb2fabe40cc5f0015434758c9756698bbfa9449bb
@@ -79,4 +99,4 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/webserver-1/webserver-1.tgz
     version: "1"
-generated: "2022-11-23T16:35:02.246735007Z"
+generated: "2022-12-15T15:30:01.35276444Z"
