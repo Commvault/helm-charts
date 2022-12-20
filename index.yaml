@@ -3,6 +3,16 @@ entries:
   accessnode:
   - apiVersion: v2
     appVersion: "1"
+    created: "2022-12-20T19:08:56.694843353Z"
+    description: A Helm chart for creating an access node
+    digest: 8787373d8683c179c5e9a6f833412b8e7be49085bfb0139537874054de27e9df
+    name: accessnode
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/accessnode-1.0.2/accessnode-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: "1"
     created: "2022-11-23T16:35:00.873930949Z"
     description: A Helm chart for creating an access node
     digest: 0f35406af7347dc93071f7d20a4e820c6003814cc1999a7f10ef38f9e10bab71
@@ -14,6 +24,16 @@ entries:
   commandcenter:
   - apiVersion: v2
     appVersion: "1"
+    created: "2022-12-20T19:08:56.831739665Z"
+    description: A Helm chart for creating the command center
+    digest: 7a3e9a027668a432481dfdd980734aed3ac847225e0cea4d0ad575b2d38126ca
+    name: commandcenter
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/commandcenter-1.0.2/commandcenter-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: "1"
     created: "2022-11-23T16:35:01.091568015Z"
     description: A Helm chart for creating the command center
     digest: 2e15d1f859a54bb83306b09b7e090ddaa319a2019a71b3df31e4cb34f6aebcdb
@@ -23,6 +43,16 @@ entries:
     - https://github.com/Commvault/helm-charts/releases/download/commandcenter-1/commandcenter-1.tgz
     version: "1"
   commserve:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2022-12-20T19:08:56.95535137Z"
+    description: A Helm chart for creating the CS component
+    digest: 3d8f2022d465dbf10a5de846427414651c55fa7e8fe470acae70b6d5fe09e999
+    name: commserve
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/commserve-1.0.3/commserve-1.0.3.tgz
+    version: 1.0.3
   - apiVersion: v2
     appVersion: "1"
     created: "2022-12-15T15:30:01.058123588Z"
@@ -46,6 +76,17 @@ entries:
   config:
   - apiVersion: v2
     appVersion: "1"
+    created: "2022-12-20T19:08:57.088407652Z"
+    description: A Helm chart for creating the base consiguration and secret  for
+      all cv applications in the namespace
+    digest: 2021fa0e20a1586410412c3588fd2a0bd730178616bf9580516bd191cd65dae8
+    name: config
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/config-1.0.2/config-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: "1"
     created: "2022-11-23T16:35:01.535519986Z"
     description: A Helm chart for creating the base consiguration and secret  for
       all cv applications in the namespace
@@ -56,6 +97,16 @@ entries:
     - https://github.com/Commvault/helm-charts/releases/download/config-1/config-1.tgz
     version: "1"
   mediaagent:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2022-12-20T19:08:57.214224374Z"
+    description: A Helm chart for creating a media agent
+    digest: b65e91c24b319b8dc51e64b21d25ca0b99a7f818c052d633ffb9dd1861542437
+    name: mediaagent
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/mediaagent-1.0.2/mediaagent-1.0.2.tgz
+    version: 1.0.2
   - apiVersion: v2
     appVersion: "1"
     created: "2022-11-23T16:35:01.749066938Z"
@@ -69,6 +120,17 @@ entries:
   networkgateway:
   - apiVersion: v2
     appVersion: "1"
+    created: "2022-12-20T19:08:57.348221263Z"
+    description: A Helm chart for creating an FS agent which can serve as a network
+      gateway
+    digest: 1a0112cb05442e4af6f5876fe0f6763863cdbffb2b75eef9a14967285b40056b
+    name: networkgateway
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/networkgateway-1.0.2/networkgateway-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: "1"
     created: "2022-11-23T16:35:02.031291094Z"
     description: A Helm chart for creating an FS agent which can serve as a network
       gateway
@@ -79,6 +141,16 @@ entries:
     - https://github.com/Commvault/helm-charts/releases/download/networkgateway-1/networkgateway-1.tgz
     version: "1"
   webserver:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2022-12-20T19:08:57.46962445Z"
+    description: A Helm chart for creating the webserver
+    digest: 34a5cf9fcf24f4ba1fad46b3cefbaab77ac074257abd0a3a5d5d561fea7e5f67
+    name: webserver
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/webserver-1.0.3/webserver-1.0.3.tgz
+    version: 1.0.3
   - apiVersion: v2
     appVersion: "1"
     created: "2022-12-15T15:30:01.352650139Z"
@@ -99,4 +171,4 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/webserver-1/webserver-1.tgz
     version: "1"
-generated: "2022-12-15T15:30:01.35276444Z"
+generated: "2022-12-20T19:08:57.469661551Z"
