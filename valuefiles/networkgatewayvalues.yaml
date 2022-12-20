@@ -12,7 +12,7 @@ image:
   namespace: 
   # Optional. Default value is networkgateway
   repository: 
-  # Optional. Overrides gobal value. Default is latest
+  # Required unless global.image.tag is specified. Overrides gobal value.
   tag: 
 
 # Optional. Will be merged with global annotations and also override matching global annotations

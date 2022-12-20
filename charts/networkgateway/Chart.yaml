@@ -2,5 +2,5 @@ apiVersion: v2
 name: networkgateway
 description: A Helm chart for creating an FS agent which can serve as a network gateway
 type: application
-version: 1
+version: 1.0.2
 appVersion: "1"

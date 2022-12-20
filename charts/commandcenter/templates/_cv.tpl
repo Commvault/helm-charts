@@ -4,11 +4,15 @@
     {{- or ($values.image).registry (($values.global).image).registry }}
     {{- or ($values.image).namespace (($values.global).image).namespace "commvault" }}/
     {{- or ($values.image).repository (($values.global).image).repository $defaultRepository }}:
-    {{- or ($values.image).tag (($values.global).image).tag "latest" }}
+    {{- required "image.tag or global.image.tag is required" (or ($values.image).tag (($values.global).image).tag) }}
 {{- end }}
 
 {{- define "cv.metadataname" -}}
+{{- if .Values.clientName -}}
  {{(.Values.global).appname}}{{ tpl .Values.clientName . | lower }}
+{{- else -}}
+{{- required "clientName is required" "" -}}
+{{- end -}}
 {{- end -}}
 
 {{- define "cv.hostname" }}

@@ -13,7 +13,7 @@ global:
     registry: 
     # Optional image namespace or account. Default is commvault
     namespace: 
-    # Optional. Default is latest
+    # Required
     tag: 
     # Optional. Name of the secret
     pullSecret: 

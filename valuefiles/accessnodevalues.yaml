@@ -12,7 +12,7 @@ image:
   namespace: 
   # Optional. Default value is accessnode
   repository: 
-  # Optional. Overrides gobal value. Default is latest
+  # Required unless global.image.tag is specified. Overrides gobal value.
   tag: 
 
 storageClass:

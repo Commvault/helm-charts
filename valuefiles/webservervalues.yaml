@@ -12,10 +12,10 @@ image:
   namespace: 
   # Optional. Default value is webserver
   repository: 
-  # Optional. Overrides gobal value. Default is latest
+  # Required unless global.image.tag is specified. Overrides gobal value.
   tag: 
 
-# Optional. default service type is LoadBalancer.
+# Optional. default service type is ClusterIP.
 serviceType: 
 
 # Optional. Will be merged with global annotations and also override matching global annotations

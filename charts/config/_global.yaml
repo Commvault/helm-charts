@@ -1,7 +1,0 @@
-global:
-  # Optional
-  namespace: 
-
-  image:
-    # Optional. Name of the secret. Specify a name if an image pull secret is being created
-    pullSecret: 

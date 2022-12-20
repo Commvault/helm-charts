@@ -48,7 +48,9 @@ spec:
         # Ports can be left as mentioned as commserver needs all of them for correct functioning.   
         ports:
         - containerPort: 5000        
+        - containerPort: 80
         - containerPort: 8403
+        - containerPort: 8400
         - containerPort: 8401
         - containerPort: 1433
         - containerPort: 27017
@@ -70,8 +72,8 @@ spec:
           mountPath: /opt/commvaultDB
           subPath: commvaultDB
         - name: cv-storage-drbackups
-          mountPath: /opt/commvaultDB/jobResults
-          subPath: commvaultDB
+          mountPath: /opt/commvaultDR
+          subPath: drbackups
         - name: cv-storage-database
           mountPath: /var/opt/mssql
           subPath: mssql

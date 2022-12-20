@@ -12,7 +12,7 @@ image:
   namespace: 
   # Optional. Default value is commandcenter
   repository: 
-  # Optional. Overrides gobal value. Default is latest
+  # Required unless global.image.tag is specified. Overrides gobal value.
   tag: 
 
 # Required. The client name of the webserver the command center needs to be connected to. default is commserve

@@ -15,7 +15,7 @@ image:
   namespace: 
   # Optional. Default value is commserve
   repository: 
-  # Optional. Overrides gobal value. Default is latest
+  # Required unless global.image.tag is specified. Overrides gobal value.
   tag: 
 
 # Optional. Applies to the network gateway service (cvfwd) of the commserve. Default service type is LoadBalancer. The service is created ending with the word gateway
