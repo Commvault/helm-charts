@@ -1,10 +1,22 @@
+{{/*
+_cv.tpl is the same for all commvault components. Any change in this file should be copied to the _cv.tpl in all the components.
+*/}}
+
+
+
+
 {{- define "cv.image" }}
-{{- $values := index . 0 }}
-{{- $defaultRepository := index . 1 }}
-    {{- or ($values.image).registry (($values.global).image).registry }}
-    {{- or ($values.image).namespace (($values.global).image).namespace "commvault" }}/
-    {{- or ($values.image).repository (($values.global).image).repository $defaultRepository }}:
-    {{- required "image.tag or global.image.tag is required" (or ($values.image).tag (($values.global).image).tag) }}
+{{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
+{{- $registry := (or (.Values.image).registry ((.Values.global).image).registry "")  }}
+{{- if ne $registry "" -}}
+{{- if ne (hasSuffix "/" $registry) true -}}
+{{- $registry = print $registry "/" -}}
+{{- end -}}
+{{- end -}}
+    {{- $registry }}
+    {{- or (.Values.image).namespace ((.Values.global).image).namespace ($defaults.image).namespace }}/
+    {{- or (.Values.image).repository ((.Values.global).image).repository ($defaults.image).repository }}:
+    {{- required "image.tag or global.image.tag is required" (or (.Values.image).tag ((.Values.global).image).tag) }}
 {{- end }}
 
 {{- define "cv.metadataname" -}}
@@ -150,10 +162,14 @@ and will be merged to provide a single set of additional pod specifications that
 cv.resources is a utility function that allows the user to specify pod resource requests and limits
 Pod resource specifications can be specified at both global and local values
 and will be merged to provide a single set of resource specification that will be added to the final deployment
+There is also a provision to have chart level defaults which can be specified by having a defaults.yaml in chart directory.
+Values in defaults.yaml gets the last priority
 */}}
 {{- define "cv.resources" }}
-{{- if or (.Values.global).resources .Values.resources }}
+{{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
+{{- if or (.Values.global).resources .Values.resources $defaults.resources }}
 {{ "resources:" | indent 8 -}}
-{{- include "cv.getCombinedYaml" (list .Values.resources (.Values.global).resources $ 10 false ) }}
+{{- $combinedYaml := fromYaml ((include "cv.getCombinedYaml" (list (.Values.global).resources $defaults.resources $ 10 false ))) }}
+{{- include "cv.getCombinedYaml" (list .Values.resources $combinedYaml $ 10 false ) }}
 {{- end -}}
 {{ end }}

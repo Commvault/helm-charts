@@ -1,0 +1,9 @@
+resources:
+  requests:
+    memory: 16Gi
+  limits:
+    memory: 64Gi
+
+image:
+  namespace: commvault
+  repository: commserve

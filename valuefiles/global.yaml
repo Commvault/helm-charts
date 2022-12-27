@@ -9,7 +9,7 @@ global:
 
   # final image value will be registry/namespace/repository:tag. Individual components have default values for repository
   image:
-    # Optional. must end with /
+    # Optional.
     registry: 
     # Optional image namespace or account. Default is commvault
     namespace: 

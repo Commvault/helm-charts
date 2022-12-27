@@ -28,7 +28,7 @@ spec:
       # This section contains details about the commserve container. 
       # User has to substitute certain values in the section. Refer to comments on each line for more details.       
       - name: {{ include "cv.metadataname" . }}
-        image: {{ include "cv.image" (list .Values "commserve" ) }}
+        image: {{ include "cv.image" . }}
         {{- include "cv.resources" . }}
         envFrom:
         - secretRef:
