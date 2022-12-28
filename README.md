@@ -23,12 +23,44 @@ the latest versions of the packages.
 You can then run below command to see the charts.
 
     helm search repo commvault
-    
-Values for different charts are present. ([Here](https://github.com/Commvault/helm-charts/tree/main/valuefiles)). This has detailed explanation for every required and optional fields. There is a common global file for all charts and a local value file for every chart. Values can also be supplied using --set command line parameter.
 
 Docker hub repository for Commvault - [Repository](https://hub.docker.com/u/commvault)
 
 The First chart to be installed is the Config Chart which holds the config map for all the commvault component chart installs. This needs to be installed always prior to a new chart install.
+
+### Install using --set
+
+To install the config chart:
+
+    helm install config commvault/config --set csOrGatewayHostName=cs.commvault.svc.cluster.local --set secret.user=installuser --set secret.password=password --set global.namespace=commvault --set namespace.create=true
+    
+To install the commserve chart:
+
+    helm install commserve commvault/commserve --set clientName=cs --set global.namespace=commvault --set global.image.tag={tagvalue} --storageClass.csdb=managed-csi 
+    
+To install the webserver chart:
+
+    helm install webserver commvault/webserver --set clientName=ws --set global.namespace=commvault --set global.image.tag={tagvalue}
+    
+To install the commandcenter chart:
+
+    helm install commandcenter commvault/commandcenter --set clientName=cc --set webserverName=ws --set global.namespace=commvault --set global.image.tag={tagvalue}
+
+To install the mediaagent chart:
+
+    helm install mediaagent commvault/mediaagent --set clientName=ma --set global.namespace=commvault --set global.image.tag={tagvalue} --storageClass.ddb=managed-csi
+
+To install the networkgateway chart:
+
+    helm install networkgateway commvault/networkgateway --set clientName=nwg --set global.namespace=commvault --set global.image.tag={tagvalue}
+    
+To install the accessnode chart:
+
+    helm install accessnode commvault/accessnode --set clientName=accessnode --set global.namespace=commvault --set global.image.tag={tagvalue}
+    
+### Install using values file
+
+Values for different charts are present. ([Here](https://github.com/Commvault/helm-charts/tree/main/valuefiles)). This has detailed explanation for every required and optional fields. There is a common global file for all charts and a local value file for every chart. Values can also be supplied using --set command line parameter.
 
 To install the config chart:
 
