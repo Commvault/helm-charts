@@ -49,6 +49,7 @@ To install the commandcenter chart:
 To install the mediaagent chart:
 
     helm install mediaagent commvault/mediaagent --set clientName=ma --set global.namespace=commvault --set global.image.tag={tagvalue}
+
 To install the networkgateway chart:
 
     helm install networkgateway commvault/networkgateway --set clientName=nwg --set global.namespace=commvault --set global.image.tag={tagvalue}
