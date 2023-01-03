@@ -28,7 +28,7 @@ Docker hub repository for Commvault - [Repository](https://hub.docker.com/u/comm
 
 The First chart to be installed is the Config Chart which holds the config map for all the commvault component chart installs. This needs to be installed always prior to a new chart install.
 
-### Install using --set
+### Install using \--set
 
 To install the config chart:
 
