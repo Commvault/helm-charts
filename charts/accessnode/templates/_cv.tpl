@@ -35,7 +35,6 @@ _cv.tpl is the same for all commvault components. Any change in this file should
 {{- end }}
 {{- end -}}
 
-
 {{- define "cv.imagePullSecret" }}
 {{- if or (.Values.image).pullSecret ((.Values.global).image).pullSecret }}
       imagePullSecrets: 
@@ -51,7 +50,7 @@ So just as an example you can have the value of additionalPodspecs.zone set to s
 
 additionalPodspecs:
   nodeSelector: 
-    region: "{{ .Values.global.region }}"
+    zone: "{{ .Values.global.zone }}"
 
 The usequotes parameter is for annotations which require the values to be in quotes if they are integers
 */}}
@@ -151,11 +150,17 @@ and will be merged to provide a single set of service annotations that will be a
 
 {{/*
 cv.additionalPodspecs is a utility function that allows the user to specify additional pod specifications that are not mentioned in the deployment templates
-Use "podspecs" as the section name to enter the additional pod specifications. pod specifications can be specified at both global and local values
+Use "additionalPodspecs" as the section name to enter the additional pod specifications. pod specifications can be specified at both global and local values
 and will be merged to provide a single set of additional pod specifications that will be added to the final deployment
+There is also a provision to have chart level defaults which can be specified by having a defaults.yaml in chart directory.
+Values in defaults.yaml gets the last priority
 */}}
 {{- define "cv.additionalPodspecs" }}
-{{- include "cv.getCombinedYaml" (list .Values.additionalPodspecs (.Values.global).additionalPodspecs $ 6 false ) }}
+{{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
+{{- if or (.Values.global).additionalPodspecs .Values.additionalPodspecs $defaults.additionalPodspecs }}
+{{- $combinedYaml := fromYaml ((include "cv.getCombinedYaml" (list (.Values.global).additionalPodspecs $defaults.additionalPodspecs $ 6 false ))) }}
+{{- include "cv.getCombinedYaml" (list .Values.additionalPodspecs $combinedYaml $ 6 false ) }}
+{{- end -}}
 {{- end }}
 
 {{/*
@@ -173,3 +178,71 @@ Values in defaults.yaml gets the last priority
 {{- include "cv.getCombinedYaml" (list .Values.resources $combinedYaml $ 10 false ) }}
 {{- end -}}
 {{ end }}
+
+{{/*
+cv.commonenv creates environment variables that are common to all deployments
+*/}}
+{{- define "cv.commonenv" }}
+{{- $statefulset := or .Values.statefulset .Values.global.statefulset }}
+{{- $objectname := include "cv.metadataname" . }}
+        {{- if $statefulset }}
+        # client display name
+        - name: CV_CLIENT_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: CV_CLIENT_HOSTNAME
+          # pod ip will be used for statefulset
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: CV_IS_STATEFULSET  
+          value: 'true'
+        - name: CV_DNS_SUFFIX
+          # dns suffix of the client
+          value: {{ .Values.serviceName | default $objectname }}.{{ or (.Values.global).namespace "default" }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
+        {{- else }}
+        - name: CV_CLIENT_NAME
+          # client display name
+          value: {{ tpl .Values.clientName . }}
+        - name: CV_CLIENT_HOSTNAME
+          # hostname of the client should match the service name.
+          value: {{ include "cv.hostname" . }}
+        - name: CV_DNS_SUFFIX
+          # dns suffix of the client
+          value: {{ or (.Values.global).namespace "default" }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
+        {{- end }}
+        - name: CV_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: CV_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace   
+{{- end -}}
+
+
+{{/*
+cv.commondeploymentpecs creates pod specifications that are common to all deployments
+*/}}
+{{- define "cv.commondeploymentspecs" }}
+{{- $objectname := include "cv.metadataname" . }}
+{{- $statefulset := or .Values.statefulset .Values.global.statefulset }}
+  {{- if $statefulset }}
+  serviceName: {{ .Values.serviceName | default $objectname }}
+  {{- if .Values.replicas }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  updateStrategy:
+    type: RollingUpdate
+  {{- else }}
+  replicas: 1  
+  strategy:
+    type: Recreate
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $objectname }}
+{{- end -}}
+

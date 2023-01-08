@@ -1,45 +1,34 @@
+{{- $objectname := include "cv.metadataname" . }}
+{{- $statefulset := or .Values.statefulset .Values.global.statefulset }}
+
 apiVersion: apps/v1 
-kind: Deployment
+kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
-  name: {{ include "cv.metadataname" . }}
+  name: {{ $objectname }}
   namespace: {{(.Values.global).namespace}}
   {{- include "cv.deploymentannotations" . }}
   labels:
-    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+    app.kubernetes.io/name: {{ $objectname }}
 spec:
-  # This section contains details about the deployment. 
-  # This file should be applied on the k8s cluster, only after all the other yaml files are applied. 
-  # Because this file consumes the specifications mentioned in all the other files, and deploys the image. 
-  replicas: 1
-  strategy:
-    type: Recreate  
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "cv.metadataname" . }}    
+  {{- include "cv.commondeploymentspecs" . }}
   template:
     metadata:
-      name: {{ include "cv.metadataname" . }}
+      name: {{ $objectname }}
       labels:
-        app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+        app.kubernetes.io/name: {{ $objectname }}
     spec:
       {{- include "cv.imagePullSecret" . }}
       {{- include "cv.additionalPodspecs" . }}
       containers:
-      # This section contains details about the commserve container. 
-      # User has to substitute certain values in the section. Refer to comments on each line for more details.       
-      - name: {{ include "cv.metadataname" . }}
+      # Commserve
+      - name: {{ $objectname }}
         image: {{ include "cv.image" . }}
         {{- include "cv.resources" . }}
         envFrom:
         - secretRef:
            name: {{(.Values.global).appname}}cvcreds
         env:
-        - name: CV_CLIENT_NAME
-          # client display name
-          value: {{ tpl .Values.clientName . }}
-        - name: CV_CLIENT_HOSTNAME
-          # hostname of the client should match the service name
-          value: {{ include "cv.hostname" . }}
+        {{- include "cv.commonenv" . }}
         {{- if .Values.email }}
         - name: CVID_EMAIL
           # Optional. Email of admin user
@@ -58,7 +47,6 @@ spec:
         volumeMounts:
         # This section contains list of persistent volumes that has to be mounted onto the container.                 
         # This can be left with default settings as mentioned in this template.
-        # If you have not applied pvc.yaml, then skip these following settings
         - name: cv-storage-logs
           mountPath: /var/log/commvault/Log_Files
           subPath: Log_Files
@@ -77,21 +65,30 @@ spec:
         - name: cv-storage-database
           mountPath: /var/opt/mssql
           subPath: mssql
-          
+
+      {{- if not $statefulset }}          
       volumes:
-      # This section mentions the persistent volume claims that are referenced in the above container. 
-      # User can use default values from this template.
-      # If you have not applied pvc.yaml, then skip these following settings
       - name: cv-storage-logs
         persistentVolumeClaim:
-           claimName: {{ include "cv.metadataname" . }}-logs
+           claimName: {{ $objectname }}-logs
       - name: cv-storage-certificates
         persistentVolumeClaim:
-           claimName: {{ include "cv.metadataname" . }}-certificates
+           claimName: {{ $objectname }}-certificates
       - name: cv-storage-database
         persistentVolumeClaim:
-           claimName: {{ include "cv.metadataname" . }}-database
+           claimName: {{ $objectname }}-database
       - name: cv-storage-drbackups
         persistentVolumeClaim:
-           claimName: {{ include "cv.metadataname" . }}-drbackups
+           claimName: {{ $objectname }}-drbackups
+      {{- end }}
 
+  {{- if $statefulset }}
+  volumeClaimTemplates:
+  {{- include "cv.pvctemplate" (list . "logs" "50Gi") }}
+  {{- include "cv.pvctemplate" (list . "certificates" "25M") }}
+  {{- include "cv.pvctemplate" (list . "database" "100Gi") }}
+  {{- include "cv.pvctemplate" (list . "drbackups" "50Gi") }}
+  persistentVolumeClaimRetentionPolicy:
+    whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}
+    whenDeleted: {{ or .Values.whenDeleted .Values.global.whenDeleted | default "Delete" }}
+  {{- end }}

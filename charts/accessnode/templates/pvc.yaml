@@ -1,55 +1,12 @@
-# PVC for log files.
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ include "cv.metadataname" . }}-logs
-  namespace: {{(.Values.global).namespace}}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  # leave this if condition alone. otherwise it can cause problem on restart if storageclassname is blank
-  {{- if or (.Values.storageClass).logs ((.Values.global).storageClass).logs }}
-  storageClassName: {{ or (.Values.storageClass).logs ((.Values.global).storageClass).logs }}
-  {{- end}}
-  resources:
-    requests:
-      storage: {{ or (.Values.storageClass).logs_size ((.Values.global).storageClass).logs_size "10Gi" }}
+{{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
+{{- if not $statefulset }}
+{{ include "cv.pvc" (list . "logs" "10Gi") }}
 
 ---
 
-# PVC for registry and certificates.
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ include "cv.metadataname" . }}-certificates
-  namespace: {{(.Values.global).namespace}}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  # leave this if condition alone. otherwise it can cause problem on restart if storageclassname is blank
-  {{- if or (.Values.storageClass).certificates ((.Values.global).storageClass).certificates }}
-  storageClassName: {{ or (.Values.storageClass).certificates ((.Values.global).storageClass).certificates }}
-  {{- end}}
-  resources:
-    requests:
-      storage: {{ or (.Values.storageClass).certificates_size ((.Values.global).storageClass).certificates_size "25M" }}
+{{ include "cv.pvc" (list . "certificates" "25M") }}
 
 ---
 
-# PVC for job results
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ include "cv.metadataname" . }}-jobresults
-  namespace: {{(.Values.global).namespace}}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  # leave this if condition alone. otherwise it can cause problem on restart if storageclassname is blank
-  {{- if or (.Values.storageClass).jobresults ((.Values.global).storageClass).jobresults }}
-  storageClassName: {{ or (.Values.storageClass).jobresults ((.Values.global).storageClass).jobresults }}
-  {{- end}}
-  resources:
-    requests:
-      storage: {{ or (.Values.storageClass).jobresults_size ((.Values.global).storageClass).jobresults_size "20Gi" }}
-
+{{ include "cv.pvc" (list . "jobresults" "20Gi") }}
+{{ end }}

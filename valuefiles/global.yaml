@@ -44,13 +44,16 @@ global:
   serviceannotations:
 
   # Optional. Use this to add additional values to the pod specifications such as nodeSelector. These will be merged with any local additionalPodspecs
-  additionalPodspecs:
+  #Example:
+  #additionalPodspecs:
+  #  nodeSelector: 
+  #    disktype: ssd
 
   # Optional. Deployment requests and limits. Enable only those values that need to be set.
-  # resources:
-  #   requests:
-  #     memory: 
-  #     cpu:
-  #   limits:
-  #     memory:
-  #     cpu: 
+  #resources:
+  #  requests:
+  #    memory: 
+  #    cpu:
+  #  limits:
+  #    memory:
+  #    cpu: 

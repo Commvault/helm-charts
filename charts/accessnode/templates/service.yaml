@@ -1,3 +1,4 @@
+{{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
 apiVersion: v1 
 kind: Service 
 metadata:
@@ -7,10 +8,8 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 spec:      
-  type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else }}LoadBalancer{{ end }}
+  type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else if $statefulset }}ClusterIP{{ else }}ClusterIP{{ end }}
   ports:
-    # This section contains the port numbers that are needed for correct functioning of the webserver. 
-    # This can be left with default settings as mentioned in this template. 
     - name: cvfwd
       port: 8403
       targetPort: 8403                        
