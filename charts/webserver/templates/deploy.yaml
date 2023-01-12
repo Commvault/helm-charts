@@ -52,9 +52,19 @@ spec:
         - name: cv-webservercache
           mountPath: /opt/commvault/iDataAgent/jobResults/commvault/iDataAgent/jobResults/DM2CacheDir
           subPath: DM2CacheDir
+        {{- include "cv.additionalVolumeMounts" . }}
 
-      {{- if not $statefulset }}          
       volumes:
+      - name: podinfo
+        downwardAPI:
+          items:
+            - path: "labels"
+              fieldRef:
+                fieldPath: metadata.labels
+            - path: "annotations"
+              fieldRef:
+                fieldPath: metadata.annotations
+      {{- if not $statefulset }}
       - name: cv-storage-logs
         persistentVolumeClaim:
            claimName: {{ $objectname }}-logs
@@ -64,15 +74,16 @@ spec:
       - name: cv-webservercache
         persistentVolumeClaim:
            claimName:  {{ $objectname }}-cache
+      {{- include "cv.deployment.additionalVolumes" . }}
       {{- end }}
 
   {{- if $statefulset }}
   volumeClaimTemplates:
-  {{- include "cv.pvctemplate" (list . "logs" "10Gi") }}
-  {{- include "cv.pvctemplate" (list . "certificates" "25M") }}
-  {{- include "cv.pvctemplate" (list . "cache" "10Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "logs" "10Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "certificates" "25M") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "cache" "10Gi") }}
+  {{- include "cv.statefulset.additionalPvcTemplates" . }}
   persistentVolumeClaimRetentionPolicy:
     whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}
     whenDeleted: {{ or .Values.whenDeleted .Values.global.whenDeleted | default "Delete" }}
   {{- end }}
-

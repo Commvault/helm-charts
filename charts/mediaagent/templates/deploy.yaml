@@ -1,5 +1,5 @@
-{{ $objectname := include "cv.metadataname" . }}
-{{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
+{{- $objectname := include "cv.metadataname" . }}
+{{- $statefulset := or .Values.statefulset .Values.global.statefulset }}
 
 apiVersion: apps/v1 
 kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
@@ -10,19 +10,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ $objectname }}
 spec:
-  {{- if $statefulset }}
-  serviceName: {{ .Values.serviceName | default $objectname }}
-  replicas: {{ .Values.replicas | default 1 }}
-  updateStrategy:
-    type: RollingUpdate
-  {{- else }}
-  replicas: 1  
-  strategy:
-    type: Recreate
-  {{- end }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ $objectname }}    
+  {{- include "cv.commondeploymentspecs" . }}
   template:
     metadata:
       name: {{ $objectname }}
@@ -67,9 +55,19 @@ spec:
         - name: cv-storage-ddb
           mountPath: /opt/ddb
           subPath: ddb
+        {{- include "cv.additionalVolumeMounts" . }}
 
-      {{- if not $statefulset }}
       volumes:
+      - name: podinfo
+        downwardAPI:
+          items:
+            - path: "labels"
+              fieldRef:
+                fieldPath: metadata.labels
+            - path: "annotations"
+              fieldRef:
+                fieldPath: metadata.annotations
+      {{- if not $statefulset }}
       - name: cv-storage-logs
         persistentVolumeClaim:
            claimName: {{ $objectname }}-logs
@@ -85,17 +83,18 @@ spec:
       - name: cv-storage-ddb
         persistentVolumeClaim:
            claimName: {{ $objectname }}-ddb
+      {{- include "cv.deployment.additionalVolumes" . }}
       {{- end }}
 
   {{- if $statefulset }}
   volumeClaimTemplates:
-  {{- include "cv.pvctemplate" (list . "logs" "10Gi") }}
-  {{- include "cv.pvctemplate" (list . "certificates" "25M") }}
-  {{- include "cv.pvctemplate" (list . "jobresults" "20Gi") }}
-  {{- include "cv.pvctemplate" (list . "indexcache" "20Gi") }}
-  {{- include "cv.pvctemplate" (list . "ddb" "50Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "logs" "10Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "certificates" "25M") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "jobresults" "20Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "indexcache" "20Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "ddb" "50Gi") }}
+  {{- include "cv.statefulset.additionalPvcTemplates" . }}
   persistentVolumeClaimRetentionPolicy:
-    whenDeleted: Delete
-    whenScaled: Delete
+    whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}
+    whenDeleted: {{ or .Values.whenDeleted .Values.global.whenDeleted | default "Delete" }}
   {{- end }}
-

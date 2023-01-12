@@ -1,0 +1,21 @@
+{{- $createViewRole := true  }}
+{{- if hasKey .Values "createViewRole" }}
+{{- $createViewRole = .Values.createViewRole }}
+{{- end }}
+{{- if $createViewRole }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ (.Values.global).appname}}cv-view
+  namespace: {{ (.Values.global).namespace }}
+rules:
+{{/*
+"" indicates the core API group
+*/}}
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: ["apps"]
+  resources: ["statefulsets", "deployments"]
+  verbs: ["get", "watch", "list"]
+{{ end }}

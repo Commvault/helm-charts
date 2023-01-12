@@ -1,8 +1,9 @@
 {{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
 {{- if not $statefulset }}
-{{ include "cv.pvc" (list . "logs" "10Gi") }}
+{{ include "cv.deployment.pvc" (list . "logs" "10Gi") }}
 
----
+{{ include "cv.deployment.pvc" (list . "certificates" "25M") }}
 
-{{ include "cv.pvc" (list . "certificates" "25M") }}
+{{ include "cv.deployment.additionalPvc" . }}
+
 {{ end }}

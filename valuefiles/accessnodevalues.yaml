@@ -41,3 +41,13 @@ serviceannotations:
 #  limits:
 #    memory:
 #    cpu: 
+
+# Optional. Additional volumes can be mounted in the pod. These volumes will be in addition to any volumes from global values
+# Both storageClass and volume are optional fields. volume takes precedence over storageClass for Deployment
+# volumes:
+#   - name: vol1
+#     mountPath: /var/opt/vol1
+#     subPath: vol1
+#     size: 1Gi
+#     storageClass: default
+#     volume: vVol1

@@ -1,20 +1,15 @@
 {{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
 {{- if not $statefulset }}
-{{ include "cv.pvc" (list . "logs" "10Gi") }}
+{{ include "cv.deployment.pvc" (list . "logs" "10Gi") }}
 
----
+{{ include "cv.deployment.pvc" (list . "certificates" "25M") }}
 
-{{ include "cv.pvc" (list . "certificates" "25M") }}
+{{ include "cv.deployment.pvc" (list . "jobresults" "20Gi") }}
 
----
+{{ include "cv.deployment.pvc" (list . "indexcache" "20Gi") }}
 
-{{ include "cv.pvc" (list . "jobresults" "20Gi") }}
+{{ include "cv.deployment.pvc" (list . "ddb" "50Gi") }}
 
----
+{{ include "cv.deployment.additionalPvc" . }}
 
-{{ include "cv.pvc" (list . "indexcache" "20Gi") }}
-
----
-
-{{ include "cv.pvc" (list . "ddb" "50Gi") }}
 {{ end }}
