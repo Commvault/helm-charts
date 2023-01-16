@@ -131,3 +131,42 @@ Note that the top level "volumes:" level in the combined array is important for 
 {{- end }}
 {{- end }}
 
+
+{{/*
+Enforces the format of the image tag. It must be of the format <version>.<release>.* example: 11.30.1
+The version and feature release may be used to change how objects are deployed for a given version and release
+For now the version number 11 is enforced
+*/}}
+{{- define "cv.utils.validateVersionAndRelease" }}
+{{- $tag := (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- if regexMatch "^\\d+[.]\\d+[.]" $tag }}
+    {{- $numbers := regexFindAll  "(\\d+)" $tag 2 }}
+    {{- $version := atoi (first $numbers) }}
+    {{- $servicepack := atoi (last $numbers) }}
+    {{- if or (lt $version 11) (gt $version 11) }}
+    {{- fail (printf "Incorrect version number %d " $version)}}
+    {{- end }}
+{{- else }}
+    {{- fail (printf "Incorrect tag %s. Must be of format <version>.<release>.*" $tag)}}
+{{- end }}
+{{- end }}
+
+
+{{/*
+Returns the number 11 from sample tag 11.30.1
+This function assumes that validateVersionAndRelease has been called to validate tag value correctness
+*/}}
+{{- define "cv.utils.getVersion" }}
+{{- $tag := (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- atoi (first (regexFindAll  "(\\d+)" $tag 2)) }}
+{{- end }}
+
+{{/*
+Returns the number 30 from sample tag 11.30.1
+This function assumes that validateVersionAndRelease has been called to validate tag value correctness
+*/}}
+{{- define "cv.utils.getFeatureRelease" }}
+{{- $tag := (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- atoi (last (regexFindAll  "(\\d+)" $tag 2)) }}
+{{- end }}
+

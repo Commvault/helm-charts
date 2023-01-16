@@ -12,7 +12,7 @@ namespace:
   create: 
 
 # Optional. If values are specified then an image pull secret will be created.
-# The name of the secret needs to be specific in gobal.image.pullSecret
+# The name of the secret needs to be specified in gobal.image.pullSecret
 imageCredentials:
   registry: 
   username: 

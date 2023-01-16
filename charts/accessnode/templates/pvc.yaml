@@ -4,6 +4,8 @@
 
 {{ include "cv.deployment.pvc" (list . "certificates" "25M") }}
 
+{{ include "cv.deployment.pvc" (list . "jobresults" "20Gi") }}
+
 {{ include "cv.deployment.additionalPvc" . }}
 
 {{ end }}
