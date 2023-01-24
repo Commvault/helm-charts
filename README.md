@@ -32,31 +32,31 @@ The First chart to be installed is the Config Chart which holds the config map f
 
 To install the config chart:
 
-    helm install config commvault/config --set csOrGatewayHostName=cs.commvault.svc.cluster.local --set secret.user=installuser --set secret.password=password --set global.namespace=commvault --set namespace.create=true
+    helm upgrade --install config commvault/config --set csOrGatewayHostName=cs.commvault.svc.cluster.local --set secret.user=installuser --set secret.password=password --set global.namespace=commvault --set namespace.create=true
     
 To install the commserve chart:
 
-    helm install commserve commvault/commserve --set clientName=cs --set global.namespace=commvault --set global.image.tag={tagvalue}
+    helm upgrade --install commserve commvault/commserve --set clientName=cs --set global.namespace=commvault --set global.image.tag={tagvalue}
     
 To install the webserver chart:
 
-    helm install webserver commvault/webserver --set clientName=ws --set global.namespace=commvault --set global.image.tag={tagvalue}
+    helm upgrade --install webserver commvault/webserver --set clientName=ws --set global.namespace=commvault --set global.image.tag={tagvalue}
     
 To install the commandcenter chart:
 
-    helm install commandcenter commvault/commandcenter --set clientName=cc --set webserverName=ws --set global.namespace=commvault --set global.image.tag={tagvalue}
+    helm upgrade --install commandcenter commvault/commandcenter --set clientName=cc --set webserverName=ws --set global.namespace=commvault --set global.image.tag={tagvalue}
 
 To install the mediaagent chart:
 
-    helm install mediaagent commvault/mediaagent --set clientName=ma --set global.namespace=commvault --set global.image.tag={tagvalue}
+    helm upgrade --install mediaagent commvault/mediaagent --set clientName=ma --set global.namespace=commvault --set global.image.tag={tagvalue}
 
 To install the networkgateway chart:
 
-    helm install networkgateway commvault/networkgateway --set clientName=nwg --set global.namespace=commvault --set global.image.tag={tagvalue}
+    helm upgrade --install networkgateway commvault/networkgateway --set clientName=nwg --set global.namespace=commvault --set global.image.tag={tagvalue}
     
 To install the accessnode chart:
 
-    helm install accessnode commvault/accessnode --set clientName=accessnode --set global.namespace=commvault --set global.image.tag={tagvalue}
+    helm upgrade --install accessnode commvault/accessnode --set clientName=accessnode --set global.namespace=commvault --set global.image.tag={tagvalue}
     
 ### Install using values file
 
@@ -64,31 +64,31 @@ Values for different charts are present. ([Here](https://github.com/Commvault/he
 
 To install the config chart:
 
-    helm install cvconfig commvault/config -f configvalues.yaml -f global.yaml
+    helm upgrade --install cvconfig commvault/config -f configvalues.yaml -f global.yaml
     
 To install the commserve chart:
 
-    helm install commserve commvault/commserve -f csvalues.yaml -f global.yaml
+    helm upgrade --install commserve commvault/commserve -f csvalues.yaml -f global.yaml
     
 To install the webserver chart:
 
-    helm install webserver commvault/webserver -f webservervalues.yaml -f global.yaml
+    helm upgrade --install webserver commvault/webserver -f webservervalues.yaml -f global.yaml
     
 To install the commandcenter chart:
 
-    helm install commandcenter commvault/commandcenter -f commandcentervalues.yaml -f global.yaml
+    helm upgrade --install commandcenter commvault/commandcenter -f commandcentervalues.yaml -f global.yaml
 
 To install the mediaagent chart:
 
-    helm install mediaagent commvault/mediaagent -f mediaagentvalues.yaml -f global.yaml
+    helm upgrade --install mediaagent commvault/mediaagent -f mediaagentvalues.yaml -f global.yaml
 
 To install the networkgateway chart:
 
-    helm install networkgateway commvault/networkgateway -f networkgatewayvalues.yaml -f global.yaml
+    helm upgrade --install networkgateway commvault/networkgateway -f networkgatewayvalues.yaml -f global.yaml
     
 To install the accessnode chart:
 
-    helm install accessnode commvault/accessnode -f accessnodevalues.yaml -f global.yaml
+    helm upgrade --install accessnode commvault/accessnode -f accessnodevalues.yaml -f global.yaml
 
 To uninstall the chart:
 
