@@ -20,5 +20,8 @@ spec:
     - name: https
       port: {{.Values.httpsPort | default 443}}
       targetPort: 443           
+    - name: server
+      port: 6688
+      targetPort: 6688
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
