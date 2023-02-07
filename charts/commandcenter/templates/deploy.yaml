@@ -52,16 +52,6 @@ spec:
           mountPath: /opt/commvault/appdata
           subPath: certificates
         {{- include "cv.additionalVolumeMounts" . }}
-        startupProbe:
-            httpGet:
-                path: /status
-                port: 6688
-                scheme: HTTP
-            initialDelaySeconds: 2
-            timeoutSeconds: 600
-            periodSeconds: 2
-            failureThreshold: 7
-
       volumes:
       - name: podinfo
         downwardAPI:
