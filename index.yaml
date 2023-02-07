@@ -64,6 +64,16 @@ entries:
   commandcenter:
   - apiVersion: v2
     appVersion: "1"
+    created: "2023-02-07T23:53:46.502508381Z"
+    description: A Helm chart for creating the command center
+    digest: 5e3e344faafa356e09cf33925b0ab2b8debcdb4b8a2ca5d9819bc79564ba6fa3
+    name: commandcenter
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/commandcenter-1.0.7/commandcenter-1.0.7.tgz
+    version: 1.0.7
+  - apiVersion: v2
+    appVersion: "1"
     created: "2023-01-16T17:16:18.04460982Z"
     description: A Helm chart for creating the command center
     digest: aa55c4d0cd84513f8c4d76115b5dda1189a525746f08e807a18ab2b70e179c15
@@ -194,6 +204,17 @@ entries:
     - https://github.com/Commvault/helm-charts/releases/download/commserve-1/commserve-1.tgz
     version: "1"
   config:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2023-02-07T23:53:46.738030587Z"
+    description: A Helm chart for creating the base consiguration and secret  for
+      all cv applications in the namespace
+    digest: ef14e48ecae7def19722d033ecff7d4c060ccfca154923c852e1eccae8390eb4
+    name: config
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/config-1.0.5/config-1.0.5.tgz
+    version: 1.0.5
   - apiVersion: v2
     appVersion: "1"
     created: "2023-01-16T17:16:18.668769621Z"
@@ -437,4 +458,4 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/webserver-1/webserver-1.tgz
     version: "1"
-generated: "2023-01-16T17:16:19.394963732Z"
+generated: "2023-02-07T23:53:46.738179289Z"
