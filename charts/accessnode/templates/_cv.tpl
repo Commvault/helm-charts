@@ -85,6 +85,23 @@ Values in defaults.yaml gets the last priority
 {{- end }}
 
 {{/*
+cv.commonContainerSpecs adds container specifications that are common for all commvault images
+*/}}
+{{- define "cv.commonContainerSpecs" }}
+{{- if and (eq (include "cv.utils.isMinVersion" (list . 11 32)) "true") (ne (.Values.pause |default false) true) }}
+        startupProbe:
+            httpGet:
+                path: /startupstatus
+                port: 6688
+                scheme: HTTP
+            initialDelaySeconds: 2
+            timeoutSeconds: 600
+            periodSeconds: 2
+            failureThreshold: 7
+{{- end }}
+{{- end }}
+
+{{/*
 cv.resources is a function that allows the user to specify pod resource requests and limits
 Pod resource specifications can be specified at both global and local values
 and will be merged to provide a single set of resource specification that will be added to the final deployment

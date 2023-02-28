@@ -19,23 +19,14 @@ global:
     pullSecret: 
 
   storageClass:
-    # Optional. Name of the storage class for logs. Default storage class will be used if not specified
-    logs: 
+    # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
+    certsandlogs: 
     # Optional. default is "10Gi" 
-    logs_size: 
-    # Optional. Name of the storage class for registry and certificates. Default storage class will be used if not specified
-    certificates: 
-    # Optional. default is "25M" 
-    certificates_size: 
-    # Optional. Name of the storage class for webserver cache for uploads and downloads. Default storage class will be used if not specified
-    cache: 
-    # Optional. default is "10Gi" 
-    cache_size: 
+    certsandlogs_size: 
     # Optional. Name of the storage class for job results. Default storage class will be used if not specified
     jobresults: 
     # Optional. default is "2Gi" 
     jobresults_size: 
-
 
   # Optional. Deployment annotations
   deploymentannotations:

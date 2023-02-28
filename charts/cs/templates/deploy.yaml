@@ -48,25 +48,18 @@ spec:
         volumeMounts:
         # This section contains list of persistent volumes that has to be mounted onto the container.                 
         # This can be left with default settings as mentioned in this template.
-        - name: cv-storage-logs
-          mountPath: /var/log/commvault/Log_Files
-          subPath: Log_Files
-        - name: cv-storage-certificates
-          mountPath: /etc/CommVaultRegistry
-          subPath: Registry   
-        - name: cv-storage-certificates
-          mountPath: /opt/commvault/appdata
-          subPath: certificates
-        - name: cv-storage-database
+        {{- include "cv.commonVolumeMounts" . }}
+        - name: cv-storage-csdb
           mountPath: /opt/commvaultDB
           subPath: commvaultDB
         - name: cv-storage-drbackups
           mountPath: /opt/commvaultDR
           subPath: drbackups
-        - name: cv-storage-database
+        - name: cv-storage-csdb
           mountPath: /var/opt/mssql
           subPath: mssql
         {{- include "cv.additionalVolumeMounts" . }}
+        {{ include "cv.commonContainerSpecs" . }}
 
       volumes:
       - name: podinfo
@@ -79,15 +72,12 @@ spec:
               fieldRef:
                 fieldPath: metadata.annotations
       {{- if not $statefulset }}
-      - name: cv-storage-logs
+      - name: cv-storage-certsandlogs
         persistentVolumeClaim:
-           claimName: {{ $objectname }}-logs
-      - name: cv-storage-certificates
+           claimName: {{ $objectname }}-certsandlogs
+      - name: cv-storage-csdb
         persistentVolumeClaim:
-           claimName: {{ $objectname }}-certificates
-      - name: cv-storage-database
-        persistentVolumeClaim:
-           claimName: {{ $objectname }}-database
+           claimName: {{ $objectname }}-csdb
       - name: cv-storage-drbackups
         persistentVolumeClaim:
            claimName: {{ $objectname }}-drbackups
@@ -96,9 +86,8 @@ spec:
 
   {{- if $statefulset }}
   volumeClaimTemplates:
-  {{- include "cv.statefulset.pvctemplate" (list . "logs" "50Gi") }}
-  {{- include "cv.statefulset.pvctemplate" (list . "certificates" "25M") }}
-  {{- include "cv.statefulset.pvctemplate" (list . "database" "100Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "certsandlogs" "50Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "csdb" "100Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "drbackups" "50Gi") }}
   {{- include "cv.statefulset.additionalPvcTemplates" . }}
   persistentVolumeClaimRetentionPolicy:

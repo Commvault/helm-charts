@@ -152,3 +152,22 @@ storageClass:
 {{- end }}
 {{- end }}
 
+{{- define "cv.commonVolumeMounts" }}
+        - name: podinfo
+          mountPath: /etc/podinfo        
+        - name: cv-storage-certsandlogs
+          mountPath: /var/log/commvault/Log_Files
+          subPath: Log_Files
+        {{- if eq (include "cv.utils.isMinVersion" (list . 11 32)) "true" }}
+        - name: cv-storage-certsandlogs
+          mountPath: /etc/CommVaultRegistryBackups
+          subPath: RegistryBackups
+        {{- else }}
+        - name: cv-storage-certsandlogs
+          mountPath: /etc/CommVaultRegistry
+          subPath: Registry
+        {{- end }}
+        - name: cv-storage-certsandlogs
+          mountPath: /opt/commvault/appdata
+          subPath: certificates
+{{- end }}

@@ -15,6 +15,13 @@ image:
   # Required unless global.image.tag is specified. Overrides gobal value.
   tag: 
 
+# storage class for webserver image
+storageClass:
+  # Optional. Name of the storage class for webserver cache for uploads and downloads. Default storage class will be used if not specified
+  cache: 
+  # Optional. default is "10Gi" 
+  cache_size: 
+
 # Optional. default service type is ClusterIP.
 serviceType: 
 

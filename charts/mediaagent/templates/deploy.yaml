@@ -38,15 +38,7 @@ spec:
         volumeMounts:
         # This section contains list of persistent volumes that has to be mounted onto the container.                 
         # This can be left with default settings as mentioned in this template.
-        - name: cv-storage-logs
-          mountPath: /var/log/commvault/Log_Files
-          subPath: Log_Files
-        - name: cv-storage-certificates
-          mountPath: /etc/CommVaultRegistry
-          subPath: Registry   
-        - name: cv-storage-certificates
-          mountPath: /opt/commvault/appdata
-          subPath: certificates
+        {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-jobresults
           mountPath: /opt/commvault/iDataAgent/jobResults
           subPath: jobResults
@@ -57,6 +49,7 @@ spec:
           mountPath: /opt/ddb
           subPath: ddb
         {{- include "cv.additionalVolumeMounts" . }}
+        {{ include "cv.commonContainerSpecs" . }}
 
       volumes:
       - name: podinfo
@@ -69,12 +62,9 @@ spec:
               fieldRef:
                 fieldPath: metadata.annotations
       {{- if not $statefulset }}
-      - name: cv-storage-logs
+      - name: cv-storage-certsandlogs
         persistentVolumeClaim:
-           claimName: {{ $objectname }}-logs
-      - name: cv-storage-certificates
-        persistentVolumeClaim:
-           claimName: {{ $objectname }}-certificates
+           claimName: {{ $objectname }}-certsandlogs
       - name: cv-storage-jobresults
         persistentVolumeClaim:
            claimName: {{ $objectname }}-jobresults
@@ -89,8 +79,7 @@ spec:
 
   {{- if $statefulset }}
   volumeClaimTemplates:
-  {{- include "cv.statefulset.pvctemplate" (list . "logs" "10Gi") }}
-  {{- include "cv.statefulset.pvctemplate" (list . "certificates" "25M") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "certsandlogs" "10Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "jobresults" "20Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "indexcache" "20Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "ddb" "50Gi") }}

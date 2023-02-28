@@ -170,3 +170,23 @@ This function assumes that validateVersionAndRelease has been called to validate
 {{- atoi (last (regexFindAll  "(\\d+)" $tag 2)) }}
 {{- end }}
 
+{{/*
+Returns "true" if the image tag's version and FR is at least what is given as inputs to this function. This is how it can be used
+
+  {{- if eq (include "cv.utils.isMinVersion" (list . 11 34)) "true" }}
+  // TRUE
+  {{ else }}
+  // FALSE
+  {{ end }}
+
+*/}}
+{{- define "cv.utils.isMinVersion" }}
+{{- $root := index . 0 }}
+{{- $version := index . 1 }}
+{{- $featurerelease := index . 2 }}
+{{- if and (ge (atoi ( include "cv.utils.getVersion" $root )) $version ) (ge (atoi ( include "cv.utils.getFeatureRelease" $root )) $featurerelease) }}
+{{- printf "true" }}
+{{- else }}
+{{- printf "false" }}
+{{- end }}
+{{- end }}

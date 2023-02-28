@@ -1,3 +1,7 @@
 image:
   namespace: commvault
   repository: mediaagent
+
+# setting termination period to 6 hours for media agent
+additionalPodspecs:
+  terminationGracePeriodSeconds: 21600
