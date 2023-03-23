@@ -38,15 +38,12 @@ spec:
         # ports can be left default
         ports:
         - containerPort: 8403
-        - containerPort: 80
-        - containerPort: 443
+        - containerPort: {{ .Values.httpPort | default 80 }}
+        - containerPort: {{ .Values.httpsPort | default 443 }}
         volumeMounts:
         # This section contains list of persistent volumes that has to be mounted onto the container.                 
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
-        - name: cv-storage-certsandlogs
-          mountPath: /opt/commvault/Apache/conf
-          subPath: config
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
 

@@ -1,0 +1,81 @@
+# clientName:       # Required. client display name
+
+# clientHostName:   # Optional. hostname of the client should match the service fqdn.
+
+# image:            # final image value wil be registry/namespace/repository:tag
+  # registry:       # Optional. Overrides gobal value.
+  # namespace:      # Optional image namespace or account. Overrides gobal value. Default is commvault
+  # repository:     # Optional. Default value is commserve
+  # tag:            # Required unless global.image.tag is specified. Overrides gobal value.
+
+# storageClass:         # storage class specifications for accessnode pod
+  # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
+  # certsandlogs_size:  # Optional. default is "10Gi" 
+  # jobresults:         # Optional. Name of the storage class for job results. Default storage class will be used if not specified. Overrides global value
+  # jobresults_size:    # Optional. default is "20Gi". Overrides global value
+
+# deploymentannotations:    # Optional. Will be merged with global annotations and also override matching global annotations
+
+# serviceannotations:       # Optional. Will be merged with global annotations and also override matching global annotations
+
+# Optional. Use this to add additional values to the pod specifications such as nodeSelector. These will merge and override any global additionalPodspecs
+#Example:
+#additionalPodspecs:
+#  nodeSelector: 
+#    disktype: ssd
+
+# Optional. Deployment requests and limits. Enable only those values that need to be set. This also overrides any global values
+#resources:
+#  requests:
+#    memory: 
+#    cpu:
+#  limits:
+#    memory:
+#    cpu: 
+
+# Optional. Additional volumes can be mounted in the pod. These volumes will be in addition to any volumes from global values
+# Both storageClass and volume are optional fields. volume takes precedence over storageClass for Deployment
+# volumes:
+#   - name: vol1
+#     mountPath: /var/opt/vol1
+#     subPath: vol1
+#     size: 1Gi
+#     storageClass: default
+#     volume: vVol1
+
+
+# global values can be shared with all commvault components.
+
+# global:
+  # namespace:        # Optional
+
+  # image:            # final image value will be registry/namespace/repository:tag. Individual components have default values for repository
+    # registry:       # Optional.
+    # namespace:      # Optional image namespace or account. Default is commvault
+    # tag:            # Required
+    # pullSecret:     # Optional. Name of the secret
+
+  # storageClass:           # storage class specifications can be specified as global values also
+    # certsandlogs:         # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
+    # certsandlogs_size:    # Optional. default is "10Gi" 
+    # jobresults:           # Optional. Name of the storage class for job results. Default storage class will be used if not specified
+    # jobresults_size:      # Optional. default is "20Gi" 
+
+  # deploymentannotations:    # Optional. Deployment annotations
+
+  # serviceannotations:       # Optional. Service annotations
+
+  # Optional. Use this to add additional values to the pod specifications such as nodeSelector. These will be merged with any local additionalPodspecs
+  #Example:
+  #additionalPodspecs:
+  #  nodeSelector: 
+  #    disktype: ssd
+
+  # Optional. Deployment requests and limits. Enable only those values that need to be set.
+  #resources:
+  #  requests:
+  #    memory: 
+  #    cpu:
+  #  limits:
+  #    memory:
+  #    cpu: 
