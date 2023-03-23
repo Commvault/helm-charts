@@ -44,6 +44,9 @@ spec:
         # This section contains list of persistent volumes that has to be mounted onto the container.                 
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
+        - name: cv-storage-certsandlogs
+          mountPath: /opt/commvault/Apache/conf
+          subPath: config
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
 

@@ -11,14 +11,18 @@ namespace:
   # Optional. set to true if namespace should be created
   create: 
 
-# Optional. If values are specified then an image pull secret will be created.
-# The name of the secret needs to be specified in gobal.image.pullSecret
-imageCredentials:
-  # Optiona. registry value defaults to docker.io
+# Optional. If pullsecret.create=true then an image pull secret will be created.
+pullsecret:
+  # Set to true if image pull secret should be created as part of config creation
+  create:
+  # Required. The name of the pull secret. Use this same value in gobal.image.pullSecret or image.pullSecret when deploying commvault components
+  name:               
+  # Optional. registry value defaults to docker.io
   registry: 
+  # Required
   username: 
+  # Required. user password or token
   password: 
-  email: 
 
 # Optional. Default value is true. Creates a role and role binding for the default service account
 createViewRole: 

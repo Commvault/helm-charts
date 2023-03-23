@@ -4,9 +4,6 @@ global:
   # Optional
   namespace:
 
-  # Optional. default is svc.cluster.local 
-  clusterDomain: 
-
   # final image value will be registry/namespace/repository:tag. Individual components have default values for repository
   image:
     # Optional.

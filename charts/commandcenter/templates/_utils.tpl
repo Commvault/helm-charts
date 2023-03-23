@@ -138,7 +138,7 @@ The version and feature release may be used to change how objects are deployed f
 For now the version number 11 is enforced
 */}}
 {{- define "cv.utils.validateVersionAndRelease" }}
-{{- $tag := (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- $tag := required "image.tag or global.image.tag is required" (or (.Values.image).tag ((.Values.global).image).tag) }}
 {{- if regexMatch "^\\d+[.]\\d+[.]" $tag }}
     {{- $numbers := regexFindAll  "(\\d+)" $tag 2 }}
     {{- $version := atoi (first $numbers) }}
