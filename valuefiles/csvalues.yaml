@@ -1,37 +1,32 @@
-# Required. client display name
-clientName: 
+clientName:       # Required. client display name
 
-# Optional. hostname of the client should match the service fqdn.
-clientHostName: 
+clientHostName:   # Optional. hostname of the client should match the service fqdn.
 
-# Optional. Email of the first admin user
-email: 
+email:            # Optional. Email of the first admin user
 
-# final image value wil be registry/namespace/repository:tag
-image: 
-  # Optional. Overrides gobal value. Must end with /
-  registry: 
-  # Optional image namespace or account. Overrides gobal value. Default is commvault
-  namespace: 
-  # Optional. Default value is commserve
-  repository: 
-  # Required unless global.image.tag is specified. Overrides gobal value.
-  tag: 
+image:            # final image value will be registry/namespace/repository:tag
+  registry:       # Optional. Overrides global value.
+  namespace:      # Optional image namespace or account. Overrides global value. Default is commvault
+  repository:     # Optional. Default value is commserve
+  tag:            # Required unless global.image.tag is specified. Overrides global value.
 
-# Optional. Applies to the network gateway service (cvfwd) of the commserve. Default service type is LoadBalancer. The service is created ending with the word gateway
-serviceType: 
+storageClass:         # storage class specifications for commserve pod
+  certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
+  certsandlogs_size:  # Optional. default is "50Gi" 
+  csdb:               # Optional. Name of the storage class for commserve database. Default storage class will be used if not specified
+  csdb_size:          # Optional. default is "100Gi" 
+  drbackups:          # Optional. Name of the storage class for dr backups. Default storage class will be used if not specified
+  drbackups_size:     # Optional. default is "50Gi" 
 
-# Optional. Will be merged with global annotations and also override matching global annotations
-deploymentannotations:
+serviceType:          # Optional. Applies to the network gateway service (cvfwd) of the commserve. Default service type is LoadBalancer. The service is created ending with the word gateway
 
-# Optional. Applies to the network gateway service of the commserve. Will be merged with global annotations and also override matching global annotations
-serviceannotations:
+deploymentannotations:    # Optional. Will be merged with global annotations and also override matching global annotations
 
-# Optional. Applies to the internal services of the commserve.
-csserviceannotations:
+serviceannotations:       # Optional. Applies to the network gateway service of the commserve. Will be merged with global annotations and also override matching global annotations
 
-# Optional. Applies to the commcell console services of the commserve.
-consoleserviceannotations:
+csserviceannotations:     # Optional. Applies to the internal services of the commserve.
+
+consoleserviceannotations: # Optional. Applies to the commcell console services of the commserve.
 
 # Optional. Use this to add additional values to the pod specifications such as nodeSelector. These will merge and override any global additionalPodspecs
 #Example:

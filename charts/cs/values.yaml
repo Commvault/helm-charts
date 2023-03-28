@@ -4,16 +4,16 @@
 
 # email:            # Optional. Email of the first admin user
 
-# image:            # final image value wil be registry/namespace/repository:tag
-  # registry:       # Optional. Overrides gobal value.
-  # namespace:      # Optional image namespace or account. Overrides gobal value. Default is commvault
+# image:            # final image value will be registry/namespace/repository:tag
+  # registry:       # Optional. Overrides global value.
+  # namespace:      # Optional image namespace or account. Overrides global value. Default is commvault
   # repository:     # Optional. Default value is commserve
-  # tag:            # Required unless global.image.tag is specified. Overrides gobal value.
+  # tag:            # Required unless global.image.tag is specified. Overrides global value.
 
 # storageClass:         # storage class specifications for commserve pod
   # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
   # certsandlogs_size:  # Optional. default is "50Gi" 
-  # csdb:               # Optional. Name of the storage class for cs database. Default storage class will be used if not specified
+  # csdb:               # Optional. Name of the storage class for commserve database. Default storage class will be used if not specified
   # csdb_size:          # Optional. default is "100Gi" 
   # drbackups:          # Optional. Name of the storage class for dr backups. Default storage class will be used if not specified
   # drbackups_size:     # Optional. default is "50Gi" 
@@ -69,8 +69,6 @@
   # storageClass:           # storage class specifications can be specified as global values also
     # certsandlogs:         # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
     # certsandlogs_size:    # Optional. default is "10Gi" 
-    # jobresults:           # Optional. Name of the storage class for job results. Default storage class will be used if not specified
-    # jobresults_size:      # Optional. default is "20Gi" 
 
   # deploymentannotations:    # Optional. Deployment annotations
 

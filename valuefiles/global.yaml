@@ -1,35 +1,22 @@
 # global values can be shared with all commvault components.
-
 global:
-  # Optional
-  namespace:
+  namespace:        # Optional
 
-  # final image value will be registry/namespace/repository:tag. Individual components have default values for repository
-  image:
-    # Optional.
-    registry: 
-    # Optional image namespace or account. Default is commvault
-    namespace: 
-    # Required
-    tag: 
-    # Optional. Name of the secret
-    pullSecret: 
+  image:            # final image value will be registry/namespace/repository:tag. Individual components have default values for repository
+    registry:       # Optional.
+    namespace:      # Optional image namespace or account. Default is commvault
+    tag:            # Required
+    pullSecret:     # Optional. Name of the secret
 
-  storageClass:
-    # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
-    certsandlogs: 
-    # Optional. default is "10Gi" 
-    certsandlogs_size: 
-    # Optional. Name of the storage class for job results. Default storage class will be used if not specified
-    jobresults: 
-    # Optional. default is "2Gi" 
-    jobresults_size: 
+  storageClass:           # storage class specifications can be specified as global values
+    certsandlogs:         # Optional. Name of the storage class for certificates, logs and registry. Default storage class will be used if not specified
+    certsandlogs_size:    # Optional. default is "10Gi" 
+    jobresults:           # Optional. Name of the storage class for job results. Default storage class will be used if not specified
+    jobresults_size:      # Optional. default is "2Gi" 
 
-  # Optional. Deployment annotations
-  deploymentannotations:
+  deploymentannotations:  # Optional. Deployment annotations
 
-  # Optional. Service annotations
-  serviceannotations:
+  serviceannotations:     # Optional. Service annotations
 
   # Optional. Use this to add additional values to the pod specifications such as nodeSelector. These will be merged with any local additionalPodspecs
   #Example:

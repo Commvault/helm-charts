@@ -4,15 +4,15 @@ clientName:
 # Optional. hostname of the client should match the service fqdn.
 clientHostName: 
 
-# final image value wil be registry/namespace/repository:tag
+# final image value will be registry/namespace/repository:tag
 image: 
-  # Optional. Overrides gobal value. Must end with /
+  # Optional. Overrides global value. Must end with /
   registry: 
-  # Optional image namespace or account. Overrides gobal value. Default is commvault
+  # Optional image namespace or account. Overrides global value. Default is commvault
   namespace: 
   # Optional. Default value is webserver
   repository: 
-  # Required unless global.image.tag is specified. Overrides gobal value.
+  # Required unless global.image.tag is specified. Overrides global value.
   tag: 
 
 # storage class for webserver image

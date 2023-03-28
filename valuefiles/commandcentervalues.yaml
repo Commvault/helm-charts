@@ -1,34 +1,26 @@
-# Required. client display name
-clientName: 
+clientName:       # Required. client display name
 
-# Optional. hostname of the client should match the service fqdn.
-clientHostName: 
+webserverName:    # Required. The client name of the webserver the command center needs to be connected to. default is commserve
 
-# final image value wil be registry/namespace/repository:tag
-image: 
-  # Optional. Overrides gobal value. Must end with /
-  registry: 
-  # Optional image namespace or account. Overrides gobal value. Default is commvault
-  namespace: 
-  # Optional. Default value is commandcenter
-  repository: 
-  # Required unless global.image.tag is specified. Overrides gobal value.
-  tag: 
+clientHostName:   # Optional. hostname of the client should match the service fqdn.
 
-# Required. The client name of the webserver the command center needs to be connected to. default is commserve
-webserverName: 
+image:            # final image value will be registry/namespace/repository:tag
+  registry:       # Optional. Overrides global value.
+  namespace:      # Optional image namespace or account. Overrides global value. Default is commvault
+  repository:     # Optional. Default value is commandcenter
+  tag:            # Required unless global.image.tag is specified. Overrides global value.
 
-# Optional. Default is 80
-httpPort: 
+storageClass:         # storage class specifications for commandcenter pod
+  certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
+  certsandlogs_size:  # Optional. default is "10Gi" 
 
-# Optional. Default is 443
-httpsPort: 
+httpPort:         # Optional. Default is 80
 
-# Optional. Will be merged with global annotations and also override matching global annotations
-deploymentannotations: 
+httpsPort:        # Optional. Default is 443
 
-# Optional. Will be merged with global annotations and also override matching global annotations
-serviceannotations:
+deploymentannotations:    # Optional. Will be merged with global annotations and also override matching global annotations
+
+serviceannotations:       # Optional. Will be merged with global annotations and also override matching global annotations
 
 # Optional. Use this to add additional values to the pod specifications such as nodeSelector. These will merge and override any global additionalPodspecs
 #Example:

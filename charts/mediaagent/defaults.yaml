@@ -5,3 +5,6 @@ image:
 # setting termination period to 6 hours for media agent
 additionalPodspecs:
   terminationGracePeriodSeconds: 21600
+
+
+

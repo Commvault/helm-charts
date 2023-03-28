@@ -2,11 +2,11 @@
 
 # clientHostName:   # Optional. hostname of the client should match the service fqdn.
 
-# image:            # final image value wil be registry/namespace/repository:tag
-  # registry:       # Optional. Overrides gobal value.
-  # namespace:      # Optional image namespace or account. Overrides gobal value. Default is commvault
-  # repository:     # Optional. Default value is commserve
-  # tag:            # Required unless global.image.tag is specified. Overrides gobal value.
+# image:            # final image value will be registry/namespace/repository:tag
+  # registry:       # Optional. Overrides global value.
+  # namespace:      # Optional image namespace or account. Overrides global value. Default is commvault
+  # repository:     # Optional. Default value is mediaagent
+  # tag:            # Required unless global.image.tag is specified. Overrides global value.
 
 # storageClass:         # storage class specifications for mediaagent pods
   # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified

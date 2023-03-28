@@ -88,7 +88,11 @@ Values in defaults.yaml gets the last priority
 cv.commonContainerSpecs adds container specifications that are common for all commvault images
 */}}
 {{- define "cv.commonContainerSpecs" }}
+{{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
 {{- if and (eq (include "cv.utils.isMinVersion" (list . 11 32)) "true") (ne (.Values.pause |default false) true) }}
+{{- $startupprobe := ternary $defaults.startupprobe "true" (hasKey $defaults "startupprobe") }}
+{{- $startupprobe = ternary .Values.startupprobe $startupprobe (hasKey .Values "startupprobe") }}
+  {{- if $startupprobe }}
         startupProbe:
             httpGet:
                 path: /startupstatus
@@ -98,6 +102,7 @@ cv.commonContainerSpecs adds container specifications that are common for all co
             timeoutSeconds: 600
             periodSeconds: 2
             failureThreshold: 7
+  {{- end }}            
 {{- end }}
 {{- end }}
 
@@ -186,5 +191,6 @@ cv.commondeploymentpecs creates pod specifications that are common to all deploy
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ $objectname }}
+  revisionHistoryLimit: 0
 {{- end -}}
 

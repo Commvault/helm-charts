@@ -11,7 +11,7 @@
 # pullsecret:
   # create:             # Set to true if image pull secret should be created as part of config creation
   # name:               # Required. The name of the pull secret. Use this same value in gobal.image.pullSecret or image.pullSecret when deploying commvault components
-  # registry:           # Optional. registry value defaults to docker.io
+  # registry:           # Optional. Defaults to docker.io
   # username:           # Required
   # password:           # Required. user password or token
 
