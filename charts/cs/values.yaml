@@ -58,7 +58,6 @@
 # global values can be shared with all commvault components.
 
 # global:
-  # namespace:        # Optional
 
   # image:            # final image value will be registry/namespace/repository:tag. Individual components have default values for repository
     # registry:       # Optional.

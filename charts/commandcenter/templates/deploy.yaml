@@ -6,7 +6,7 @@ apiVersion: apps/v1
 kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ $objectname }}
-  namespace: {{(.Values.global).namespace}}
+  namespace: {{ include "cv.namespace" . }}
   {{- include "cv.deploymentannotations" . }}
   labels:
     app.kubernetes.io/name: {{ $objectname }}

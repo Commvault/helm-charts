@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service 
 metadata:
   name: {{ include "cv.metadataname" . }}
-  namespace: {{(.Values.global).namespace}}
+  namespace: {{ include "cv.namespace" . }}
   {{- include "cv.csserviceannotations" . }}
   labels:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
@@ -51,7 +51,7 @@ kind: Service
 metadata:
   # this service is for the java console
   name: {{ include "cv.metadataname" . }}console
-  namespace: {{(.Values.global).namespace}}
+  namespace: {{ include "cv.namespace" . }}
   {{- include "cv.consoleserviceannotations" . }}
   labels:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}console
@@ -72,7 +72,7 @@ kind: Service
 metadata:
   # this service is for the firewall daemon for clients outside of the cluster to connect to the commserve
   name: {{ include "cv.metadataname" . }}gateway
-  namespace: {{(.Values.global).namespace}}
+  namespace: {{ include "cv.namespace" . }}
   {{- include "cv.serviceannotations" . }}
   labels:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}gateway

@@ -31,9 +31,18 @@ _cv.tpl is the same for all commvault components. Any change in this file should
 {{- if .Values.clientHostName }}
 {{- .Values.clientHostName }}
 {{- else }}
-{{- include "cv.metadataname" . }}.{{ or (.Values.global).namespace "default" }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
+{{- include "cv.metadataname" . }}.{{- include "cv.namespace" . }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
 {{- end }}
 {{- end -}}
+
+{{- define "cv.namespace" -}}
+{{- if (.Values.global).namespace -}}
+ {{ (.Values.global).namespace }}
+{{- else -}}
+ {{ .Release.Namespace }}
+{{- end -}}
+{{- end -}}
+
 
 {{- define "cv.imagePullSecret" }}
 {{- if or (.Values.image).pullSecret ((.Values.global).image).pullSecret }}
@@ -143,7 +152,7 @@ cv.commonenv creates environment variables that are common to all deployments
           value: 'true'
         - name: CV_DNS_SUFFIX
           # dns suffix of the client
-          value: {{ .Values.serviceName | default $objectname }}.{{ or (.Values.global).namespace "default" }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
+          value: {{ .Values.serviceName | default $objectname }}.{{- include "cv.namespace" . }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
         {{- else }}
         - name: CV_CLIENT_NAME
           # client display name
@@ -153,7 +162,7 @@ cv.commonenv creates environment variables that are common to all deployments
           value: {{ include "cv.hostname" . }}
         - name: CV_DNS_SUFFIX
           # dns suffix of the client
-          value: {{ or (.Values.global).namespace "default" }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
+          value: {{ include "cv.namespace" . }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
         {{- end }}
         {{- if .Values.pause }}
         - name: CV_PAUSE
