@@ -13,7 +13,7 @@ rules:
 "" indicates the core API group
 */}}
 - apiGroups: [""]
-  resources: ["pods"]
+  resources: ["pods","secrets"]
   verbs: ["get", "watch", "list"]
 - apiGroups: ["apps"]
   resources: ["statefulsets", "deployments","replicasets"]

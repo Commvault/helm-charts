@@ -8,6 +8,8 @@
 
 {{ include "cv.deployment.pvc" (list . "drbackups" "50Gi") }}
 
+{{ include "cv.deployment.pvc" (list . "cvmedia" "100Gi") }}
+
 {{ include "cv.deployment.additionalPvc" . }}
 
 {{ end }}

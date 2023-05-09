@@ -59,6 +59,9 @@ spec:
         - name: cv-storage-csdb
           mountPath: /var/opt/mssql
           subPath: mssql
+        - name: cv-storage-cvmedia
+          mountPath: /opt/commvault/SW/
+          subPath: cvmedia
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
 
@@ -82,6 +85,9 @@ spec:
       - name: cv-storage-drbackups
         persistentVolumeClaim:
            claimName: {{ $objectname }}-drbackups
+      - name: cv-storage-cvmedia
+        persistentVolumeClaim:
+           claimName: {{ $objectname }}-cvmedia
       {{- include "cv.deployment.additionalVolumes" . }}
       {{- end }}
 
@@ -90,6 +96,7 @@ spec:
   {{- include "cv.statefulset.pvctemplate" (list . "certsandlogs" "50Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "csdb" "100Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "drbackups" "50Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "cvmedia" "100Gi") }}
   {{- include "cv.statefulset.additionalPvcTemplates" . }}
   persistentVolumeClaimRetentionPolicy:
     whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}
