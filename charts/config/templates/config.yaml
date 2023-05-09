@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ (.Values.global).appname}}cvconfig
+  name: {{ include "cv.metadataname2" (list . "cvconfig") }}
   namespace: {{ include "cv.namespace" . }}
 data:  
   # host name of the Commserve or gateway

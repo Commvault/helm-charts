@@ -18,7 +18,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ include "cv.metadataname" $root }}-{{ $name }}
-  namespace: {{($root.Values.global).namespace}}
+  namespace: {{ include "cv.namespace" $root }}
 spec:
   accessModes:
     - ReadWriteOnce

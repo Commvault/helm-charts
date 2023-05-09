@@ -21,10 +21,16 @@ _cv.tpl is the same for all commvault components. Any change in this file should
 
 {{- define "cv.metadataname" -}}
 {{- if .Values.clientName -}}
- {{(.Values.global).appname}}{{ tpl .Values.clientName . | lower }}
+ {{(.Values.global).prefix}}{{ tpl .Values.clientName . | lower }}{{(.Values.global).suffix}}
 {{- else -}}
 {{- required "clientName is required" "" -}}
 {{- end -}}
+{{- end -}}
+
+{{- define "cv.metadataname2" -}}
+{{- $root := index . 0 }}
+{{- $name := index . 1 }}
+ {{- ($root.Values.global).prefix}}{{ $name }}{{($root.Values.global).suffix}}
 {{- end -}}
 
 {{- define "cv.hostname" }}
@@ -47,10 +53,13 @@ _cv.tpl is the same for all commvault components. Any change in this file should
 {{- define "cv.imagePullSecret" }}
 {{- if or (.Values.image).pullSecret ((.Values.global).image).pullSecret }}
       imagePullSecrets: 
-      - name: {{(.Values.global).appname}}{{or (.Values.image).pullSecret ((.Values.global).image).pullSecret}}
+      - name: {{(.Values.global).prefix}}{{or (.Values.image).pullSecret ((.Values.global).image).pullSecret}}{{(.Values.global).suffix}}
 {{- end }}
 {{- end }}
 
+{{- define "cv.cvfwdport" }}
+{{- or .Values.cvfwdport (.Values.global).cvfwdport 8403 }}
+{{- end }}
 
 
 {{/*
@@ -167,6 +176,14 @@ cv.commonenv creates environment variables that are common to all deployments
         {{- if .Values.pause }}
         - name: CV_PAUSE
           value: 'true'
+        {{- end }}
+        {{- if (.Values.global).prefix }}
+        - name: CV_APP_PREFIX
+          value: "{{(.Values.global).prefix}}"
+        {{- end }}
+        {{- if (.Values.global).suffix }}
+        - name: CV_APP_SUFFIX
+          value: "{{(.Values.global).suffix}}"
         {{- end }}
         - name: CV_POD_NAME
           valueFrom:

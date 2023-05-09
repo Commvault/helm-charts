@@ -1,0 +1,50 @@
+{{- $cvpatcher := true  }}
+{{- if hasKey .Values "cvpatcher" }}
+{{- $cvpatcher = .Values.cvpatcher }}
+{{- end }}
+{{- if $cvpatcher }}
+{{- $objectname := include "cv.metadataname2" (list . "cvpatcher") }}
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: {{ $objectname }}
+spec:      
+  type: ClusterIP
+  ports:
+    - name: cvpatcher
+      port: 6688
+      targetPort: 6688      
+      protocol: TCP 
+  selector:
+    app.kubernetes.io/name: {{ $objectname }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $objectname }}
+  labels:
+    app.kubernetes.io/name: {{ $objectname }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $objectname }}
+  template:
+    metadata:
+      name: {{ $objectname }}
+      labels:
+        app.kubernetes.io/name: {{ $objectname }}
+    spec:
+      {{- include "cv.imagePullSecret" . }}
+      containers:
+      - name: cvpatcher
+        image: {{ include "cv.cvpatcherimage" . }}
+        env:
+        {{- if (.Values.global).prefix }}
+        - name: CV_APP_PREFIX
+          value: {{(.Values.global).prefix}}
+        {{- end }}
+        {{- include "cv.resources" . }}
+        ports:
+        - containerPort: 6688
+{{ end }}

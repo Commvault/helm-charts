@@ -13,3 +13,5 @@
   # password:           # Required. user password or token
 
 # createViewRole:       # Optional. Default value is true. Creates a role and role binding for the default service account
+
+# cvpatcher:            # Optional. Default value is true. Creates cvpatcher service which enables automatic patching of the commvault components

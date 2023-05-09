@@ -1,3 +1,4 @@
+{{- if ne .Values.create false -}}
 {{- include "cv.utils.validateVersionAndRelease" . }}
 {{- $objectname := include "cv.metadataname" . }}
 {{- $statefulset := or .Values.statefulset .Values.global.statefulset }}
@@ -27,7 +28,7 @@ spec:
         {{- include "cv.resources" . }}
         envFrom:
         - secretRef:
-           name: {{(.Values.global).appname}}cvcreds
+           name: {{ include "cv.metadataname2" (list . "cvcreds") }}
         env:
         {{- include "cv.commonenv" . }}
         {{- if .Values.email }}
@@ -39,7 +40,7 @@ spec:
         ports:
         - containerPort: 5000        
         - containerPort: 80
-        - containerPort: 8403
+        - containerPort: {{ include "cv.cvfwdport" . }}
         - containerPort: 8400
         - containerPort: 8401
         - containerPort: 1433
@@ -94,3 +95,4 @@ spec:
     whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}
     whenDeleted: {{ or .Values.whenDeleted .Values.global.whenDeleted | default "Delete" }}
   {{- end }}
+{{- end }}

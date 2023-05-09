@@ -1,3 +1,4 @@
+{{- if ne .Values.create false -}}
 {{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
 apiVersion: v1 
 kind: Service 
@@ -11,9 +12,10 @@ spec:
   type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else if $statefulset }}ClusterIP{{ else }}LoadBalancer{{ end }}
   ports:
     - name: cvfwd
-      port: 8403
-      targetPort: 8403                        
+      port: {{ include "cv.cvfwdport" . }}
+      targetPort: {{ include "cv.cvfwdport" . }} 
       protocol: TCP 
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 
+{{- end }}

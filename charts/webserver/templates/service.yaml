@@ -1,3 +1,4 @@
+{{- if ne .Values.create false -}}
 {{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
 apiVersion: v1 
 kind: Service 
@@ -6,15 +7,15 @@ metadata:
   namespace: {{ include "cv.namespace" . }}
   {{- include "cv.serviceannotations" . }}
   labels:
-    app.kubernetes.io/name: {{(.Values.global).appname}}{{ tpl .Values.clientName . }}
+    app.kubernetes.io/name: {{(.Values.global).prefix}}{{ tpl .Values.clientName . }}
 spec:      
   type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else }}ClusterIP{{ end }}
   ports:
     # This section contains the port numbers that are needed for correct functioning of the Webserver. 
     # This can be left with default settings as mentioned in this template. 
     - name: cvfwd
-      port: 8403
-      targetPort: 8403                        
+      port: {{ include "cv.cvfwdport" . }}
+      targetPort: {{ include "cv.cvfwdport" . }}
       protocol: TCP 
     - name: webservice
       port: 5000
@@ -30,3 +31,4 @@ spec:
       protocol: TCP
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+{{- end }}

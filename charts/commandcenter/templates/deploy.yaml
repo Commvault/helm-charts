@@ -1,3 +1,4 @@
+{{- if ne .Values.create false -}}
 {{- include "cv.utils.validateVersionAndRelease" . }}
 {{- $objectname := include "cv.metadataname" . }}
 {{- $statefulset := or .Values.statefulset .Values.global.statefulset }}
@@ -27,9 +28,9 @@ spec:
         {{- include "cv.resources" . }}
         envFrom:
         - configMapRef:
-           name: {{(.Values.global).appname}}cvconfig
+           name: {{ include "cv.metadataname2" (list . "cvconfig") }}
         - secretRef:
-           name: {{(.Values.global).appname}}cvcreds
+           name: {{ include "cv.metadataname2" (list . "cvcreds") }}
         env:              
         {{- include "cv.commonenv" . }}
         - name: CV_WS_CLIENT_NAME 
@@ -37,7 +38,7 @@ spec:
           value: {{if .Values.webserverName}}{{tpl .Values.webserverName .}}{{end}}
         # ports can be left default
         ports:
-        - containerPort: 8403
+        - containerPort: {{ include "cv.cvfwdport" . }}
         - containerPort: {{ .Values.httpPort | default 80 }}
         - containerPort: {{ .Values.httpsPort | default 443 }}
         volumeMounts:
@@ -72,3 +73,4 @@ spec:
     whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}
     whenDeleted: {{ or .Values.whenDeleted .Values.global.whenDeleted | default "Delete" }}
   {{- end }}
+{{- end }}

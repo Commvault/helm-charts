@@ -6,7 +6,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ (.Values.global).appname}}cv-view
+  name: {{ include "cv.metadataname2" (list . "cv-view") }}
   namespace: {{ include "cv.namespace" . }}
 subjects:
 - kind: ServiceAccount
@@ -14,6 +14,6 @@ subjects:
   namespace: {{ include "cv.namespace" . }}
 roleRef:
   kind: Role
-  name: {{ (.Values.global).appname}}cv-view
+  name: {{ include "cv.metadataname2" (list . "cv-view") }}
   apiGroup: ""
 {{ end }}
