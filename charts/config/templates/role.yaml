@@ -13,9 +13,31 @@ rules:
 "" indicates the core API group
 */}}
 - apiGroups: [""]
-  resources: ["pods","secrets"]
+  resources: ["pods"]
   verbs: ["get", "watch", "list"]
 - apiGroups: ["apps"]
   resources: ["statefulsets", "deployments","replicasets"]
   verbs: ["get", "watch", "list"]
 {{ end }}
+
+---
+
+{{- $cvpatcher := true  }}
+{{- if hasKey .Values "cvpatcher" }}
+{{- $cvpatcher = .Values.cvpatcher }}
+{{- end }}
+{{- if $cvpatcher }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "cv.metadataname2" (list . "cvpatcher") }}
+  namespace: {{ include "cv.namespace" . }}
+rules:
+{{/*
+"" indicates the core API group
+*/}}
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "watch", "list","create","update","patch","delete"]
+{{ end }}
+

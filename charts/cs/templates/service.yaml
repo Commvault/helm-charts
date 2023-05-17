@@ -1,5 +1,5 @@
 {{- if ne .Values.create false -}}
-{{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
+{{ $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
 apiVersion: v1 
 kind: Service 
 metadata:
@@ -50,27 +50,6 @@ spec:
 apiVersion: v1 
 kind: Service 
 metadata:
-  # this service is for the java console
-  name: {{ include "cv.metadataname" . }}console
-  namespace: {{ include "cv.namespace" . }}
-  {{- include "cv.consoleserviceannotations" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "cv.metadataname" . }}console
-spec:      
-  type: {{ if .Values.consoleServiceType }}{{ .Values.consoleServiceType }}{{ else }}LoadBalancer{{ end }}
-  ports:
-    - name: javaconsole
-      port: 8401
-      targetPort: 8401             
-      protocol: TCP 
-  selector:
-    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
-
----
-
-apiVersion: v1 
-kind: Service 
-metadata:
   # this service is for the firewall daemon for clients outside of the cluster to connect to the commserve
   name: {{ include "cv.metadataname" . }}gateway
   namespace: {{ include "cv.namespace" . }}
@@ -83,6 +62,10 @@ spec:
     - name: cvfwd
       port: {{ include "cv.cvfwdport" . }}
       targetPort: {{ include "cv.cvfwdport" . }}
+      protocol: TCP 
+    - name: javaconsole
+      port: 8401
+      targetPort: 8401             
       protocol: TCP 
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}

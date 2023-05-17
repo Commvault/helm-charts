@@ -90,7 +90,7 @@ storageClass:
 
 {{- define "cv.deployment.additionalVolumes" }}
 {{- $objectname := include "cv.metadataname" . }}
-{{- $volumes := (fromYaml (include "cv.util.mergelist" (list .Values.volumes .Values.global.volumes "volumes"))).volumes }}
+{{- $volumes := (fromYaml (include "cv.util.mergelist" (list .Values.volumes ((.Values).global).volumes "volumes"))).volumes }}
 {{- range $v := $volumes }}
       - name: cv-storage-{{ $v.name }}
         persistentVolumeClaim:
@@ -99,7 +99,7 @@ storageClass:
 {{- end }}
 
 {{- define "cv.deployment.additionalPvc" }}
-{{- $volumes := (fromYaml (include "cv.util.mergelist" (list .Values.volumes .Values.global.volumes "volumes"))).volumes }}
+{{- $volumes := (fromYaml (include "cv.util.mergelist" (list .Values.volumes ((.Values).global).volumes "volumes"))).volumes }}
 {{- $root := . }}
 {{- range $v := $volumes }}
 {{ include "cv.deployment.pvc.tpl" (list $root $v.name $v.size $v.storageClass $v.volume ) }}
@@ -136,7 +136,7 @@ storageClass:
 
 {{- define "cv.statefulset.additionalPvcTemplates" }}
 {{- $root := . }}
-{{- $volumes := (fromYaml (include "cv.util.mergelist" (list .Values.volumes .Values.global.volumes "volumes"))).volumes }}
+{{- $volumes := (fromYaml (include "cv.util.mergelist" (list .Values.volumes ((.Values).global).volumes "volumes"))).volumes }}
 {{- range $v := $volumes }}
 {{ include "cv.statefulset.pvc.tpl" (list $root $v.name $v.size $v.storageClass ) }}
 {{- end }}
@@ -144,7 +144,7 @@ storageClass:
 
 
 {{- define "cv.additionalVolumeMounts" }}
-{{- $volumes := (fromYaml (include "cv.util.mergelist" (list .Values.volumes .Values.global.volumes "volumes"))).volumes }}
+{{- $volumes := (fromYaml (include "cv.util.mergelist" (list .Values.volumes ((.Values).global).volumes "volumes"))).volumes }}
 {{- range $v := $volumes }}
         - name: cv-storage-{{ $v.name }}
           mountPath: {{ $v.mountPath }}

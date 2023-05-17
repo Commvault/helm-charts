@@ -144,7 +144,7 @@ Values in defaults.yaml gets the last priority
 cv.commonenv creates environment variables that are common to all deployments
 */}}
 {{- define "cv.commonenv" }}
-{{- $statefulset := or .Values.statefulset .Values.global.statefulset }}
+{{- $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
 {{- $objectname := include "cv.metadataname" . }}
         {{- if $statefulset }}
         # client display name
@@ -201,7 +201,7 @@ cv.commondeploymentpecs creates pod specifications that are common to all deploy
 */}}
 {{- define "cv.commondeploymentspecs" }}
 {{- $objectname := include "cv.metadataname" . }}
-{{- $statefulset := or .Values.statefulset .Values.global.statefulset }}
+{{- $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
   {{- if $statefulset }}
   serviceName: {{ .Values.serviceName | default $objectname }}
   {{- if .Values.replicas }}

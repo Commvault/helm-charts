@@ -1,7 +1,7 @@
 {{- if ne .Values.create false -}}
 {{- include "cv.utils.validateVersionAndRelease" . }}
 {{- $objectname := include "cv.metadataname" . }}
-{{- $statefulset := or .Values.statefulset .Values.global.statefulset }}
+{{- $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
 
 apiVersion: apps/v1 
 kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
@@ -36,6 +36,7 @@ spec:
         # ports can be left default
         ports:                                                      
         - containerPort: {{ include "cv.cvfwdport" . }}
+        - containerPort: 8400
         volumeMounts:
         # This section contains list of persistent volumes that has to be mounted onto the container.                 
         # This can be left with default settings as mentioned in this template.

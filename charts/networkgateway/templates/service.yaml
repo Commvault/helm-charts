@@ -1,5 +1,5 @@
 {{- if ne .Values.create false -}}
-{{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
+{{ $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
 apiVersion: v1 
 kind: Service 
 metadata:

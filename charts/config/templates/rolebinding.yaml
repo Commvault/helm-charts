@@ -17,3 +17,26 @@ roleRef:
   name: {{ include "cv.metadataname2" (list . "cv-view") }}
   apiGroup: ""
 {{ end }}
+
+---
+
+{{- $cvpatcher := true  }}
+{{- if hasKey .Values "cvpatcher" }}
+{{- $cvpatcher = .Values.cvpatcher }}
+{{- end }}
+{{- if $cvpatcher }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "cv.metadataname2" (list . "cvpatcher") }}
+  namespace: {{ include "cv.namespace" . }}
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: {{ include "cv.namespace" . }}
+roleRef:
+  kind: Role
+  name: {{ include "cv.metadataname2" (list . "cvpatcher") }}
+  apiGroup: ""
+{{ end }}
+

@@ -1,5 +1,5 @@
 {{- if ne .Values.create false -}}
-{{ $statefulset := or .Values.statefulset .Values.global.statefulset }}
+{{ $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
 apiVersion: v1 
 kind: Service 
 metadata:
@@ -14,6 +14,10 @@ spec:
     - name: cvfwd
       port: {{ include "cv.cvfwdport" . }}
       targetPort: {{ include "cv.cvfwdport" . }}
+      protocol: TCP 
+    - name: cvd
+      port: 8400
+      targetPort: 8400
       protocol: TCP 
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
