@@ -131,6 +131,19 @@ Note that the top level "volumes:" level in the combined array is important for 
 {{- end }}
 {{- end }}
 
+{{/*
+Returns the tag of the image
+*/}}
+{{- define "cv.utils.getTag" }}
+{{- $tag := "" }}
+{{- if (.Values.image).fullname -}}
+{{- $tag = last (splitList ":" (.Values.image).fullname) }}
+{{- else -}}
+{{- $tag = required "image.tag, global.image.tag or image.fullname is required" (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- end }}
+{{- $tag }}
+{{- end }}
+
 
 {{/*
 Enforces the format of the image tag. It must be of the format <version>.<release>.* example: 11.30.1
@@ -138,7 +151,7 @@ The version and feature release may be used to change how objects are deployed f
 For now the version number 11 is enforced
 */}}
 {{- define "cv.utils.validateVersionAndRelease" }}
-{{- $tag := required "image.tag or global.image.tag is required" (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- $tag := include "cv.utils.getTag" . }}
 {{- if regexMatch "^\\d+[.]\\d+[.]" $tag }}
     {{- $numbers := regexFindAll  "(\\d+)" $tag 2 }}
     {{- $version := atoi (first $numbers) }}
@@ -157,7 +170,7 @@ Returns the number 11 from sample tag 11.30.1
 This function assumes that validateVersionAndRelease has been called to validate tag value correctness
 */}}
 {{- define "cv.utils.getVersion" }}
-{{- $tag := (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- $tag := include "cv.utils.getTag" . }}
 {{- atoi (first (regexFindAll  "(\\d+)" $tag 2)) }}
 {{- end }}
 
@@ -166,7 +179,7 @@ Returns the number 30 from sample tag 11.30.1
 This function assumes that validateVersionAndRelease has been called to validate tag value correctness
 */}}
 {{- define "cv.utils.getFeatureRelease" }}
-{{- $tag := (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- $tag := include "cv.utils.getTag" . }}
 {{- atoi (last (regexFindAll  "(\\d+)" $tag 2)) }}
 {{- end }}
 

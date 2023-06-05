@@ -5,6 +5,9 @@
 {{- end }}
 
 {{- define "cv.cvpatcherimage" }}
+{{- if (.Values.image).fullname -}}
+{{- (.Values.image).fullname }}
+{{- else -}}
 {{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
 {{- $registry := (or (.Values.image).registry ((.Values.global).image).registry "")  }}
 {{- if ne $registry "" -}}
@@ -16,4 +19,5 @@
     {{- or (.Values.image).namespace ((.Values.global).image).namespace ($defaults.image).namespace }}/
     {{- or (.Values.image).repository ((.Values.global).image).repository ($defaults.image).repository }}:
     {{- "latest" }}
+{{- end -}}    
 {{- end }}

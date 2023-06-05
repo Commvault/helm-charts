@@ -8,6 +8,7 @@ apiVersion: v1
 kind: Service 
 metadata:
   name: {{ $objectname }}
+  namespace: {{ include "cv.namespace" . }}
 spec:      
   type: ClusterIP
   ports:
@@ -22,6 +23,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ $objectname }}
+  namespace: {{ include "cv.namespace" . }}
   labels:
     app.kubernetes.io/name: {{ $objectname }}
 spec:
@@ -39,10 +41,15 @@ spec:
       containers:
       - name: cvpatcher
         image: {{ include "cv.cvpatcherimage" . }}
+        imagePullPolicy: Always
         env:
         {{- if (.Values.global).prefix }}
         - name: CV_APP_PREFIX
-          value: {{(.Values.global).prefix}}
+          value: "{{ tpl (.Values.global).prefix . }}"
+        {{- end }}
+        {{- if (.Values.global).suffix }}
+        - name: CV_APP_SUFFIX
+          value: "{{ tpl (.Values.global).suffix . }}"
         {{- end }}
         {{- include "cv.resources" . }}
         ports:

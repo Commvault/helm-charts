@@ -6,6 +6,9 @@ _cv.tpl is the same for all commvault components. Any change in this file should
 
 
 {{- define "cv.image" }}
+{{- if (.Values.image).fullname -}}
+{{- (.Values.image).fullname }}
+{{- else -}}
 {{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
 {{- $registry := (or (.Values.image).registry ((.Values.global).image).registry "")  }}
 {{- if ne $registry "" -}}
@@ -17,20 +20,21 @@ _cv.tpl is the same for all commvault components. Any change in this file should
     {{- or (.Values.image).namespace ((.Values.global).image).namespace ($defaults.image).namespace }}/
     {{- or (.Values.image).repository ((.Values.global).image).repository ($defaults.image).repository }}:
     {{- required "image.tag or global.image.tag is required" (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- end -}}
 {{- end }}
 
 {{- define "cv.metadataname" -}}
 {{- if .Values.clientName -}}
- {{(.Values.global).prefix}}{{ tpl .Values.clientName . | lower }}{{(.Values.global).suffix}}
+ {{ tpl (default "" (.Values.global).prefix) . }}{{ tpl .Values.clientName . | lower }}{{tpl (default "" (.Values.global).suffix) . }}
 {{- else -}}
-{{- required "clientName is required" "" -}}
+{{ tpl (default "" (.Values.global).prefix) . }}{{ .Release.Name | lower }}{{tpl (default "" (.Values.global).suffix) . }}
 {{- end -}}
 {{- end -}}
 
 {{- define "cv.metadataname2" -}}
 {{- $root := index . 0 }}
 {{- $name := index . 1 }}
- {{- ($root.Values.global).prefix}}{{ $name }}{{($root.Values.global).suffix}}
+ {{- tpl ( default "" ($root.Values.global).prefix) $root }}{{ $name }}{{tpl ( default "" ($root.Values.global).suffix) $root }}
 {{- end -}}
 
 {{- define "cv.hostname" }}
@@ -53,7 +57,7 @@ _cv.tpl is the same for all commvault components. Any change in this file should
 {{- define "cv.imagePullSecret" }}
 {{- if or (.Values.image).pullSecret ((.Values.global).image).pullSecret }}
       imagePullSecrets: 
-      - name: {{(.Values.global).prefix}}{{or (.Values.image).pullSecret ((.Values.global).image).pullSecret}}{{(.Values.global).suffix}}
+      - name: {{ tpl (default "" (.Values.global).prefix) . }}{{or (.Values.image).pullSecret ((.Values.global).image).pullSecret}}{{tpl (default "" (.Values.global).suffix) . }}
 {{- end }}
 {{- end }}
 
@@ -165,7 +169,11 @@ cv.commonenv creates environment variables that are common to all deployments
         {{- else }}
         - name: CV_CLIENT_NAME
           # client display name
-          value: {{ tpl .Values.clientName . }}
+          {{- if .Values.clientName -}}          
+          value: {{ tpl .Values.clientName .}}
+          {{- else }}
+          value: {{ .Release.Name }}
+          {{- end }}
         - name: CV_CLIENT_HOSTNAME
           # hostname of the client should match the service name.
           value: {{ include "cv.hostname" . }}
@@ -173,17 +181,29 @@ cv.commonenv creates environment variables that are common to all deployments
           # dns suffix of the client
           value: {{ include "cv.namespace" . }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
         {{- end }}
+        {{- if .Values.csOrGatewayHostName }}
+        - name: CV_CSHOSTNAME
+          value: {{ .Values.csOrGatewayHostName }}
+        {{- end }}
+        {{- if ((.Values).secret).user }}
+        - name: CV_COMMCELL_USER
+          value: {{ .Values.secret.user }}
+        {{- end }}
+        {{- if ((.Values).secret).password }}
+        - name: CV_COMMCELL_PWD
+          value: {{ .Values.secret.password }}
+        {{- end }}
         {{- if .Values.pause }}
         - name: CV_PAUSE
           value: 'true'
         {{- end }}
         {{- if (.Values.global).prefix }}
         - name: CV_APP_PREFIX
-          value: "{{(.Values.global).prefix}}"
+          value: "{{ tpl (.Values.global).prefix . }}"
         {{- end }}
         {{- if (.Values.global).suffix }}
         - name: CV_APP_SUFFIX
-          value: "{{(.Values.global).suffix}}"
+          value: "{{ tpl (.Values.global).suffix . }}"
         {{- end }}
         - name: CV_POD_NAME
           valueFrom:

@@ -29,8 +29,10 @@ spec:
         envFrom:
         - configMapRef:
            name: {{ include "cv.metadataname2" (list . "cvconfig") }}
+           optional: true
         - secretRef:
            name: {{ include "cv.metadataname2" (list . "cvcreds") }}
+           optional: true
         env:              
         {{- include "cv.commonenv" . }}
         - name: CV_WS_CLIENT_NAME 

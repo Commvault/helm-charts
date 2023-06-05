@@ -29,6 +29,7 @@ spec:
         envFrom:
         - secretRef:
            name: {{ include "cv.metadataname2" (list . "cvcreds") }}
+           optional: true
         env:
         {{- include "cv.commonenv" . }}
         {{- if .Values.email }}
