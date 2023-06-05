@@ -6,7 +6,7 @@
   # registry:       # Optional. Overrides global value.
   # namespace:      # Optional image namespace or account. Overrides global value. Default is commvault
   # repository:     # Optional. Default value is networkgateway
-  # tag:            # Required unless global.image.tag is specified. Overrides global value.
+  # tag:            # Required unless global.image.tag or image.fullname is specified. Overrides global value.
 
 # storageClass:         # storage class specifications for networkgateway pod
   # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
