@@ -7,7 +7,7 @@ metadata:
   namespace: {{ include "cv.namespace" . }}
   {{- include "cv.serviceannotations" . }}
   labels:
-    app.kubernetes.io/name: {{(.Values.global).prefix}}{{ tpl .Values.clientName . }}
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 spec:      
   type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else }}ClusterIP{{ end }}
   ports:
