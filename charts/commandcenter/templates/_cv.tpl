@@ -169,7 +169,9 @@ cv.commonenv creates environment variables that are common to all deployments
         {{- else }}
         - name: CV_CLIENT_NAME
           # client display name
-          {{- if .Values.clientName }}
+          {{- if .Values.displayname }}
+          value: {{ tpl .Values.displayname .}}
+          {{- else if .Values.clientName }}
           value: {{ tpl .Values.clientName .}}
           {{- else }}
           value: {{ .Release.Name }}

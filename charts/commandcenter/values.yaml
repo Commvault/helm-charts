@@ -1,4 +1,6 @@
-# clientName:       # Optional. Client Display Name. Helm Release name will be used by default
+# clientName:       # Optional. Client Name. Helm Release name will be used by default
+
+# displayname:       # Optional. Client Display Name. Defaults to same value as clientName
 
 # webserverName:    # Required. The client name of the webserver the command center needs to be connected to. default is commserve
 

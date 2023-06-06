@@ -1,4 +1,6 @@
-# clientName:       # Optional. Client Display Name. Helm Release name will be used by default
+# clientName:       # Optional. Client Name. Helm Release name will be used by default
+
+# displayname:       # Optional. Client Display Name. Defaults to same value as clientName
 
 # clientHostName:   # Optional. hostname of the client should match the service fqdn.
 
