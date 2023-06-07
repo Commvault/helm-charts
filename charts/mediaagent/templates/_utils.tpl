@@ -136,10 +136,10 @@ Returns the tag of the image
 */}}
 {{- define "cv.utils.getTag" }}
 {{- $tag := "" }}
-{{- if (.Values.image).fullname -}}
-{{- $tag = last (splitList ":" (.Values.image).fullname) }}
+{{- if (.Values.image).location -}}
+{{- $tag = last (splitList ":" (.Values.image).location) }}
 {{- else -}}
-{{- $tag = required "image.tag, global.image.tag or image.fullname is required" (or (.Values.image).tag ((.Values.global).image).tag) }}
+{{- $tag = required "image.tag, global.image.tag or image.location is required" (or (.Values.image).tag ((.Values.global).image).tag) }}
 {{- end }}
 {{- $tag }}
 {{- end }}
