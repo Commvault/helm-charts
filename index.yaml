@@ -68,15 +68,4 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/networkgateway-1.0.0/networkgateway-1.0.0.tgz
     version: 1.0.0
-  webserver:
-  - apiVersion: v2
-    appVersion: "1"
-    created: "2023-06-16T17:27:25.22744866Z"
-    description: A Helm chart for creating the webserver
-    digest: 81b691a489dc88d5c6fa9679ef43c569e1b0305bfd6cda0300005f12e1d7509f
-    name: webserver
-    type: application
-    urls:
-    - https://github.com/Commvault/helm-charts/releases/download/webserver-1.0.0/webserver-1.0.0.tgz
-    version: 1.0.0
 generated: "2023-06-16T17:27:25.22746026Z"
