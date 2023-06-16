@@ -45,7 +45,7 @@ spec:
         # This section contains list of persistent volumes that has to be mounted onto the container.                 
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
-        - name: cv-webservercache
+        - name: cv-storage-cache
           mountPath: /opt/commvault/iDataAgent/jobResults/commvault/iDataAgent/jobResults/DM2CacheDir
           subPath: DM2CacheDir
         {{- include "cv.additionalVolumeMounts" . }}
