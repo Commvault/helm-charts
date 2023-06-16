@@ -12,13 +12,19 @@
   # repository:     # Optional. Default value is commserve
   # tag:            # Required unless global.image.tag or image.location is specified. Overrides global value.
 
-# storageClass:         # storage class specifications for commserve pod
-  # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
+
+# Storage class specifications.
+# If a pvc is not needed then set any of the values below to emptyDir.
+# Default storage class will be used if no value is given
+# storageClass:         
+  # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry.
   # certsandlogs_size:  # Optional. default is "50Gi" 
-  # csdb:               # Optional. Name of the storage class for commserve database. Default storage class will be used if not specified
+  # csdb:               # Optional. Name of the storage class for commserve database.
   # csdb_size:          # Optional. default is "100Gi" 
-  # drbackups:          # Optional. Name of the storage class for dr backups. Default storage class will be used if not specified
+  # drbackups:          # Optional. Name of the storage class for dr backups.
   # drbackups_size:     # Optional. default is "50Gi" 
+  # cvmedia:            # Optional. Name of the storage class for storing the media
+  # cvmedia_size:       # Optional. default is "100Gi" 
 
 # serviceType:          # Optional. Applies to the network gateway service (cvfwd) of the commserve. Default service type is LoadBalancer. The service is created ending with the word gateway
 

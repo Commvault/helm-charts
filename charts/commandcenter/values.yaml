@@ -12,8 +12,12 @@
   # repository:     # Optional. Default value is commandcenter
   # tag:            # Required unless global.image.tag or image.location is specified. Overrides global value.
 
-# storageClass:         # storage class specifications for commandcenter pod
-  # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
+
+# Storage class specifications.
+# If a pvc is not needed then set any of the values below to emptyDir.
+# Default storage class will be used if no value is given
+# storageClass:
+  # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry.
   # certsandlogs_size:  # Optional. default is "10Gi" 
 
 # httpPort:         # Optional. Default is 80

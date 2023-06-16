@@ -10,10 +10,14 @@
   # repository:     # Optional. Default value is commserve
   # tag:            # Required unless global.image.tag or image.location is specified. Overrides global value.
 
-# storageClass:         # storage class specifications for webserver pod
-  # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
+
+# Storage class specifications.
+# If a pvc is not needed then set any of the values below to emptyDir.
+# Default storage class will be used if no value is given
+# storageClass:
+  # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry.
   # certsandlogs_size:  # Optional. default is "10Gi" 
-  # cache:              # Optional. Name of the storage class for webserver cache for uploads and downloads. Default storage class will be used if not specified
+  # cache:              # Optional. Name of the storage class for webserver cache for uploads and downloads.
   # cache_size:         # Optional. default is "10Gi" 
 
 # serviceType:            # Optional. default service type is ClusterIP.

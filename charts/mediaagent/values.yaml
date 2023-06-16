@@ -10,14 +10,18 @@
   # repository:     # Optional. Default value is mediaagent
   # tag:            # Required unless global.image.tag or image.location is specified. Overrides global value.
 
-# storageClass:         # storage class specifications for mediaagent pods
-  # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
+
+# Storage class specifications.
+# If a pvc is not needed then set any of the values below to emptyDir.
+# Default storage class will be used if no value is given
+# storageClass:
+  # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry.
   # certsandlogs_size:  # Optional. default is "10Gi" 
-  # jobresults:         # Optional. Name of the storage class for job results. Default storage class will be used if not specified. Overrides global value
+  # jobresults:         # Optional. Name of the storage class for job results.
   # jobresults_size:    # Optional. default is "20Gi". Overrides global value
-  # indexcache:           # Optional. Name of the storage class for index cache. Default storage class will be used if not specified. Overrides global values
+  # indexcache:           # Optional. Name of the storage class for index cache.
   # indexcache_size:      # Optional. default is "20Gi". Overrides global values
-  # ddb:                  # Optional. Name of the storage class for ddb. Default storage class will be used if not specified. Overrides global values
+  # ddb:                  # Optional. Name of the storage class for ddb.
   # ddb_size:             # Optional. default is "50Gi". Overrides global values
 
 # deploymentannotations:    # Optional. Will be merged with global annotations and also override matching global annotations

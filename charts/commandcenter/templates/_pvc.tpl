@@ -83,9 +83,11 @@ storageClass:
 {{- $name = index . 3 }}
 {{- end }}
 {{- $storageClass := or (get ($root.Values.storageClass) $type) (get (($root.Values.global).storageClass) $type) "" }}
+{{- if ne $storageClass "emptyDir" }}
 {{- $size := or (get ($root.Values.storageClass) $type_size) (get (($root.Values.global).storageClass) $type_size) $defaultsize }}
 {{- $pv := or (get ($root.Values.storageClass) $type_pv) (get (($root.Values.global).storageClass) $type_pv) "" }}
 {{ include "cv.deployment.pvc.tpl" (list $root $name $size $storageClass $pv ) }}
+{{- end }}
 {{- end }}
 
 {{- define "cv.deployment.additionalVolumes" }}
@@ -170,4 +172,28 @@ storageClass:
         - name: cv-storage-certsandlogs
           mountPath: /opt/commvault/appdata
           subPath: certificates
+{{- end }}
+
+
+{{- define "cv.deployment.volumes" }}
+{{- $root := index . 0 }}
+{{- $type := index . 1 }}
+{{- $defaultsize := index . 2 }}
+{{- $objectname := include "cv.metadataname" $root }}
+{{- $type_size := print $type "_size" }}
+{{- $storageClass := or (get ($root.Values.storageClass) $type) (get (($root.Values.global).storageClass) $type) "" }}
+{{- $size := or (get ($root.Values.storageClass) $type_size) (get (($root.Values.global).storageClass) $type_size) $defaultsize }}
+{{- if eq $storageClass "emptyDir" }}
+      - name: cv-storage-{{$type}}
+      {{- if $size }}
+        emptyDir:
+          sizeLimit: {{$size}}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+{{- else }}
+      - name: cv-storage-{{$type}}
+        persistentVolumeClaim:
+           claimName: {{ $objectname }}-{{$type}}
+{{- end }}
 {{- end }}

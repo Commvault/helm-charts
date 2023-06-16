@@ -59,12 +59,8 @@ spec:
               fieldRef:
                 fieldPath: metadata.annotations
       {{- if not $statefulset }}
-      - name: cv-storage-certsandlogs
-        persistentVolumeClaim:
-           claimName: {{ $objectname }}-certsandlogs
-      - name: cv-storage-jobresults
-        persistentVolumeClaim:
-           claimName: {{ $objectname }}-jobresults
+      {{- include "cv.deployment.volumes" (list . "certsandlogs" "10Gi") }}
+      {{- include "cv.deployment.volumes" (list . "jobresults" "20Gi") }}
       {{- include "cv.deployment.additionalVolumes" . }}
       {{- end }}
 
