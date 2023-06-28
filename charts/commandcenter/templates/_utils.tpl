@@ -219,3 +219,15 @@ Either explicit oem id is passed in as parameter or it will be assumed based on 
 {{- $oemid = or .Values.oemid ((.Values).global).oemid $oemid }}
 {{- quote $oemid }}
 {{- end }}
+
+{{/*
+Returns either commvault or metallic depending on the oem id
+*/}}
+{{- define "cv.utils.getOemPath" }}
+{{- $oemid := include "cv.utils.getOemId" . }}
+{{- if eq $oemid "\"119\"" }}
+{{- "metallic" }}
+{{- else }}
+{{- "commvault" }}
+{{- end }}
+{{- end }}

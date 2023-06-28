@@ -46,7 +46,7 @@ spec:
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-cache
-          mountPath: /opt/commvault/iDataAgent/jobResults/commvault/iDataAgent/jobResults/DM2CacheDir
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/iDataAgent/jobResults/commvault/iDataAgent/jobResults/DM2CacheDir
           subPath: DM2CacheDir
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}

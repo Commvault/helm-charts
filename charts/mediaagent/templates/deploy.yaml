@@ -44,10 +44,10 @@ spec:
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-jobresults
-          mountPath: /opt/commvault/iDataAgent/jobResults
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/iDataAgent/jobResults
           subPath: jobResults
         - name: cv-storage-indexcache
-          mountPath: /opt/commvault/MediaAgent/IndexCache
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/MediaAgent/IndexCache
           subPath: indexcache
         - name: cv-storage-ddb
           mountPath: /opt/ddb

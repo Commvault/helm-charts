@@ -158,7 +158,7 @@ storageClass:
         - name: podinfo
           mountPath: /etc/podinfo        
         - name: cv-storage-certsandlogs
-          mountPath: /var/log/commvault/Log_Files
+          mountPath: /var/log/{{include "cv.utils.getOemPath" .}}/Log_Files
           subPath: Log_Files
         {{- if eq (include "cv.utils.isMinVersion" (list . 11 32)) "true" }}
         - name: cv-storage-certsandlogs
@@ -170,7 +170,7 @@ storageClass:
           subPath: Registry
         {{- end }}
         - name: cv-storage-certsandlogs
-          mountPath: /opt/commvault/appdata
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/appdata
           subPath: certificates
 {{- end }}
 

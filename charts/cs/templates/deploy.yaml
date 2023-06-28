@@ -53,16 +53,16 @@ spec:
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-csdb
-          mountPath: /opt/commvaultDB
-          subPath: commvaultDB
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}DB
+          subPath: {{include "cv.utils.getOemPath" .}}DB
         - name: cv-storage-drbackups
-          mountPath: /opt/commvaultDR
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}DR
           subPath: drbackups
         - name: cv-storage-csdb
           mountPath: /var/opt/mssql
           subPath: mssql
         - name: cv-storage-cvmedia
-          mountPath: /opt/commvault/SW/
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/SW/
           subPath: cvmedia
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
