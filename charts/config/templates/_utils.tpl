@@ -203,3 +203,19 @@ Returns "true" if the image tag's version and FR is at least what is given as in
 {{- printf "false" }}
 {{- end }}
 {{- end }}
+
+{{/*
+Finds the appropriate oem id to use.
+Either explicit oem id is passed in as parameter or it will be assumed based on feature release
+*/}}
+{{- define "cv.utils.getOemId" }}
+{{- $release := include "cv.utils.getFeatureRelease" . }}
+{{- $oemid := "" }}
+{{- if eq (len $release) 4 }}
+{{- $oemid = "119" }}
+{{- else }}
+{{- $oemid = "1" }}
+{{- end }}
+{{- $oemid = or .Values.oemid ((.Values).global).oemid $oemid }}
+{{- quote $oemid }}
+{{- end }}
