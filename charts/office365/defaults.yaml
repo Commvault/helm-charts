@@ -1,5 +1,8 @@
 image:
   namespace: commvault
   repository: office365
+additionalPodspecs:
+  nodeSelector:
+    kubernetes.io/os: windows
 
 
