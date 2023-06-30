@@ -1,0 +1,6 @@
+apiVersion: v2
+name: office365
+description: A Helm chart for creating an agent which can serve as an access node for office365
+type: application
+version: "1.0.0"
+appVersion: "1"
