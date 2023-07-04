@@ -22,7 +22,7 @@ spec:
       {{- include "cv.imagePullSecret" . }}
       {{- include "cv.additionalPodspecs" . }}
       containers:
-      # networkgateway
+      # office365
       - name: {{ $objectname }}
         image: {{ include "cv.image" . }}
         {{- include "cv.resources" . }}

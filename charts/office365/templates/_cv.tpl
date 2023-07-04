@@ -183,10 +183,6 @@ cv.commonenv creates environment variables that are common to all deployments
           # dns suffix of the client
           value: {{ include "cv.namespace" . }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
         {{- end }}
-        {{- if .Values.csOrGatewayIP }}
-        - name: CV_CSIP
-          value: {{ .Values.csOrGatewayIP }}
-        {{- end }}
         {{- if .Values.csOrGatewayHostName }}
         - name: CV_CSHOSTNAME
           value: {{ .Values.csOrGatewayHostName }}

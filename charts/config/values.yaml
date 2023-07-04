@@ -1,4 +1,5 @@
 # csOrGatewayHostName:  # Required. host name of the Commserve or gateway
+# csOrGatewayName:      # Optional. Name of the Commserve or gateway, reuqired for windows
 
 # secret:               # username/password used for registering the commvault components with the commserve
   # user:               # Required. Plain text user name used for install
