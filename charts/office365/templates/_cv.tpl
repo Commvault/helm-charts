@@ -189,7 +189,7 @@ cv.commonenv creates environment variables that are common to all deployments
         {{- end }}
         {{- if .Values.csOrGatewayName }}
         - name: CV_CSNAME
-          value: {{ .Values.csOrGatewayName }}
+          value: "{{ .Values.csOrGatewayName }}"
         {{- end }}
         {{- if ((.Values).secret).user }}
         - name: CV_COMMCELL_USER
