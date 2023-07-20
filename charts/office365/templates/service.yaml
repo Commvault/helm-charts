@@ -1,0 +1,21 @@
+{{- if ne .Values.create false -}}
+{{ $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: {{ include "cv.metadataname" . }}
+  namespace: {{ include "cv.namespace" . }}
+  {{- include "cv.serviceannotations" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+spec:      
+  type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else if $statefulset }}ClusterIP{{ else }}LoadBalancer{{ end }}
+  ports:
+    - name: cvfwd
+      port: {{ include "cv.cvfwdport" . }}
+      targetPort: {{ include "cv.cvfwdport" . }} 
+      protocol: TCP 
+  selector:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+
+{{- end }}
