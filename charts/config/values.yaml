@@ -1,8 +1,10 @@
 # csOrGatewayHostName:  # Required. host name of the Commserve or gateway
 
-# secret:               # username/password used for registering the commvault components with the commserve
-  # user:               # Required. Plain text user name used for install
-  # password:           # Required. Plain text password
+# secret:               # username/password or authcode used for registering the commvault components with the commserve
+                        # when installing the commserve component the user and password is required for first user
+  # user:               # Optional. Plain text user name used for install.
+  # password:           # Optional. Plain text password.
+  # authcode:           # Optional. Authcode can be given in place of username/password
 
 # Optional. If pullsecret.create=true then an image pull secret will be created.
 # pullsecret:
