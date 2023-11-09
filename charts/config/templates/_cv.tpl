@@ -197,6 +197,10 @@ cv.commonenv creates environment variables that are common to all deployments
         - name: CV_COMMCELL_PWD
           value: {{ .Values.secret.password }}
         {{- end }}
+        {{- if ((.Values).secret).authcode }}
+        - name: CV_CSAUTH_CODE
+          value: {{ .Values.secret.authcode }}
+        {{- end }}
         {{- if .Values.pause }}
         - name: CV_PAUSE
           value: 'true'
