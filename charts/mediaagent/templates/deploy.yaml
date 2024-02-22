@@ -21,6 +21,7 @@ spec:
     spec:
       {{- include "cv.imagePullSecret" . }}
       {{- include "cv.additionalPodspecs" . }}
+      {{- include "cv.initContainer" . }}
       containers:
       # Mediaagent
       - name: {{ $objectname }}
@@ -30,9 +31,11 @@ spec:
         - configMapRef:
            name: {{ include "cv.metadataname2" (list . "cvconfig") }}
            optional: true
+        {{- if eq (include "cv.useInitContainer" .) "false" }}
         - secretRef:
            name: {{ include "cv.metadataname2" (list . "cvcreds") }}
            optional: true
+        {{- end }}
         env:
         {{- include "cv.commonenv" . }}
         # ports can be left default
