@@ -27,6 +27,7 @@ spec:
       - name: {{ $objectname }}
         image: {{ include "cv.image" . }}
         {{- include "cv.resources" . }}
+        {{- include "cv.additionalContainerspecs" . }}
         envFrom:
         {{- if eq (include "cv.useInitContainer" .) "false" }}        
         - secretRef:

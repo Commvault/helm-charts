@@ -107,6 +107,21 @@ Values in defaults.yaml gets the last priority
 {{- end }}
 
 {{/*
+cv.additionalContainerspecs is a function that allows the user to specify additional container specifications that are not mentioned in the deployment templates
+Use "additionalContainerspecs" as the section name to enter the additional pod specifications. pod specifications can be specified at both global and local values
+and will be merged to provide a single set of additional container specifications that will be added to the final deployment
+There is also a provision to have chart level defaults which can be specified by having a defaults.yaml in chart directory.
+Values in defaults.yaml gets the last priority
+*/}}
+{{- define "cv.additionalContainerspecs" }}
+{{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
+{{- if or (.Values.global).additionalContainerspecs .Values.additionalContainerspecs $defaults.additionalContainerspecs }}
+{{- $combinedYaml := fromYaml ((include "cv.utils.getCombinedYaml" (list (.Values.global).additionalContainerspecs $defaults.additionalContainerspecs $ 8 false ))) }}
+{{- include "cv.utils.getCombinedYaml" (list .Values.additionalContainerspecs $combinedYaml $ 8 false ) }}
+{{- end -}}
+{{- end }}
+
+{{/*
 cv.commonContainerSpecs adds container specifications that are common for all commvault images
 */}}
 {{- define "cv.commonContainerSpecs" }}
