@@ -107,6 +107,21 @@ Values in defaults.yaml gets the last priority
 {{- end }}
 
 {{/*
+cv.additionalContainerspecs is a function that allows the user to specify additional container specifications that are not mentioned in the deployment templates
+Use "additionalContainerspecs" as the section name to enter the additional pod specifications. pod specifications can be specified at both global and local values
+and will be merged to provide a single set of additional container specifications that will be added to the final deployment
+There is also a provision to have chart level defaults which can be specified by having a defaults.yaml in chart directory.
+Values in defaults.yaml gets the last priority
+*/}}
+{{- define "cv.additionalContainerspecs" }}
+{{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
+{{- if or (.Values.global).additionalContainerspecs .Values.additionalContainerspecs $defaults.additionalContainerspecs }}
+{{- $combinedYaml := fromYaml ((include "cv.utils.getCombinedYaml" (list (.Values.global).additionalContainerspecs $defaults.additionalContainerspecs $ 8 false ))) }}
+{{- include "cv.utils.getCombinedYaml" (list .Values.additionalContainerspecs $combinedYaml $ 8 false ) }}
+{{- end -}}
+{{- end }}
+
+{{/*
 cv.commonContainerSpecs adds container specifications that are common for all commvault images
 */}}
 {{- define "cv.commonContainerSpecs" }}
@@ -143,6 +158,18 @@ Values in defaults.yaml gets the last priority
 {{- include "cv.utils.getCombinedYaml" (list .Values.resources $combinedYaml $ 10 false ) }}
 {{- end -}}
 {{ end }}
+
+
+{{- define "cv.useInitContainer" }}
+{{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
+{{- $initContainer := false }}
+{{- if eq (include "cv.utils.isMinVersion" (list . 11 40)) "true" }}
+{{- $initContainer = true }}
+{{- end }}
+{{- $initContainer = ternary $defaults.initContainer $initContainer (hasKey $defaults "initContainer") }}
+{{- $initContainer = ternary .Values.initContainer $initContainer (hasKey .Values "initContainer") }}
+{{- $initContainer | toString }}
+{{- end }}
 
 {{/*
 cv.commonenv creates environment variables that are common to all deployments
@@ -189,6 +216,7 @@ cv.commonenv creates environment variables that are common to all deployments
         - name: CV_CSHOSTNAME
           value: {{ .Values.csOrGatewayHostName }}
         {{- end }}
+      {{- if eq (include "cv.useInitContainer" .) "false" }}
         {{- if ((.Values).secret).user }}
         - name: CV_COMMCELL_USER
           value: {{ .Values.secret.user }}
@@ -201,6 +229,7 @@ cv.commonenv creates environment variables that are common to all deployments
         - name: CV_CSAUTH_CODE
           value: {{ .Values.secret.authcode }}
         {{- end }}
+      {{- end }}
         {{- if .Values.pause }}
         - name: CV_PAUSE
           value: 'true'
@@ -248,3 +277,35 @@ cv.commondeploymentpecs creates pod specifications that are common to all deploy
   revisionHistoryLimit: 0
 {{- end -}}
 
+
+{{- define "cv.initContainer" }}
+{{- $objectname := include "cv.metadataname" . }}
+{{- if eq (include "cv.useInitContainer" .) "true" }}
+      initContainers:
+      - name: {{ $objectname }}-init
+        image: {{ include "cv.image" . }}
+        command: ["/bin/sh", "-c"]
+        args:
+          - echo -e "CV_COMMCELL_USER=$(echo ${CV_COMMCELL_USER})\nCV_COMMCELL_PWD=$(echo ${CV_COMMCELL_PWD})\nCV_CSAUTH_CODE=$(echo ${CV_CSAUTH_CODE})" > /tmp/artifact/creds.txt
+        env:
+        {{- if ((.Values).secret).user }}
+        - name: CV_COMMCELL_USER
+          value: {{ .Values.secret.user }}
+        {{- end }}
+        {{- if ((.Values).secret).password }}
+        - name: CV_COMMCELL_PWD
+          value: {{ .Values.secret.password }}
+        {{- end }}
+        {{- if ((.Values).secret).authcode }}
+        - name: CV_CSAUTH_CODE
+          value: {{ .Values.secret.authcode }}
+        {{- end }}
+        envFrom:
+        - secretRef:
+            name: {{ include "cv.metadataname2" (list . "cvcreds") }}
+            optional: true
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp/artifact
+{{- end }}            
+{{- end }}

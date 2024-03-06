@@ -21,18 +21,22 @@ spec:
     spec:
       {{- include "cv.imagePullSecret" . }}
       {{- include "cv.additionalPodspecs" . }}
+      {{- include "cv.initContainer" . }}
       containers:
       # Webserver
       - name: {{ $objectname }}        
         image: {{ include "cv.image" . }}
         {{- include "cv.resources" . }}
+        {{- include "cv.additionalContainerspecs" . }}
         envFrom:
         - configMapRef:
            name: {{ include "cv.metadataname2" (list . "cvconfig") }}
            optional: true
+        {{- if eq (include "cv.useInitContainer" .) "false" }}
         - secretRef:
            name: {{ include "cv.metadataname2" (list . "cvcreds") }}
            optional: true
+        {{- end }}
         env:
         {{- include "cv.commonenv" . }}
         # ports can be left default
