@@ -53,15 +53,7 @@ spec:
         {{ include "cv.commonContainerSpecs" . }}
           
       volumes:
-      - name: podinfo
-        downwardAPI:
-          items:
-            - path: "labels"
-              fieldRef:
-                fieldPath: metadata.labels
-            - path: "annotations"
-              fieldRef:
-                fieldPath: metadata.annotations
+      {{- include "cv.commonVolumes" . }}
       {{- if not $statefulset }}
       {{- include "cv.deployment.volumes" (list . "certsandlogs" "10Gi") }}
       {{- include "cv.deployment.volumes" (list . "jobresults" "20Gi") }}
