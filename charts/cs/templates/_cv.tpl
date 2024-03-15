@@ -166,9 +166,6 @@ Values in defaults.yaml gets the last priority
 {{- if eq (include "cv.utils.isMinVersion" (list . 11 40)) "true" }}
 {{- $initContainer = true }}
 {{- end }}
-{{- if .Release.IsUpgrade -}}
-{{- $initContainer = false }}
-{{- end }}
 {{- $initContainer = ternary $defaults.initContainer $initContainer (hasKey $defaults "initContainer") }}
 {{- $initContainer = ternary .Values.initContainer $initContainer (hasKey .Values "initContainer") }}
 {{- $initContainer | toString }}
@@ -295,5 +292,6 @@ cv.commondeploymentpecs creates pod specifications that are common to all deploy
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Base64/Temp/k8ssecrets
         - name: cv-storage-secretssvolume
           mountPath: /tmp/secretcontents
+          subPath: k8ssecrets
 {{- end }}            
 {{- end }}
