@@ -166,6 +166,9 @@ Values in defaults.yaml gets the last priority
 {{- if eq (include "cv.utils.isMinVersion" (list . 11 40)) "true" }}
 {{- $initContainer = true }}
 {{- end }}
+{{- if .Release.IsUpgrade -}}
+{{- $initContainer = false }}
+{{- end }}
 {{- $initContainer = ternary $defaults.initContainer $initContainer (hasKey $defaults "initContainer") }}
 {{- $initContainer = ternary .Values.initContainer $initContainer (hasKey .Values "initContainer") }}
 {{- $initContainer | toString }}
@@ -281,31 +284,16 @@ cv.commondeploymentpecs creates pod specifications that are common to all deploy
 {{- define "cv.initContainer" }}
 {{- $objectname := include "cv.metadataname" . }}
 {{- if eq (include "cv.useInitContainer" .) "true" }}
-      initContainers:
+      initContainers: 
       - name: {{ $objectname }}-init
         image: {{ include "cv.image" . }}
         command: ["/bin/sh", "-c"]
         args:
-          - echo -e "CV_COMMCELL_USER=$(echo ${CV_COMMCELL_USER})\nCV_COMMCELL_PWD=$(echo ${CV_COMMCELL_PWD})\nCV_CSAUTH_CODE=$(echo ${CV_CSAUTH_CODE})" > /tmp/artifact/creds.txt
-        env:
-        {{- if ((.Values).secret).user }}
-        - name: CV_COMMCELL_USER
-          value: {{ .Values.secret.user }}
-        {{- end }}
-        {{- if ((.Values).secret).password }}
-        - name: CV_COMMCELL_PWD
-          value: {{ .Values.secret.password }}
-        {{- end }}
-        {{- if ((.Values).secret).authcode }}
-        - name: CV_CSAUTH_CODE
-          value: {{ .Values.secret.authcode }}
-        {{- end }}
-        envFrom:
-        - secretRef:
-            name: {{ include "cv.metadataname2" (list . "cvcreds") }}
-            optional: true
+          - cp /tmp/secretcontents/* /opt/{{include "cv.utils.getOemPath" .}}/Base64/Temp/k8ssecrets
         volumeMounts:
-        - name: tmp
-          mountPath: /tmp/artifact
+        - name: configsecrets
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Base64/Temp/k8ssecrets
+        - name: cv-storage-secretssvolume
+          mountPath: /tmp/secretcontents
 {{- end }}            
 {{- end }}

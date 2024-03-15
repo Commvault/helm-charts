@@ -172,8 +172,31 @@ storageClass:
         - name: cv-storage-certsandlogs
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/appdata
           subPath: certificates
+        {{- if eq (include "cv.useInitContainer" .) "true" }}
+        - name: configsecrets
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Base64/Temp/k8ssecrets
+          subPath: k8ssecrets
+        {{- end }}
 {{- end }}
 
+{{- define "cv.commonVolumes" }}
+      - name: podinfo
+        downwardAPI:
+          items:
+            - path: "labels"
+              fieldRef:
+                fieldPath: metadata.labels
+            - path: "annotations"
+              fieldRef:
+                fieldPath: metadata.annotations
+      {{- if eq (include "cv.useInitContainer" .) "true" }}
+      - name: cv-storage-secretssvolume
+        secret:
+          secretName: {{ include "cv.metadataname2" (list . "cvcreds") }}
+      - name: configsecrets
+        emptyDir: {}
+      {{- end }}
+{{- end }}
 
 {{- define "cv.deployment.volumes" }}
 {{- $root := index . 0 }}

@@ -5,6 +5,8 @@
   # user:               # Optional. Plain text user name used for install.
   # password:           # Optional. Plain text password.
   # authcode:           # Optional. Authcode can be given in place of username/password
+  # CCCertificate       # Optional. Certificate for Command Center.
+  # CCCertificatePassword # Optional. Plain text password for Command Center certificate.
 
 # Optional. If pullsecret.create=true then an image pull secret will be created.
 # pullsecret:
