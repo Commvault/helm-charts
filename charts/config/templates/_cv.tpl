@@ -290,8 +290,8 @@ cv.commondeploymentpecs creates pod specifications that are common to all deploy
         volumeMounts:
         - name: configsecrets
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Base64/Temp/k8ssecrets
+          subPath: k8ssecrets
         - name: cv-storage-secretssvolume
           mountPath: /tmp/secretcontents
-          subPath: k8ssecrets
 {{- end }}            
 {{- end }}
