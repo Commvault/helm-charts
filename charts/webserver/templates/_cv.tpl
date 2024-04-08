@@ -163,7 +163,7 @@ Values in defaults.yaml gets the last priority
 {{- define "cv.useInitContainer" }}
 {{- $defaults := (fromYaml (.Files.Get "defaults.yaml")) }}
 {{- $initContainer := false }}
-{{- if eq (include "cv.utils.isMinVersion" (list . 11 40)) "true" }}
+{{- if eq (include "cv.utils.isMinVersion" (list . 11 38)) "true" }}
 {{- $initContainer = true }}
 {{- end }}
 {{- $initContainer = ternary $defaults.initContainer $initContainer (hasKey $defaults "initContainer") }}
