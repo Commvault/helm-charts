@@ -174,7 +174,7 @@ storageClass:
           subPath: certificates
         {{- if eq (include "cv.useInitContainer" .) "true" }}
         - name: configsecrets
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Base64/Temp/k8ssecrets
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/k8ssecrets
           subPath: k8ssecrets
         {{- end }}
 {{- end }}
