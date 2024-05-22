@@ -286,10 +286,10 @@ cv.commondeploymentpecs creates pod specifications that are common to all deploy
         image: {{ include "cv.image" . }}
         command: ["/bin/sh", "-c"]
         args:
-          - cp /tmp/secretcontents/* /opt/{{include "cv.utils.getOemPath" .}}/Base64/Temp/k8ssecrets
+          - cp /tmp/secretcontents/* /opt/{{include "cv.utils.getOemPath" .}}/k8ssecrets
         volumeMounts:
         - name: configsecrets
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Base64/Temp/k8ssecrets
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/k8ssecrets
           subPath: k8ssecrets
         - name: cv-storage-secretssvolume
           mountPath: /tmp/secretcontents
