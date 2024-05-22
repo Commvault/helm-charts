@@ -207,18 +207,20 @@ Returns "true" if the image tag's version and FR is at least what is given as in
 {{/*
 Finds the appropriate oem id to use.
 Either explicit oem id is passed in as parameter or it will be assumed based on feature release
+
+This was an if condition added earlier to determine oemid based on feature release
+but no longer relevant
+{{- if eq (len $release) 4 }}
+{{- $oemid = "119" }}
+{{- end }}
 */}}
 {{- define "cv.utils.getOemId" }}
 {{- $release := include "cv.utils.getFeatureRelease" . }}
-{{- $oemid := "" }}
-{{- if eq (len $release) 4 }}
-{{- $oemid = "119" }}
-{{- else }}
-{{- $oemid = "1" }}
-{{- end }}
+{{- $oemid := "1" }}
 {{- $oemid = or .Values.oemid ((.Values).global).oemid $oemid }}
 {{- quote $oemid }}
 {{- end }}
+
 
 {{/*
 Returns either commvault or metallic depending on the oem id
