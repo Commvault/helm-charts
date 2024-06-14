@@ -288,7 +288,7 @@ cv.commondeploymentpecs creates pod specifications that are common to all deploy
         args:
           - cp /tmp/secretcontents/* /opt/{{include "cv.utils.getOemPath" .}}/k8ssecrets
         volumeMounts:
-        - name: configsecrets
+        - name: cv-storage-certsandlogs
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/k8ssecrets
           subPath: k8ssecrets
         - name: cv-storage-secretssvolume

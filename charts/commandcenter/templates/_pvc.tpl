@@ -173,7 +173,7 @@ storageClass:
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/appdata
           subPath: certificates
         {{- if eq (include "cv.useInitContainer" .) "true" }}
-        - name: configsecrets
+        - name: cv-storage-certsandlogs
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/k8ssecrets
           subPath: k8ssecrets
         {{- end }}
@@ -192,9 +192,7 @@ storageClass:
       {{- if eq (include "cv.useInitContainer" .) "true" }}
       - name: cv-storage-secretssvolume
         secret:
-          secretName: {{ include "cv.metadataname2" (list . "cvcreds") }}
-      - name: configsecrets
-        emptyDir: {}
+          secretName: {{ include "cv.metadataname2" (list . "cvcreds") }} 
       {{- end }}
 {{- end }}
 

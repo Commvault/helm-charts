@@ -2,5 +2,5 @@ apiVersion: v2
 name: accessnode
 description: A Helm chart for creating an access node
 type: application
-version: "1.0.2"
+version: "1.0.3"
 appVersion: "1"
