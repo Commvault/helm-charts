@@ -250,6 +250,10 @@ cv.commonenv creates environment variables that are common to all deployments
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace   
+        - name: CV_POD_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
 {{- end -}}
 
 
