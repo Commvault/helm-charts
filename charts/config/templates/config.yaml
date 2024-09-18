@@ -6,4 +6,5 @@ metadata:
 data:  
   # host name of the Commserve or gateway
   CV_CSHOSTNAME: {{ tpl .Values.csOrGatewayHostName . }}
+  CV_CSCLIENTNAME: {{ tpl .Values.csClientName . }}
 
