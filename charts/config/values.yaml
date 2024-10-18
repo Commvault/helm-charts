@@ -1,5 +1,5 @@
 # csOrGatewayHostName:  # Required. host name of the Commserve or gateway. To specify a port number, use hostname:port format
-# csClientName:         # Optional. client name of the Commserve or gateway
+# csClientName:         # Optional. client name of the Commserve
 # secret:               # username/password or authcode used for registering the commvault components with the commserve
                         # when installing the commserve component the user and password is required for first user
   # user:               # Optional. Plain text user name used for install.
