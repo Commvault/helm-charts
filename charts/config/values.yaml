@@ -1,5 +1,5 @@
 # csOrGatewayHostName:  # Required. host name of the Commserve or gateway. To specify a port number, use hostname:port format
-
+# csClientName:         # Optional. client name of the Commserve or gateway
 # secret:               # username/password or authcode used for registering the commvault components with the commserve
                         # when installing the commserve component the user and password is required for first user
   # user:               # Optional. Plain text user name used for install.
@@ -7,6 +7,7 @@
   # authcode:           # Optional. Authcode can be given in place of username/password
   # CCCertificate       # Optional. Certificate for Command Center.
   # CCCertificatePassword # Optional. Plain text password for Command Center certificate.
+  # sa_password:        # Optional. Plain text password for SQL Server sa user.
 
 # Optional. If pullsecret.create=true then an image pull secret will be created.
 # pullsecret:
