@@ -190,6 +190,14 @@ cv.commonenv creates environment variables that are common to all deployments
               fieldPath: status.podIP
         - name: CV_IS_STATEFULSET  
           value: 'true'
+        {{- if ((.Values).secret).sa_password }}
+        - name: CV_SA_PWD
+          value: {{ tpl .Values.secret.sa_password . }}
+        {{- end }}
+        {{- if .Values.csClientName }}
+        - name: CV_CSCLIENTNAME
+          value: {{ .Values.csClientName }}
+        {{- end }}
         - name: CV_DNS_SUFFIX
           # dns suffix of the client
           value: {{ .Values.serviceName | default $objectname }}.{{- include "cv.namespace" . }}.{{ or (.Values.global).clusterDomain "svc.cluster.local" }}
@@ -203,6 +211,10 @@ cv.commonenv creates environment variables that are common to all deployments
           {{- else }}
           value: {{ .Release.Name }}
           {{- end }}
+        {{- if ((.Values).secret).sa_password }}
+        - name: CV_SA_PWD
+          value: {{ tpl .Values.secret.sa_password . }}
+        {{- end }}
         - name: CV_CLIENT_HOSTNAME
           # hostname of the client should match the service name.
           value: {{ include "cv.hostname" . }}
@@ -215,6 +227,10 @@ cv.commonenv creates environment variables that are common to all deployments
         {{- if .Values.csOrGatewayHostName }}
         - name: CV_CSHOSTNAME
           value: {{ .Values.csOrGatewayHostName }}
+        {{- end }}
+        {{- if .Values.csClientName }}
+        - name: CV_CSCLIENTNAME
+          value: {{ .Values.csClientName }}
         {{- end }}
       {{- if eq (include "cv.useInitContainer" .) "false" }}
         {{- if ((.Values).secret).user }}
