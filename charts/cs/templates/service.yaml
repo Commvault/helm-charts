@@ -22,10 +22,6 @@ spec:
     - name: webservice
       port: 5000
       targetPort: 5000
-    - name: tomcat 
-      port: 80
-      targetPort: 80      
-      protocol: TCP 
     - name: javaconsole
       port: 8401
       targetPort: 8401             
@@ -74,4 +70,42 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "cv.metadataname" . }}-csport-restriction
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector: {} #Allow below ports from all namespaces as it is deny all concept
+      ports:
+        - port: {{ include "cv.cvfwdport" . }}
+          protocol: TCP
+        - port: 8401
+          protocol: TCP
+    - from:
+        - namespaceSelector: # Allow all other ports within the same namespace
+            matchLabels:
+              kubernetes.io/metadata.name: {{ include "cv.namespace" . }}
+      ports:
+        - protocol: TCP
+          port: 8052
+        - protocol: TCP
+          port: 5008
+        - protocol: TCP
+          port: 27017
+        - protocol: TCP
+          port: 1433
+        - protocol: TCP
+          port: 5000
+        - protocol: TCP
+          port: 8400
+        
 {{- end }}

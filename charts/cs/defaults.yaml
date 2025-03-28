@@ -1,6 +1,6 @@
 resources:
   requests:
-    memory: 16Gi
+    memory: 8Gi
   limits:
     memory: 32Gi
 

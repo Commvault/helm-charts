@@ -29,6 +29,45 @@ spec:
       port: 8052
       targetPort: 8052     
       protocol: TCP
+    - name: mongo
+      port: 27017
+      targetPort: 27017     
+      protocol: TCP
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "cv.metadataname" . }}-wsport-restriction
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector: {} #Allow below ports from all namespaces as it is deny all concept
+      ports:
+        - port: {{ include "cv.cvfwdport" . }}
+          protocol: TCP
+    - from:
+        - namespaceSelector: # Allow all other ports within the same namespace
+            matchLabels:
+              kubernetes.io/metadata.name: {{ include "cv.namespace" . }}
+      ports:
+        - protocol: TCP
+          port: 8052
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 27017
+        - protocol: TCP
+          port: 5000
+          
+
 {{- end }}
