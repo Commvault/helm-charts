@@ -43,8 +43,6 @@ spec:
         ports:
         - containerPort: 5010
         - containerPort: {{ include "cv.cvfwdport" . }}
-        - containerPort: 80
-        - containerPort: 8052 
         volumeMounts:
         # This section contains list of persistent volumes that has to be mounted onto the container.                 
         # This can be left with default settings as mentioned in this template.

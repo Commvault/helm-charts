@@ -9,7 +9,6 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 spec:      
-  # type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else }}ClusterIP{{ end }}
   type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else if $statefulset }}LoadBalancer{{ else }}LoadBalancer{{ end }}
   ports:
     # This section contains the port numbers that are needed for correct functioning of the Webserver. 
@@ -22,18 +21,6 @@ spec:
       port: 80
       targetPort: 5010
       protocol: TCP     
-    # - name: tomcat 
-    #   port: 80
-    #   targetPort: 80      
-    #   protocol: TCP 
-    # - name: messagequeue
-    #   port: 8052
-    #   targetPort: 8052     
-    #   protocol: TCP
-    # - name: mongo
-    #   port: 27017
-    #   targetPort: 27017     
-    #   protocol: TCP
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 
@@ -61,12 +48,6 @@ spec:
             matchLabels:
               kubernetes.io/metadata.name: {{ include "cv.namespace" . }}
       ports:
-        # - protocol: TCP
-        #   port: 8052
-        - protocol: TCP
-          port: 80
-        # - protocol: TCP
-        #   port: 27017
         - protocol: TCP
           port: 5010
           
