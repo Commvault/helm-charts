@@ -1,6 +1,0 @@
-apiVersion: v2
-name: cv-ddb-backup-binding
-description: A Helm chart for creating cluster role binding that binds default service accounts of a given namespace with cluster role cv-ddb-backup/user ceated role
-type: application
-version: "1.0.6"
-appVersion: "1"
