@@ -2,16 +2,14 @@
 {{- if hasKey .Values "createClusterViewRole" }}
 {{- $createClusterViewRole = .Values.createClusterViewRole }} 
 {{- end }}
-{{- if $createClusterViewRole  }}
 
 {{- $crName := include "cv.metadataname2" (list . (.Values.CvDDBBackupCRName | default "cv-ddb-backup")) }}
+{{- if $createClusterViewRole  }}
 # DEBUG: crName = {{ $crName }}
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
-metadata:
+metadata:                           
   name: {{ $crName }}
-  namespace: {{ include "cv.namespace" . }}
 rules:
   - apiGroups: ["storage.k8s.io"]
     resources: ["storageclasses", "csidrivers", "VolumeSnapshotClass", "VolumeSnapshot", "VolumeSnapshotContent"]
@@ -26,4 +24,3 @@ rules:
     resources: ["persistentvolumes", "persistentvolumeclaims"]
     verbs: ["get", "list", "watch"]
 {{- end }}
-
