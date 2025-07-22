@@ -219,6 +219,18 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/config-1.0.1/config-1.0.1.tgz
     version: 1.0.1
+  cv-ddb-backup-role:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2025-07-22T00:14:06.503401802Z"
+    description: A Helm chart for creating cluster role that enables service accounts
+      to view cluster wide resources.
+    digest: d191ba4869e182841a16b7ae65b0cd023aa0cd4f75a9a68935f4954f6e854e6f
+    name: cv-ddb-backup-role
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/cv-ddb-backup-role-1.0.6/cv-ddb-backup-role-1.0.6.tgz
+    version: 1.0.6
   mediaagent:
   - apiVersion: v2
     appVersion: "1"
@@ -387,4 +399,4 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/webserver-1.0.1/webserver-1.0.1.tgz
     version: 1.0.1
-generated: "2025-03-28T22:34:41.984052884Z"
+generated: "2025-07-22T00:14:06.503478796Z"
