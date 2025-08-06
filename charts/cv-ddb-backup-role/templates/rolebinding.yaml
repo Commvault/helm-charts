@@ -14,9 +14,9 @@ roleRef:
   kind: ClusterRole
   name: {{ $crName }}
   apiGroup: "rbac.authorization.k8s.io"
-subjects:
 {{- $targetNamespaces := .Values.targetNamespaces }}
 {{- if $targetNamespaces }}
+subjects:
 {{- range $namespace := $targetNamespaces }}
 - kind: ServiceAccount
   name: default
