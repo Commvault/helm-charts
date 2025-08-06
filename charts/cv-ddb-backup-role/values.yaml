@@ -1,4 +1,4 @@
 # createClusterViewRole # Optional. Default value is true, setting it to false will avoid creating cluster role.
 # CvDDBBackupCRName     # Optional. Default value is cv-ddb-backup. Creates a cluster role with the specified value
 # createClusterViewRoleBinding # Optional. Default value is true, setting it false will not create cluster role binding.
-# targetNamespaces # Required. list of namespace values (existing + new ones both) which should be binded to cluster role.
+# targetNamespaces # Optional. list of namespace values (existing + new ones both) which should be binded to cluster role.
