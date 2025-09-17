@@ -1,0 +1,26 @@
+{{- $createClusterViewRoleBinding := true  }}
+{{- if hasKey .Values "createClusterViewRoleBinding" }}
+{{- $createClusterViewRoleBinding = .Values.createClusterViewRoleBinding }}
+{{- end }}
+
+{{- if $createClusterViewRoleBinding }}
+{{- $crName := include "cv.metadataname2" (list . (.Values.CvDDBBackupCRName | default "cv-ddb-backup")) }}
+{{- $crbName := printf "%s-binding" $crName }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ $crbName }}
+roleRef:
+  kind: ClusterRole
+  name: {{ $crName }}
+  apiGroup: "rbac.authorization.k8s.io"
+{{- $targetNamespaces := .Values.targetNamespaces }}
+{{- if $targetNamespaces }}
+subjects:
+{{- range $namespace := $targetNamespaces }}
+- kind: ServiceAccount
+  name: default
+  namespace: {{ $namespace }}
+{{- end }}
+{{- end }}
+{{- end }}
