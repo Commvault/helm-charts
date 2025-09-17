@@ -73,4 +73,7 @@ spec:
           namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: {{ include "cv.namespace" . }}
+      ports:
+        - protocol: TCP
+          port: 6688
 {{ end }}
