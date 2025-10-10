@@ -20,3 +20,22 @@
 # createViewRole:       # Optional. Default value is true. Creates a role and role binding for the default service account
 
 # cvpatcher:            # Optional. Default value is true. Creates cvpatcher service which enables automatic patching of the commvault components
+
+# serviceAccount:       # Optional. Service account configuration for cvpatcher
+  # create:             # Optional. Default value is true. Creates dedicated service account
+  # name:               # Optional. Custom service account name
+  # automountServiceAccountToken: # Optional. Default value is true. Auto-mount service account token
+
+# permissions:          # Optional. Granular permissions for cvpatcher role
+  # secrets:            # Optional. Default: ["get", "list", "create", "update", "patch", "delete"]
+  # deployments:        # Optional. Default: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # pods:               # Optional. Default: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # statefulsets:       # Optional. Default: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # configmaps:         # Optional. Default: ["get", "list", "create", "update", "patch"]
+  # services:           # Optional. Default: ["get", "list", "create", "update", "patch"]
+  # persistentvolumeclaims: # Optional. Default: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# rbac:                 # Optional. RBAC configuration for cvpatcher
+  # create:             # Optional. Default value is true. Creates role and role binding
+  # roleName:           # Optional. Custom role name
+  # roleBindingName:    # Optional. Custom role binding name

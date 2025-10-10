@@ -8,6 +8,8 @@ kind: Role
 metadata:
   name: {{ include "cv.metadataname2" (list . "cv-view") }}
   namespace: {{ include "cv.namespace" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname2" (list . "cv-view") }}
 rules:
 {{/*
 "" indicates the core API group
@@ -27,17 +29,52 @@ rules:
 {{- $cvpatcher = .Values.cvpatcher }}
 {{- end }}
 {{- if $cvpatcher }}
+{{- $rbac := .Values.rbac | default dict }}
+{{- $permissions := .Values.permissions | default dict }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ include "cv.metadataname2" (list . "cvpatcher") }}
   namespace: {{ include "cv.namespace" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname2" (list . "cvpatcher") }}
 rules:
 {{/*
 "" indicates the core API group
 */}}
-- apiGroups: ["*"]
-  resources: ["*"]
-  verbs: ["get", "watch", "list","create","update","patch","delete"]
+# Rule 1: Secrets management - cvpatcher needs to read/write secrets for configuration
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: {{ $permissions.secrets | default (list "get" "list" "create" "update" "patch" "delete") | toJson }}
+  
+# Rule 2: Pod management - cvpatcher may need to monitor or restart pods
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: {{ $permissions.pods | default (list "get" "list" "watch" "create" "update" "patch" "delete") | toJson }}
+  
+# Rule 3: Deployment management - cvpatcher may need to update deployments
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: {{ $permissions.deployments | default (list "get" "list" "watch" "create" "update" "patch" "delete") | toJson }}
+  
+# Rule 4: StatefulSet management - cvpatcher may need to manage statefulsets
+- apiGroups: ["apps"]
+  resources: ["statefulsets"]
+  verbs: {{ $permissions.statefulsets | default (list "get" "list" "watch" "create" "update" "patch" "delete") | toJson }}
+  
+# Rule 5: ConfigMap access - for reading/writing configuration data
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: {{ $permissions.configmaps | default (list "get" "list" "create" "update" "patch") | toJson }}
+
+# Rule 6: Service access - for managing service endpoints
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: {{ $permissions.services | default (list "get" "list" "create" "update" "patch") | toJson }}
+
+# Rule 7: PersistentVolumeClaim access - for managing storage resources
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: {{ $permissions.persistentvolumeclaims | default (list "get" "list" "watch" "create" "update" "patch" "delete") | toJson }}
 {{ end }}
 

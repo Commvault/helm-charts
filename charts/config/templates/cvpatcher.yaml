@@ -3,6 +3,7 @@
 {{- $cvpatcher = .Values.cvpatcher }}
 {{- end }}
 {{- if $cvpatcher }}
+{{- $serviceAccount := .Values.serviceAccount | default dict }}
 {{- $objectname := include "cv.metadataname2" (list . "cvpatcher") }}
 apiVersion: v1 
 kind: Service 
@@ -37,6 +38,8 @@ spec:
       labels:
         app.kubernetes.io/name: {{ $objectname }}
     spec:
+      # This explicitly assigns the CVPatcher pod to use our dedicated service account
+      serviceAccountName: {{ $serviceAccount.name | default (include "cv.metadataname2" (list . "cvpatcher")) }} 
       {{- include "cv.imagePullSecret" . }}
       containers:
       - name: cvpatcher
