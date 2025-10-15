@@ -166,6 +166,17 @@ entries:
   config:
   - apiVersion: v2
     appVersion: "1"
+    created: "2025-10-15T20:56:11.745637483Z"
+    description: A Helm chart for creating the base configuration and secret  for
+      all cv components in the namespace
+    digest: 0924de173a8c14498b13e245200e86e544c22a7c35ec11ed23d46e8b9936c00b
+    name: config
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/config-1.0.7/config-1.0.7.tgz
+    version: 1.0.7
+  - apiVersion: v2
+    appVersion: "1"
     created: "2024-10-18T07:27:56.236578744Z"
     description: A Helm chart for creating the base configuration and secret  for
       all cv components in the namespace
@@ -399,4 +410,4 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/webserver-1.0.1/webserver-1.0.1.tgz
     version: 1.0.1
-generated: "2025-07-22T00:14:06.503478796Z"
+generated: "2025-10-15T20:56:11.746260235Z"
