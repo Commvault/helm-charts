@@ -8,6 +8,8 @@ kind: RoleBinding
 metadata:
   name: {{ include "cv.metadataname2" (list . "cv-view") }}
   namespace: {{ include "cv.namespace" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname2" (list . "cv-view") }}
 subjects:
 - kind: ServiceAccount
   name: default
@@ -15,7 +17,7 @@ subjects:
 roleRef:
   kind: Role
   name: {{ include "cv.metadataname2" (list . "cv-view") }}
-  apiGroup: ""
+  apiGroup: rbac.authorization.k8s.io
 {{ end }}
 
 ---
@@ -25,18 +27,22 @@ roleRef:
 {{- $cvpatcher = .Values.cvpatcher }}
 {{- end }}
 {{- if $cvpatcher }}
+{{- $serviceAccount := .Values.serviceAccount | default dict }}
+{{- $rbac := .Values.rbac | default dict }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ include "cv.metadataname2" (list . "cvpatcher") }}
   namespace: {{ include "cv.namespace" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname2" (list . "cvpatcher") }}
 subjects:
 - kind: ServiceAccount
-  name: default
+  name: {{ $serviceAccount.name | default (include "cv.metadataname2" (list . "cvpatcher-sa")) }}
   namespace: {{ include "cv.namespace" . }}
 roleRef:
   kind: Role
-  name: {{ include "cv.metadataname2" (list . "cvpatcher") }}
-  apiGroup: ""
+  name: {{ $rbac.roleName | default (include "cv.metadataname2" (list . "cvpatcher")) }}
+  apiGroup: rbac.authorization.k8s.io
 {{ end }}
 
