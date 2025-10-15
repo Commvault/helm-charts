@@ -39,7 +39,7 @@ spec:
         app.kubernetes.io/name: {{ $objectname }}
     spec:
       # This explicitly assigns the CVPatcher pod to use our dedicated service account
-      serviceAccountName: {{ $serviceAccount.name | default (include "cv.metadataname2" (list . "cvpatcher")) }} 
+      serviceAccountName: {{ $serviceAccount.name | default (include "cv.metadataname2" (list . "cvpatcher-sa")) }} 
       {{- include "cv.imagePullSecret" . }}
       containers:
       - name: cvpatcher

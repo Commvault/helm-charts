@@ -38,7 +38,7 @@ metadata:
     app.kubernetes.io/name: {{ include "cv.metadataname2" (list . "cvpatcher") }}
 subjects:
 - kind: ServiceAccount
-  name: {{ $serviceAccount.name | default (include "cv.metadataname2" (list . "cvpatcher")) }}
+  name: {{ $serviceAccount.name | default (include "cv.metadataname2" (list . "cvpatcher-sa")) }}
   namespace: {{ include "cv.namespace" . }}
 roleRef:
   kind: Role
