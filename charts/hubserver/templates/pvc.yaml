@@ -1,0 +1,11 @@
+{{- if ne .Values.create false -}}
+{{ $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
+{{- if not $statefulset }}
+{{ include "cv.deployment.pvc" (list . "certsandlogs" "10Gi") }}
+
+{{ include "cv.deployment.pvc" (list . "cache" "10Gi") }}
+
+{{ include "cv.deployment.additionalPvc" . }}
+
+{{ end }}
+{{- end }}
