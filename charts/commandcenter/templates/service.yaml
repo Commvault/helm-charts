@@ -24,4 +24,28 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "cv.metadataname" . }}-cc-restriction
+  namespace: {{ include "cv.namespace" . }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector: {} 
+      ports:
+        - port: {{ include "cv.cvfwdport" . }} 
+          protocol: TCP
+        - port: {{.Values.httpPort | default 80}} 
+          protocol: TCP
+        - port: {{.Values.httpsPort | default 443}}
+          protocol: TCP
+
 {{- end }}
