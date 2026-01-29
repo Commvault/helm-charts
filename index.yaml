@@ -1,0 +1,59 @@
+apiVersion: v1
+entries:
+  accessnode:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-01-29T17:16:26.179755831Z"
+    description: A Helm chart for creating an access node
+    digest: 3422bb3d1c55222b97364dea459b23f8832004cc20af91bd3bcaee1ac954f33f
+    name: accessnode
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/accessnode-1.0.7/accessnode-1.0.7.tgz
+    version: 1.0.7
+  commandcenter:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-01-29T17:16:26.489128333Z"
+    description: A Helm chart for creating the command center
+    digest: 05883c1c8623f1b0a7ad7ede7383fd7f0d22fdd53a3360f517e64cc731c88c11
+    name: commandcenter
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/commandcenter-1.0.7/commandcenter-1.0.7.tgz
+    version: 1.0.7
+  commserve:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-01-29T17:16:26.749739466Z"
+    description: A Helm chart for creating the CS component
+    digest: 4f7c2dbb81447a7b4e193560c3ce7e8c384789a9f08045fe3c48ae589052ab2f
+    name: commserve
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/commserve-1.0.7/commserve-1.0.7.tgz
+    version: 1.0.7
+  mediaagent:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-01-29T17:16:27.130495446Z"
+    description: A Helm chart for creating a media agent
+    digest: 335b847fd8b0150a2c8c7cfbb2d153e715400de27ea0f6562788f120981ea2ba
+    name: mediaagent
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/mediaagent-1.0.7/mediaagent-1.0.7.tgz
+    version: 1.0.7
+  networkgateway:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-01-29T17:16:27.378175749Z"
+    description: A Helm chart for creating an FS agent which can serve as a network
+      gateway
+    digest: afbc391b52574d9657afaa9893f00b8d1d39a599ce7c35c782170c7fa5264288
+    name: networkgateway
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/networkgateway-1.0.7/networkgateway-1.0.7.tgz
+    version: 1.0.7
+generated: "2026-01-29T17:16:27.378184792Z"
