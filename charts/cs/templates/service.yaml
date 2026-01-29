@@ -106,6 +106,6 @@ spec:
         - protocol: TCP
           port: 5000
         - protocol: TCP
-          port: 8400
-        
+          port: 8400      
+          
 {{- end }}
