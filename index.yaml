@@ -33,6 +33,30 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/commserve-1.0.7/commserve-1.0.7.tgz
     version: 1.0.7
+  config:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-01-30T17:10:01.554092588Z"
+    description: A Helm chart for creating the base configuration and secret  for
+      all cv components in the namespace
+    digest: 148f9531afb9dfc471ae6d70e0435a2ddda77099f186762ed75b7ddd104b7a98
+    name: config
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/config-1.0.8/config-1.0.8.tgz
+    version: 1.0.8
+  cv-ddb-backup-role:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-01-30T17:10:01.748551375Z"
+    description: A Helm chart for creating cluster role that enables service accounts
+      to view cluster wide resources.
+    digest: 41252dfa5bab87760226b5fb049f259ec91ea57104f7f8f780e2a515cbe1cd7f
+    name: cv-ddb-backup-role
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/cv-ddb-backup-role-1.0.7/cv-ddb-backup-role-1.0.7.tgz
+    version: 1.0.7
   mediaagent:
   - apiVersion: v2
     appVersion: "1"
@@ -56,4 +80,15 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/networkgateway-1.0.7/networkgateway-1.0.7.tgz
     version: 1.0.7
-generated: "2026-01-29T17:16:27.378184792Z"
+  webserver:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-01-30T17:10:01.946237313Z"
+    description: A Helm chart for creating the webserver
+    digest: 4daeac6b8be727ccba1fb6ac9981e90157439f50795c2217e20ffff72a794965
+    name: webserver
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/webserver-1.0.7/webserver-1.0.7.tgz
+    version: 1.0.7
+generated: "2026-01-30T17:10:01.946241864Z"
