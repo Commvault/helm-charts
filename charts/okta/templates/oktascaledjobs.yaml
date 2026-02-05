@@ -28,12 +28,27 @@ spec:
         - name: {{ .containerName | default .name }}
           image: {{ .image }}
           imagePullPolicy: {{ .imagePullPolicy | default "Always" }}
-          {{- if .env }}
           env:
+          {{- /* Common env vars from global config */ -}}
+          {{- if ($.Values.global).serviceBusFqdn }}
+          - name: SERVICE_BUS_FQDN
+            value: {{ $.Values.global.serviceBusFqdn | quote }}
+          {{- end }}
+          {{- if ($.Values.global).cosmosDbEndpoint }}
+          - name: COSMOS_DB_ENDPOINT
+            value: {{ $.Values.global.cosmosDbEndpoint | quote }}
+          {{- end }}
+          {{- if ($.Values.global).cosmosDbDatabase }}
+          - name: COSMOS_DB_DATABASE
+            value: {{ $.Values.global.cosmosDbDatabase | quote }}
+          {{- end }}
+          {{- /* Queue name is job-specific */ -}}
+          - name: SERVICE_BUS_QUEUE_NAME
+            value: {{ .queueName | quote }}
+          {{- /* Additional job-specific env vars */ -}}
           {{- range .env }}
           - name: {{ .name }}
             value: {{ .value | quote }}
-          {{- end }}
           {{- end }}
         restartPolicy: Never
   triggers:
@@ -41,7 +56,7 @@ spec:
     authenticationRef:
       name: {{ include "okta.triggerAuthName" $ }}
     metadata:
-      namespace: {{ .serviceBusNamespace }}
+      namespace: {{ .serviceBusNamespace | default $.Values.global.serviceBusNamespace }}
       queueName: {{ .queueName }}
       messageCount: "{{ .messageCount | default 1 }}"
 {{- end }}

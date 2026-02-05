@@ -2,37 +2,46 @@
 # This chart deploys KEDA ScaledJobs for processing Azure Service Bus messages
 
 # global:
-#   namespace:                        # Required. Kubernetes namespace for deployment
-#   azureWorkloadIdentityClientId:    # Required. Azure Workload Identity Client ID
-
-# serviceAccount:
-#   name:                             # Required. Name of the service account for workload identity
+#   namespace: okta                                              # Required. Kubernetes namespace for deployment
+#   azureWorkloadIdentityClientId: "xxxxxxxx-xxxx-xxxx-xxxx"     # Required. Azure Workload Identity Client ID
+#
+#   # Common values shared across all jobs
+#   serviceBusNamespace: my-servicebus-namespace                 # Required. Azure Service Bus namespace for triggers
+#   serviceBusFqdn: my-servicebus-namespace.servicebus.windows.net  # Service Bus FQDN for connection
+#   cosmosDbEndpoint: https://myaccount.documents.azure.com:443/ # Cosmos DB endpoint
+#   cosmosDbDatabase: mydatabase                                 # Cosmos DB database name
 
 # triggerAuth:
-#   name:                             # Required. Name of the KEDA TriggerAuthentication resource
+#   name: okta-trigger-auth                                      # Required. Name of the KEDA TriggerAuthentication resource
 #   podIdentity:
-#     provider:                       # Required. Pod identity provider (e.g., azure-workload)
+#     provider: azure-workload                                   # Pod identity provider
 
-# scaledjobs:                         # List of scaled jobs to create
-#   - name:                           # Required. Name of the scaled job
-#     image:                          # Required. Container image to use
-#     serviceBusNamespace:            # Required. Azure Service Bus namespace
-#     queueName:                      # Required. Azure Service Bus queue name
-#     
-#     # Optional fields with defaults:
-#     pollingInterval: 30             # How often KEDA checks the queue (seconds)
-#     failedJobsHistoryLimit: 1       # Number of failed jobs to keep
-#     successfulJobsHistoryLimit: 1   # Number of successful jobs to keep
-#     maxReplicaCount: 10             # Maximum concurrent job replicas
-#     ttlSecondsAfterFinished: 3600   # Time to keep completed jobs
-#     parallelism: 1                  # Number of pods to run in parallel
-#     completions: 1                  # Number of completions required
-#     backoffLimit: 0                 # Number of retries before marking job as failed
-#     containerName:                  # Container name (defaults to job name)
-#     imagePullPolicy: Always         # Image pull policy
-#     messageCount: 1                 # Number of messages to trigger scaling
-#     
-#     # Optional environment variables:
+# serviceAccount:
+#   name: okta-service-account                                   # Required. Name of the service account for workload identity
+
+# scaledjobs:
+#   - name: my-job-1                                             # Required. Name of the scaled job
+#     image: myregistry.azurecr.io/myimage:tag                   # Required. Container image to use
+#     containerName: my-container                                # Container name (defaults to job name)
+#     queueName: my-queue-1                                      # Required. Queue name (unique per job)
+#
+#   - name: my-job-2
+#     image: myregistry.azurecr.io/another-image:tag
+#     containerName: another-container
+#     queueName: my-queue-2
+#     # Optional: Add job-specific env vars (in addition to global ones)
 #     env:
-#       - name: MY_VAR
-#         value: my-value
+#       - name: EXTRA_VAR
+#         value: something-specific
+#
+# # Optional fields with defaults (can be set per job):
+# #   pollingInterval: 30             # How often KEDA checks the queue (seconds)
+# #   failedJobsHistoryLimit: 1       # Number of failed jobs to keep
+# #   successfulJobsHistoryLimit: 1   # Number of successful jobs to keep
+# #   maxReplicaCount: 10             # Maximum concurrent job replicas
+# #   ttlSecondsAfterFinished: 3600   # Time to keep completed jobs
+# #   parallelism: 1                  # Number of pods to run in parallel
+# #   completions: 1                  # Number of completions required
+# #   backoffLimit: 0                 # Number of retries before marking job as failed
+# #   imagePullPolicy: Always         # Image pull policy
+# #   messageCount: 1                 # Number of messages to trigger scaling
