@@ -1,0 +1,47 @@
+{{- range .Values.scaledjobs }}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  name: {{ .name }}
+  namespace: {{ include "okta.namespace" $ }}
+spec:
+  pollingInterval: {{ .pollingInterval | default 30 }}
+  failedJobsHistoryLimit: {{ .failedJobsHistoryLimit | default 1 }}
+  successfulJobsHistoryLimit: {{ .successfulJobsHistoryLimit | default 1 }}
+  maxReplicaCount: {{ .maxReplicaCount | default 10 }}
+  scalingStrategy:
+    strategy: accurate
+  jobTargetRef:
+    ttlSecondsAfterFinished: {{ .ttlSecondsAfterFinished | default 3600 }}
+    parallelism: {{ .parallelism | default 1 }}
+    completions: {{ .completions | default 1 }}
+    backoffLimit: {{ .backoffLimit | default 0 }}
+    template:
+      metadata:
+        labels:
+          app: {{ .name }}
+          azure.workload.identity/use: "true"
+      spec:
+        serviceAccountName: {{ include "okta.serviceAccountName" $ }}
+        containers:
+        - name: {{ .containerName | default .name }}
+          image: {{ .image }}
+          imagePullPolicy: {{ .imagePullPolicy | default "Always" }}
+          {{- if .env }}
+          env:
+          {{- range .env }}
+          - name: {{ .name }}
+            value: {{ .value | quote }}
+          {{- end }}
+          {{- end }}
+        restartPolicy: Never
+  triggers:
+  - type: azure-servicebus
+    authenticationRef:
+      name: {{ include "okta.triggerAuthName" $ }}
+    metadata:
+      namespace: {{ .serviceBusNamespace }}
+      queueName: {{ .queueName }}
+      messageCount: "{{ .messageCount | default 1 }}"
+{{- end }}

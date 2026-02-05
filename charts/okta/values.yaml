@@ -1,0 +1,38 @@
+# Okta Helm Chart Values
+# This chart deploys KEDA ScaledJobs for processing Azure Service Bus messages
+
+# global:
+#   namespace:                        # Required. Kubernetes namespace for deployment
+#   azureWorkloadIdentityClientId:    # Required. Azure Workload Identity Client ID
+
+# serviceAccount:
+#   name:                             # Required. Name of the service account for workload identity
+
+# triggerAuth:
+#   name:                             # Required. Name of the KEDA TriggerAuthentication resource
+#   podIdentity:
+#     provider:                       # Required. Pod identity provider (e.g., azure-workload)
+
+# scaledjobs:                         # List of scaled jobs to create
+#   - name:                           # Required. Name of the scaled job
+#     image:                          # Required. Container image to use
+#     serviceBusNamespace:            # Required. Azure Service Bus namespace
+#     queueName:                      # Required. Azure Service Bus queue name
+#     
+#     # Optional fields with defaults:
+#     pollingInterval: 30             # How often KEDA checks the queue (seconds)
+#     failedJobsHistoryLimit: 1       # Number of failed jobs to keep
+#     successfulJobsHistoryLimit: 1   # Number of successful jobs to keep
+#     maxReplicaCount: 10             # Maximum concurrent job replicas
+#     ttlSecondsAfterFinished: 3600   # Time to keep completed jobs
+#     parallelism: 1                  # Number of pods to run in parallel
+#     completions: 1                  # Number of completions required
+#     backoffLimit: 0                 # Number of retries before marking job as failed
+#     containerName:                  # Container name (defaults to job name)
+#     imagePullPolicy: Always         # Image pull policy
+#     messageCount: 1                 # Number of messages to trigger scaling
+#     
+#     # Optional environment variables:
+#     env:
+#       - name: MY_VAR
+#         value: my-value
