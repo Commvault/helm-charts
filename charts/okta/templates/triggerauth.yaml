@@ -1,0 +1,9 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: {{ include "okta.triggerAuthName" . }}
+  namespace: {{ include "okta.namespace" . }}
+spec:
+  podIdentity:
+    provider: {{ include "okta.podIdentityProvider" . }}
+    identityId: {{ include "okta.workloadIdentityClientId" . }}

@@ -15,6 +15,10 @@ spec:
       port: {{ include "cv.cvfwdport" . }}
       targetPort: {{ include "cv.cvfwdport" . }}
       protocol: TCP 
+    - name: indexgateway
+      port: {{ include "cv.indexgatewayport" . }}
+      targetPort: {{ include "cv.indexgatewayport" . }}
+      protocol: TCP
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 
