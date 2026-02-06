@@ -29,26 +29,23 @@ spec:
           image: {{ .image }}
           imagePullPolicy: {{ .imagePullPolicy | default "Always" }}
           env:
-          {{- /* Common env vars from global config */ -}}
           {{- if ($.Values.global).serviceBusFqdn }}
-          - name: SERVICE_BUS_FQDN
-            value: {{ $.Values.global.serviceBusFqdn | quote }}
+            - name: SERVICE_BUS_FQDN
+              value: {{ $.Values.global.serviceBusFqdn | quote }}
           {{- end }}
           {{- if ($.Values.global).cosmosDbEndpoint }}
-          - name: COSMOS_DB_ENDPOINT
-            value: {{ $.Values.global.cosmosDbEndpoint | quote }}
+            - name: COSMOS_DB_ENDPOINT
+              value: {{ $.Values.global.cosmosDbEndpoint | quote }}
           {{- end }}
           {{- if ($.Values.global).cosmosDbDatabase }}
-          - name: COSMOS_DB_DATABASE
-            value: {{ $.Values.global.cosmosDbDatabase | quote }}
+            - name: COSMOS_DB_DATABASE
+              value: {{ $.Values.global.cosmosDbDatabase | quote }}
           {{- end }}
-          {{- /* Queue name is job-specific */ -}}
-          - name: SERVICE_BUS_QUEUE_NAME
-            value: {{ .queueName | quote }}
-          {{- /* Additional job-specific env vars */ -}}
+            - name: SERVICE_BUS_QUEUE_NAME
+              value: {{ .queueName | quote }}
           {{- range .env }}
-          - name: {{ .name }}
-            value: {{ .value | quote }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
           {{- end }}
         restartPolicy: Never
   triggers:
