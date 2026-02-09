@@ -4,9 +4,9 @@
 # ScaledJob defaults
 pollingInterval: 30
 failedJobsHistoryLimit: 1
-successfulJobsHistoryLimit: 1
+successfulJobsHistoryLimit: 0
 maxReplicaCount: 10
-ttlSecondsAfterFinished: 3600
+ttlSecondsAfterFinished: 300
 parallelism: 1
 completions: 1
 backoffLimit: 0
