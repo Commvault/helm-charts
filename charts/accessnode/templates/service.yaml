@@ -41,4 +41,6 @@ spec:
       ports:
         - port: {{ include "cv.cvfwdport" . }} 
           protocol: TCP
+        - port: {{ include "cv.indexgatewayport" . }}
+          protocol: TCP
 {{ end }}
