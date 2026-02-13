@@ -57,6 +57,28 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/cv-ddb-backup-role-1.0.7/cv-ddb-backup-role-1.0.7.tgz
     version: 1.0.7
+  gcmserver:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-02-13T19:53:29.237926995Z"
+    description: A Helm chart for creating the gcmserver
+    digest: e3741cce51fc4dc7c4e932f1197617dd1406fc5081052f038fa4dc3f397bc250
+    name: gcmserver
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/gcmserver-1.0.6/gcmserver-1.0.6.tgz
+    version: 1.0.6
+  hubserver:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-02-13T19:53:29.442108479Z"
+    description: A Helm chart for creating the hubserver
+    digest: cf4cdfe77309d05e3ef2de540eea544b2352fa1b5f4a3e91df05a61de7caa583
+    name: hubserver
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/hubserver-1.0.6/hubserver-1.0.6.tgz
+    version: 1.0.6
   mediaagent:
   - apiVersion: v2
     appVersion: "1"
@@ -91,4 +113,4 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/webserver-1.0.7/webserver-1.0.7.tgz
     version: 1.0.7
-generated: "2026-01-30T17:10:01.946241864Z"
+generated: "2026-02-13T19:53:29.442115035Z"
