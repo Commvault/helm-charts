@@ -1,0 +1,55 @@
+{{- if ne .Values.create false -}}
+{{ $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: {{ include "cv.metadataname" . }}
+  namespace: {{ include "cv.namespace" . }}
+  {{- include "cv.serviceannotations" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+spec:      
+  type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else }}ClusterIP{{ end }}
+  ports:
+    # This section contains the port numbers that are needed for correct functioning of the Webserver. 
+    # This can be left with default settings as mentioned in this template. 
+    - name: cvfwd
+      port: {{ include "cv.cvfwdport" . }}
+      targetPort: {{ include "cv.cvfwdport" . }}
+      protocol: TCP 
+    - name: gcmservice
+      port: 5005
+      targetPort: 5005
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "cv.metadataname" . }}-wsport-restriction
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cv.metadataname" . }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector: {} #Allow below ports from all namespaces as it is deny all concept
+      ports:
+        - port: {{ include "cv.cvfwdport" . }}
+          protocol: TCP
+    - from:
+        - namespaceSelector: # Allow all other ports within the same namespace
+            matchLabels:
+              kubernetes.io/metadata.name: {{ include "cv.namespace" . }}
+      ports:
+        - protocol: TCP
+          port: 5005
+          
+
+{{- end }}

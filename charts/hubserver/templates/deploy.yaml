@@ -1,0 +1,73 @@
+{{- if ne .Values.create false -}}
+{{- include "cv.utils.validateVersionAndRelease" . }}
+{{- $objectname := include "cv.metadataname" . }}
+{{- $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
+
+apiVersion: apps/v1 
+kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
+metadata:
+  name: {{ $objectname }}
+  namespace: {{ include "cv.namespace" . }}
+  {{- include "cv.deploymentannotations" . }}
+  labels:
+    app.kubernetes.io/name: {{ $objectname }}
+spec:
+  {{- include "cv.commondeploymentspecs" . }}
+  template:
+    metadata:
+      name: {{ $objectname }}
+      labels:
+        app.kubernetes.io/name: {{ $objectname }}
+    spec:
+      {{- include "cv.imagePullSecret" . }}
+      {{- include "cv.additionalPodspecs" . }}
+      {{- include "cv.initContainer" . }}
+      containers:
+      # Webserver
+      - name: {{ $objectname }}        
+        image: {{ include "cv.image" . }}
+        {{- include "cv.resources" . }}
+        {{- include "cv.additionalContainerspecs" . }}
+        envFrom:
+        - configMapRef:
+           name: {{ include "cv.metadataname2" (list . "cvconfig") }}
+           optional: true
+        {{- if eq (include "cv.useInitContainer" .) "false" }}
+        - secretRef:
+           name: {{ include "cv.metadataname2" (list . "cvcreds") }}
+           optional: true
+        {{- end }}
+        env:
+        {{- include "cv.commonenv" . }}
+        # ports can be left default
+        ports:
+        - containerPort: 5010
+        - containerPort: {{ include "cv.cvfwdport" . }}
+        volumeMounts:
+        # This section contains list of persistent volumes that has to be mounted onto the container.                 
+        # This can be left with default settings as mentioned in this template.
+        {{- include "cv.commonVolumeMounts" . }}
+        - name: cv-storage-cache
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/iDataAgent/jobResults/commvault/iDataAgent/jobResults/DM2CacheDir
+          subPath: DM2CacheDir
+        {{- include "cv.additionalVolumeMounts" . }}
+        {{ include "cv.commonContainerSpecs" . }}
+
+      volumes:
+      {{- include "cv.commonVolumes" . }}
+      {{- if not $statefulset }}
+      {{- include "cv.deployment.volumes" (list . "certsandlogs" "10Gi") }}
+      {{- include "cv.deployment.volumes" (list . "cache" "10Gi") }}
+      {{- include "cv.deployment.additionalVolumes" . }}
+      {{- end }}
+
+  {{- if $statefulset }}
+  volumeClaimTemplates:
+  {{- include "cv.statefulset.pvctemplate" (list . "certsandlogs" "10Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "cache" "10Gi") }}
+  {{- include "cv.statefulset.additionalPvcTemplates" . }}
+  persistentVolumeClaimRetentionPolicy:
+    whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}
+    whenDeleted: {{ or .Values.whenDeleted .Values.global.whenDeleted | default "Delete" }}
+  {{- end }}
+{{- end }}
