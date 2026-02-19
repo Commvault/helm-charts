@@ -65,6 +65,10 @@ _cv.tpl is the same for all commvault components. Any change in this file should
 {{- or .Values.cvfwdport (.Values.global).cvfwdport 8403 }}
 {{- end }}
 
+{{- define "cv.indexgatewayport" }}
+{{- or .Values.indexgatewayport (.Values.global).indexgatewayport 81 }}
+{{- end }}
+
 
 {{/*
 cv.deploymentannotations is a function that allows the user to specify deployment annotations

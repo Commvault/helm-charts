@@ -1,0 +1,19 @@
+# Default values for okta chart
+# These values will be used if not overridden in values.yaml
+
+# ScaledJob defaults
+pollingInterval: 30
+failedJobsHistoryLimit: 1
+successfulJobsHistoryLimit: 0
+maxReplicaCount: 10
+ttlSecondsAfterFinished: 300
+parallelism: 1
+completions: 1
+backoffLimit: 0
+imagePullPolicy: Always
+messageCount: 1
+
+# TriggerAuth defaults
+triggerAuth:
+  podIdentity:
+    provider: azure-workload
