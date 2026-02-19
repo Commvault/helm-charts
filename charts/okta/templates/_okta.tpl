@@ -12,6 +12,27 @@ This should be called at the beginning of any template that renders resources.
 {{- fail "global.azureWorkloadIdentityClientId is required" -}}
 {{- end -}}
 
+{{- if not (.Values.global).serviceBusNamespace -}}
+{{- fail "global.serviceBusNamespace is required" -}}
+{{- end -}}
+
+{{- if not (.Values.global).serviceBusFqdn -}}
+{{- fail "global.serviceBusFqdn is required" -}}
+{{- end -}}
+
+{{- if not (.Values.global).cosmosDbEndpoint -}}
+{{- fail "global.cosmosDbEndpoint is required" -}}
+{{- end -}}
+
+{{- if not (.Values.global).cosmosDbDatabase -}}
+{{- fail "global.cosmosDbDatabase is required" -}}
+{{- end -}}
+
+{{- if not (.Values.global).keyVaultName -}}
+{{- fail "global.keyVaultName is required" -}}
+{{- end -}}
+
+
 {{/* Validate serviceAccount */}}
 {{- if not (.Values.serviceAccount).name -}}
 {{- fail "serviceAccount.name is required" -}}
@@ -47,11 +68,6 @@ This should be called at the beginning of any template that renders resources.
 
 {{- if not $job.queueName -}}
 {{- fail (printf "scaledjobs[%d].queueName is required (job: %s)" $index ($job.name | default "unnamed")) -}}
-{{- end -}}
-
-{{/* Validate serviceBusNamespace - must be specified either globally or per job */}}
-{{- if and (not $job.serviceBusNamespace) (not ($.Values.global).serviceBusNamespace) -}}
-{{- fail (printf "scaledjobs[%d].serviceBusNamespace or global.serviceBusNamespace is required (job: %s)" $index ($job.name | default "unnamed")) -}}
 {{- end -}}
 
 {{/* Validate env entries if provided */}}
