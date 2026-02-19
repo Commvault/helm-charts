@@ -10,6 +10,7 @@
 #   serviceBusFqdn: my-servicebus-namespace.servicebus.windows.net  # Service Bus FQDN for connection
 #   cosmosDbEndpoint: https://myaccount.documents.azure.com:443/ # Cosmos DB endpoint
 #   cosmosDbDatabase: mydatabase                                 # Cosmos DB database name
+#   keyVaultName: mykeyvault                                       # Azure Key Vault name for secrets
 
 # triggerAuth:
 #   name: okta-trigger-auth                                      # Required. Name of the KEDA TriggerAuthentication resource

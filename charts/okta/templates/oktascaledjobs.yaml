@@ -42,6 +42,10 @@ spec:
             - name: COSMOS_DB_DATABASE
               value: {{ $.Values.global.cosmosDbDatabase | quote }}
           {{- end }}
+          {{- if ($.Values.global).keyVaultName }}
+            - name: KEY_VAULT_NAME
+              value: {{ $.Values.global.keyVaultName | quote }}
+          {{- end }}
             - name: SERVICE_BUS_QUEUE_NAME
               value: {{ .queueName | quote }}
           {{- range .env }}
