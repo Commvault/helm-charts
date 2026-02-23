@@ -1,0 +1,42 @@
+global:
+  namespace: okta
+  azureWorkloadIdentityClientId: "4f00fa2a-635a-4e65-be79-e3842de897d9"
+  
+  # Common values shared across all jobs
+  serviceBusNamespace: dataplane-2
+  serviceBusFqdn: dataplane-2.servicebus.windows.net
+  cosmosDbEndpoint: https://dataplane2.documents.azure.com:443/
+  cosmosDbDatabase: oktabackup
+  keyVaultName: cvdataplanekv
+
+triggerAuth:
+  name: okta-trigger-auth
+  podIdentity:
+    provider: azure-workload
+
+serviceAccount:
+  name: okta-service-account
+
+scaledjobs:
+  - name: okta-indexing-job
+    image: oktaacrregistry.azurecr.io/indexorchestrator:latest
+    containerName: indexorchestrator
+    queueName: index_queue
+
+  - name: okta-restore-job
+    image: oktaacrregistry.azurecr.io/oktarestore:latest
+    containerName: restoreorchestrator
+    queueName: restore_queue
+    env:
+      - name: MODE
+        value: restore
+
+  - name: okta-backup-job
+    image: oktaacrregistry.azurecr.io/okta:latest
+    containerName: backuporchestrator
+    queueName: backup_queue
+    env:
+      - name: INDEX_QUEUE_NAME
+        value: index_queue
+      - name: MODE
+        value: backup
