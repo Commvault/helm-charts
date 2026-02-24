@@ -66,7 +66,7 @@ _cv.tpl is the same for all commvault components. Any change in this file should
 {{- end }}
 
 {{- define "cv.indexgatewayport" }}
-{{- or .Values.indexgatewayport (.Values.global).indexgatewayport 81 }}
+{{- or .Values.indexgatewayport (.Values.global).indexgatewayport }}
 {{- end }}
 
 
