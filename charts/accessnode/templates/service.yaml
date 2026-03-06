@@ -15,6 +15,12 @@ spec:
       port: {{ include "cv.cvfwdport" . }}
       targetPort: {{ include "cv.cvfwdport" . }}
       protocol: TCP 
+    {{- if or .Values.indexgatewayport (.Values.global).indexgatewayport }}
+    - name: indexgateway
+      port: {{ include "cv.indexgatewayport" . }}
+      targetPort: {{ include "cv.indexgatewayport" . }}
+      protocol: TCP
+    {{- end }}
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 
@@ -37,4 +43,8 @@ spec:
       ports:
         - port: {{ include "cv.cvfwdport" . }} 
           protocol: TCP
+        {{- if or .Values.indexgatewayport (.Values.global).indexgatewayport }}
+        - port: {{ include "cv.indexgatewayport" . }}
+          protocol: TCP
+        {{- end }}
 {{ end }}
