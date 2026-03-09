@@ -68,6 +68,8 @@
 
 
 
+# blockCrossNamespace: # Optional. Default value is false. When set to true, the NetworkPolicy will restrict all ingress to the same namespace only.
+
 # global values can be shared with all commvault components.
 
 # global:
