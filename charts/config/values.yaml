@@ -1,13 +1,24 @@
 # csOrGatewayHostName:  # Required. host name of the Commserve or gateway. To specify a port number, use hostname:port format
 # csClientName:         # Optional. client name of the Commserve
-# secret:               # username/password or authcode used for registering the commvault components with the commserve
-                        # when installing the commserve component the user and password is required for first user
-  # user:               # Optional. Plain text user name used for install.
+# secret:               # username/password or authcode for commserve registration. Ignored when existingSecret is set.
+  # user:               # Optional. Plain text user name.
   # password:           # Optional. Plain text password.
-  # authcode:           # Optional. Authcode can be given in place of username/password
-  # CCCertificate       # Optional. Certificate for Command Center.
-  # CCCertificatePassword # Optional. Plain text password for Command Center certificate.
-  # sa_password:        # Optional. Plain text password for SQL Server sa user.
+  # authcode:           # Optional. Authcode can be given in place of user/password.
+  # CCCertificate       # Optional. Command Center certificate.
+  # CCCertificatePassword # Optional. Command Center certificate password.
+  # sa_password:        # Optional. SQL Server sa password.
+
+# existingSecret:       # Optional. Name of a pre-existing Kubernetes secret to use instead of creating one.
+                        # When set, secret.* values above are ignored and no secret is created by the chart.
+                        # Secret must contain these keys: CV_COMMCELL_USER, CV_COMMCELL_PWD, CV_CSAUTH_CODE,
+                        # CCCertificate, CCCertificatePassword (only include keys relevant to your install).
+
+# csi:                  # Optional. Mounts a Secrets Store CSI volume in cvpatcher to enable automatic
+                        # secret sync from a vault. Requires the CSI driver installed in the cluster.
+                        # On AKS: az aks enable-addons --addons azure-keyvault-secrets-provider ...
+                        # Also requires a SecretProviderClass created in the same namespace beforehand.
+  # enabled:            # Set to true to activate CSI mount in cvpatcher. Default: false.
+  # secretProviderClass: # Required when enabled. Name of the SecretProviderClass in the same namespace.
 
 # Optional. If pullsecret.create=true then an image pull secret will be created.
 # pullsecret:

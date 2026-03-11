@@ -57,6 +57,24 @@ spec:
         {{- include "cv.resources" . }}
         ports:
         - containerPort: 6688
+        {{- if (.Values.csi).enabled }}
+        # The CSI driver only syncs vault secrets into a Kubernetes Secret when a pod mounts it.
+        # cvpatcher is used as the always-running mount trigger — the files at mountPath are
+        # not used by cvpatcher itself, the mount just keeps the sync active.
+        volumeMounts:
+        - name: kv-csi
+          mountPath: "/mnt/kv"
+          readOnly: true
+        {{- end }}
+      {{- if (.Values.csi).enabled }}
+      volumes:
+      - name: kv-csi
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ required "csi.secretProviderClass is required when csi.enabled is true" (.Values.csi).secretProviderClass }}
+      {{- end }}
 
 ---
 
