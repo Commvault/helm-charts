@@ -2,6 +2,7 @@
 # csClientName:         # Optional. client name of the Commserve
 # secret:               # username/password or authcode used for registering the commvault components with the commserve
                         # when installing the commserve component the user and password is required for first user
+  # notCreate:          # Optional. Set to true if secret should not be created as part of config creation
   # user:               # Optional. Plain text user name used for install.
   # password:           # Optional. Plain text password.
   # authcode:           # Optional. Authcode can be given in place of username/password
