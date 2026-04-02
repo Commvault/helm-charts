@@ -36,6 +36,14 @@ spec:
         {{- end }}
         env:
         {{- include "cv.commonenv" . }}
+        {{- if hasKey .Values "cvUseSqlExpress" }}
+        - name: CV_USE_SQL_EXPRESS
+          {{- if kindIs "bool" .Values.cvUseSqlExpress }}
+          value: {{ ternary "yes" "no" .Values.cvUseSqlExpress | quote }}
+          {{- else }}
+          value: {{ .Values.cvUseSqlExpress | toString | quote }}
+          {{- end }}
+        {{- end }}
         {{- if .Values.email }}
         - name: CVID_EMAIL
           # Optional. Email of admin user
