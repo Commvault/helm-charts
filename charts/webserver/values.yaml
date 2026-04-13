@@ -19,6 +19,8 @@
   # certsandlogs_size:  # Optional. default is "10Gi" 
   # cache:              # Optional. Name of the storage class for webserver cache for uploads and downloads.
   # cache_size:         # Optional. default is "10Gi" 
+  # mongodata:          # Optional. Name of the storage class for embedded MongoDB data (/opt/<OEM>/MongoDB/Data).
+  # mongodata_size:     # Optional. default is "10Gi"
 
 # serviceType:            # Optional. default service type is ClusterIP.
 
@@ -73,6 +75,8 @@
     # certsandlogs_size:    # Optional. default is "10Gi" 
     # cache:                # Optional. Name of the storage class for webserver cache for uploads and downloads. Default storage class will be used if not specified
     # cache_size:           # Optional. default is "10Gi" 
+    # mongodata:            # Optional. Name of the storage class for embedded MongoDB data. Default storage class will be used if not specified
+    # mongodata_size:       # Optional. default is "10Gi"
 
   # deploymentannotations:    # Optional. Deployment annotations
 

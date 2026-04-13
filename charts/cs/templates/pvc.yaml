@@ -10,6 +10,8 @@
 
 {{ include "cv.deployment.pvc" (list . "cvmedia" "100Gi") }}
 
+{{ include "cv.deployment.pvc" (list . "mongodata" "10Gi") }}
+
 {{ include "cv.deployment.additionalPvc" . }}
 
 {{ end }}
