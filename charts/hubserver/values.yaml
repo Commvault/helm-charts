@@ -17,12 +17,8 @@
 # storageClass:
   # certsandlogs:       # Optional. Name of the storage class for certificates, logs and registry.
   # certsandlogs_size:  # Optional. default is "10Gi" 
-  # cache:              # Optional. Name of the storage class for webserver cache for uploads and downloads.
-  # cache_size:         # Optional. default is "10Gi" 
-  # mongodata:          # Optional. Name of the storage class for Hub embedded MongoDB data (/opt/<OEM>/MongoDB/Data).
-  # mongodata_size:     # Optional. default is "10Gi"
-  # messagequeuedata:   # Optional. Name of the storage class for CvMessageQueue data (/opt/<OEM>/MessageQueue/data).
-  # messagequeuedata_size: # Optional. default is "10Gi"
+  # cache:              # Optional. Storage class for the shared cache PVC (DM2CacheDir, MongoDB/Data, MessageQueue/data via subPaths).
+  # cache_size:         # Optional. default is "10Gi"
 
 # serviceType:            # Optional. default service type is ClusterIP.
 
@@ -75,12 +71,8 @@
   # storageClass:           # storage class specifications can be specified as global values also
     # certsandlogs:         # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
     # certsandlogs_size:    # Optional. default is "10Gi" 
-    # cache:                # Optional. Name of the storage class for webserver cache for uploads and downloads. Default storage class will be used if not specified
-    # cache_size:           # Optional. default is "10Gi" 
-    # mongodata:            # Optional. Name of the storage class for Hub embedded MongoDB data. Default storage class will be used if not specified
-    # mongodata_size:       # Optional. default is "10Gi"
-    # messagequeuedata:     # Optional. Name of the storage class for CvMessageQueue data. Default storage class will be used if not specified
-    # messagequeuedata_size: # Optional. default is "10Gi"
+    # cache:                # Optional. Shared cache PVC (DM2CacheDir, MongoDB/Data, MessageQueue/data). Default storage class if not specified
+    # cache_size:           # Optional. default is "10Gi"
 
   # deploymentannotations:    # Optional. Deployment annotations
 

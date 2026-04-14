@@ -52,7 +52,7 @@ spec:
         - name: cv-storage-cache
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/iDataAgent/jobResults/commvault/iDataAgent/jobResults/DM2CacheDir
           subPath: DM2CacheDir
-        - name: cv-storage-mongodata
+        - name: cv-storage-cache
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/MongoDB/Data
           subPath: mongodata
         {{- include "cv.additionalVolumeMounts" . }}
@@ -63,7 +63,6 @@ spec:
       {{- if not $statefulset }}
       {{- include "cv.deployment.volumes" (list . "certsandlogs" "10Gi") }}
       {{- include "cv.deployment.volumes" (list . "cache" "10Gi") }}
-      {{- include "cv.deployment.volumes" (list . "mongodata" "10Gi") }}
       {{- include "cv.deployment.additionalVolumes" . }}
       {{- end }}
 
@@ -71,7 +70,6 @@ spec:
   volumeClaimTemplates:
   {{- include "cv.statefulset.pvctemplate" (list . "certsandlogs" "10Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "cache" "10Gi") }}
-  {{- include "cv.statefulset.pvctemplate" (list . "mongodata" "10Gi") }}
   {{- include "cv.statefulset.additionalPvcTemplates" . }}
   persistentVolumeClaimRetentionPolicy:
     whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}
