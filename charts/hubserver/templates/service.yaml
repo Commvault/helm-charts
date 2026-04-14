@@ -1,5 +1,6 @@
 {{- if ne .Values.create false -}}
 {{ $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
+{{- $blockCrossNamespace := or .Values.blockCrossNamespace ((.Values.global).blockCrossNamespace) }}
 apiVersion: v1 
 kind: Service 
 metadata:
@@ -39,7 +40,13 @@ spec:
     - Ingress
   ingress:
     - from:
+        {{- if $blockCrossNamespace }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ include "cv.namespace" . }}
+        {{- else }}
         - namespaceSelector: {} #Allow below ports from all namespaces as it is deny all concept
+        {{- end }}
       ports:
         - port: {{ include "cv.cvfwdport" . }}
           protocol: TCP
