@@ -5,8 +5,6 @@
 
 {{ include "cv.deployment.pvc" (list . "cache" "10Gi") }}
 
-{{ include "cv.deployment.pvc" (list . "mongodata" "10Gi") }}
-
 {{ include "cv.deployment.additionalPvc" . }}
 
 {{ end }}
