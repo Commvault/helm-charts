@@ -53,6 +53,9 @@ spec:
         - name: cv-storage-mongodata
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/MongoDB/Data
           subPath: mongodata
+        - name: cv-storage-messagequeuedata
+          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/MessageQueue/data
+          subPath: messagequeuedata
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
 
@@ -62,6 +65,7 @@ spec:
       {{- include "cv.deployment.volumes" (list . "certsandlogs" "10Gi") }}
       {{- include "cv.deployment.volumes" (list . "cache" "10Gi") }}
       {{- include "cv.deployment.volumes" (list . "mongodata" "10Gi") }}
+      {{- include "cv.deployment.volumes" (list . "messagequeuedata" "10Gi") }}
       {{- include "cv.deployment.additionalVolumes" . }}
       {{- end }}
 
@@ -70,6 +74,7 @@ spec:
   {{- include "cv.statefulset.pvctemplate" (list . "certsandlogs" "10Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "cache" "10Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "mongodata" "10Gi") }}
+  {{- include "cv.statefulset.pvctemplate" (list . "messagequeuedata" "10Gi") }}
   {{- include "cv.statefulset.additionalPvcTemplates" . }}
   persistentVolumeClaimRetentionPolicy:
     whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}

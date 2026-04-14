@@ -7,6 +7,8 @@
 
 {{ include "cv.deployment.pvc" (list . "mongodata" "10Gi") }}
 
+{{ include "cv.deployment.pvc" (list . "messagequeuedata" "10Gi") }}
+
 {{ include "cv.deployment.additionalPvc" . }}
 
 {{ end }}

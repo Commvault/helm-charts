@@ -21,6 +21,8 @@
   # cache_size:         # Optional. default is "10Gi" 
   # mongodata:          # Optional. Name of the storage class for Hub embedded MongoDB data (/opt/<OEM>/MongoDB/Data).
   # mongodata_size:     # Optional. default is "10Gi"
+  # messagequeuedata:   # Optional. Name of the storage class for CvMessageQueue data (/opt/<OEM>/MessageQueue/data).
+  # messagequeuedata_size: # Optional. default is "10Gi"
 
 # serviceType:            # Optional. default service type is ClusterIP.
 
@@ -77,6 +79,8 @@
     # cache_size:           # Optional. default is "10Gi" 
     # mongodata:            # Optional. Name of the storage class for Hub embedded MongoDB data. Default storage class will be used if not specified
     # mongodata_size:       # Optional. default is "10Gi"
+    # messagequeuedata:     # Optional. Name of the storage class for CvMessageQueue data. Default storage class will be used if not specified
+    # messagequeuedata_size: # Optional. default is "10Gi"
 
   # deploymentannotations:    # Optional. Deployment annotations
 
