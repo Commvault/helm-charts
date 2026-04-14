@@ -68,9 +68,6 @@ spec:
         - name: cv-storage-cvmedia
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/SW/
           subPath: cvmedia
-        - name: cv-storage-mongodata
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/MongoDB/Data
-          subPath: mongodata
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
 
@@ -81,7 +78,6 @@ spec:
       {{- include "cv.deployment.volumes" (list . "csdb" "100Gi") }}
       {{- include "cv.deployment.volumes" (list . "drbackups" "50Gi") }}
       {{- include "cv.deployment.volumes" (list . "cvmedia" "100Gi") }}
-      {{- include "cv.deployment.volumes" (list . "mongodata" "10Gi") }}
       {{- include "cv.deployment.additionalVolumes" . }}
       {{- end }}
 
@@ -91,7 +87,6 @@ spec:
   {{- include "cv.statefulset.pvctemplate" (list . "csdb" "100Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "drbackups" "50Gi") }}
   {{- include "cv.statefulset.pvctemplate" (list . "cvmedia" "100Gi") }}
-  {{- include "cv.statefulset.pvctemplate" (list . "mongodata" "10Gi") }}
   {{- include "cv.statefulset.additionalPvcTemplates" . }}
   persistentVolumeClaimRetentionPolicy:
     whenScaled: {{ or .Values.whenScaled .Values.global.whenScaled | default "Delete" }}

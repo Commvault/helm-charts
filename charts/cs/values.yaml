@@ -25,8 +25,6 @@
   # drbackups_size:     # Optional. default is "50Gi" 
   # cvmedia:            # Optional. Name of the storage class for storing the media
   # cvmedia_size:       # Optional. default is "100Gi" 
-  # mongodata:          # Optional. Name of the storage class for embedded MongoDB data (/opt/<OEM>/MongoDB/Data).
-  # mongodata_size:     # Optional. default is "10Gi"
 
 # serviceType:          # Optional. Applies to the network gateway service (cvfwd) of the commserve. Default service type is LoadBalancer. The service is created ending with the word gateway
 
@@ -83,8 +81,6 @@
   # storageClass:           # storage class specifications can be specified as global values also
     # certsandlogs:         # Optional. Name of the storage class for certificates, logs and registry . Default storage class will be used if not specified
     # certsandlogs_size:    # Optional. default is "10Gi"
-    # mongodata:            # Optional. Name of the storage class for embedded MongoDB data. Default storage class will be used if not specified
-    # mongodata_size:       # Optional. default is "10Gi"
 
   # deploymentannotations:    # Optional. Deployment annotations
 
