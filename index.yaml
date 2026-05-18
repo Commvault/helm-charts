@@ -174,6 +174,16 @@ entries:
   gcmserver:
   - apiVersion: v2
     appVersion: "1"
+    created: "2026-05-18T16:20:55.06407646Z"
+    description: A Helm chart for creating the gcmserver
+    digest: fbaaefa92c1c94aa4b5068c82f6211336518ebfc465624b94390978afe565d7a
+    name: gcmserver
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/gcmserver-1.0.11/gcmserver-1.0.11.tgz
+    version: 1.0.11
+  - apiVersion: v2
+    appVersion: "1"
     created: "2026-04-14T17:10:06.070265678Z"
     description: A Helm chart for creating the gcmserver
     digest: 998f86dc954ab47d5d77014c7c3485060eb37deba85b1dc3bf6b4c54484fd4c2
@@ -213,6 +223,16 @@ entries:
     - https://github.com/Commvault/helm-charts/releases/download/gcmserver-1.0.6/gcmserver-1.0.6.tgz
     version: 1.0.6
   hubserver:
+  - apiVersion: v2
+    appVersion: "1"
+    created: "2026-05-18T16:20:55.259190652Z"
+    description: A Helm chart for creating the hubserver
+    digest: 9a4d5765dc9e8acbe03d165ccb1ece284529152e9c78f47d48b00aee572e96a1
+    name: hubserver
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/hubserver-1.0.11/hubserver-1.0.11.tgz
+    version: 1.0.11
   - apiVersion: v2
     appVersion: "1"
     created: "2026-04-14T17:10:06.263299053Z"
@@ -359,4 +379,4 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/webserver-1.0.7/webserver-1.0.7.tgz
     version: 1.0.7
-generated: "2026-04-14T17:10:07.038123764Z"
+generated: "2026-05-18T16:20:55.259407268Z"
