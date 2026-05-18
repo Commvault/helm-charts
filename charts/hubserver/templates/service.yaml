@@ -21,6 +21,18 @@ spec:
     - name: hubservice
       port: 80
       targetPort: 5010
+      protocol: TCP
+    - name: webservice
+      port: 5000
+      targetPort: 5000
+      protocol: TCP     
+    - name: messagequeue
+      port: 8052
+      targetPort: 8052     
+      protocol: TCP
+    - name: mongo
+      port: 27017
+      targetPort: 27017     
       protocol: TCP     
   selector:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
@@ -57,6 +69,12 @@ spec:
       ports:
         - protocol: TCP
           port: 5010
+        - protocol: TCP
+          port: 8052
+        - protocol: TCP
+          port: 27017
+        - protocol: TCP
+          port: 5000
           
 
 {{- end }}
