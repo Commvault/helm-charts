@@ -233,3 +233,94 @@ Returns either commvault or metallic depending on the oem id
 {{- "commvault" }}
 {{- end }}
 {{- end }}
+
+{{/*
+Returns the CU/build number (3rd number) from the tag. e.g. 105 from 11.42.105.Rev1425
+Returns 0 if fewer than 3 numbers exist in the tag.
+*/}}
+{{- define "cv.utils.getCUPack" }}
+{{- $tag := include "cv.utils.getTag" . }}
+{{- $numbers := regexFindAll "(\\d+)" $tag 3 }}
+{{- if ge (len $numbers) 3 }}
+{{- atoi (index $numbers 2) }}
+{{- else }}
+{{- 0 }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns "true" if the image tag version is at least major.fr.cu
+Supports both 2-param (version, FR) and 3-param (version, FR, CU) checks.
+Usage:
+  {{- if eq (include "cv.utils.isMinVersion3" (list . 11 42 105)) "true" }}
+*/}}
+{{- define "cv.utils.isMinVersion3" }}
+{{- $root := index . 0 }}
+{{- $version := index . 1 }}
+{{- $fr := index . 2 }}
+{{- $cu := index . 3 }}
+{{- $curVer := atoi (include "cv.utils.getVersion" $root) }}
+{{- $curFR := atoi (include "cv.utils.getFeatureRelease" $root) }}
+{{- $curCU := atoi (include "cv.utils.getCUPack" $root) }}
+{{- if gt $curVer $version }}
+{{- printf "true" }}
+{{- else if lt $curVer $version }}
+{{- printf "false" }}
+{{- else if gt $curFR $fr }}
+{{- printf "true" }}
+{{- else if lt $curFR $fr }}
+{{- printf "false" }}
+{{- else if ge $curCU $cu }}
+{{- printf "true" }}
+{{- else }}
+{{- printf "false" }}
+{{- end }}
+{{- end }}
+
+{{/*
+Determines the installation layout version (v1 or v2).
+Priority:
+  1. Explicit Helm value: global.installLayoutVersion
+  2. Existing deployment annotation: commvault.com/install-layout
+  3. Fresh install version inference (>= 11.42.105 → v2)
+  4. Fallback to v1
+*/}}
+{{- define "cv.installLayoutVersion" }}
+{{- if ((.Values.global).installLayoutVersion) }}
+{{- .Values.global.installLayoutVersion | trim }}
+{{- else }}
+{{- $objectname := include "cv.metadataname" . }}
+{{- $namespace := include "cv.namespace" . }}
+{{- $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
+{{- $kind := "Deployment" }}
+{{- if $statefulset }}
+{{- $kind = "StatefulSet" }}
+{{- end }}
+{{- $existing := lookup "apps/v1" $kind $namespace $objectname }}
+{{- if and $existing $existing.metadata $existing.metadata.annotations (index $existing.metadata.annotations "commvault.com/install-layout") }}
+{{- index $existing.metadata.annotations "commvault.com/install-layout" | trim }}
+{{- else if not $existing }}
+{{- if eq (include "cv.utils.isMinVersion3" (list . 11 42 105)) "true" }}
+{{- printf "v2" }}
+{{- else }}
+{{- printf "v1" }}
+{{- end }}
+{{- else }}
+{{- printf "v1" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns the appdata certificate mount path based on layout version.
+v1: /opt/commvault/appdata (old path - PVC mounts here, certificates/ is a subdir inside)
+v2: /var/opt/commvault/Instance001/appdata/certificates (new path - PVC mounts directly at certificates dir)
+*/}}
+{{- define "cv.paths.certMountPath" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/appdata/certificates" (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/%s/appdata" (include "cv.utils.getOemPath" .) }}
+{{- end }}
+{{- end }}
