@@ -233,3 +233,86 @@ Returns either commvault or metallic depending on the oem id
 {{- "commvault" }}
 {{- end }}
 {{- end }}
+
+{{/*
+Returns true if the tag is older than 11.42.105
+*/}}
+{{- define "cv.commandcenter.isTagBefore42105" }}
+{{- $tag := index . 0 }}
+{{- $numbers := regexFindAll "(\\d+)" $tag 3 }}
+{{- if lt (len $numbers) 2 }}
+{{- printf "true" }}
+{{- else }}
+{{- $major := atoi (index $numbers 0) }}
+{{- $fr := atoi (index $numbers 1) }}
+{{- $sp := 0 }}
+{{- if ge (len $numbers) 3 }}
+{{- $sp = atoi (index $numbers 2) }}
+{{- end }}
+{{- if lt $major 11 }}
+{{- printf "true" }}
+{{- else if gt $major 11 }}
+{{- printf "false" }}
+{{- else if lt $fr 42 }}
+{{- printf "true" }}
+{{- else if gt $fr 42 }}
+{{- printf "false" }}
+{{- else if lt $sp 105 }}
+{{- printf "true" }}
+{{- else }}
+{{- printf "false" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Determines whether commandcenter should use v1 or v2 paths
+Decision precedence:
+1. Existing v1/v2 annotation on Deployment/StatefulSet
+2. Fresh install: v2 for 11.44+ else v1
+3. Existing workload without path annotation: v1 if old image (<11.42.105), else v2
+*/}}
+{{- define "cv.commandcenter.pathMode" }}
+{{- $objectname := include "cv.metadataname" . }}
+{{- $namespace := include "cv.namespace" . }}
+{{- $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
+{{- $kind := "Deployment" }}
+{{- if $statefulset }}
+{{- $kind = "StatefulSet" }}
+{{- end }}
+{{- $existing := lookup "apps/v1" $kind $namespace $objectname }}
+{{- $annotations := dict }}
+{{- if and $existing $existing.metadata $existing.metadata.annotations }}
+{{- $annotations = $existing.metadata.annotations }}
+{{- end }}
+
+{{- if hasKey $annotations "v1paths" }}
+{{- printf "v1" }}
+{{- else if hasKey $annotations "v2paths" }}
+{{- printf "v2" }}
+{{- else if not $existing }}
+{{- if eq (include "cv.utils.isMinVersion" (list . 11 44)) "true" }}
+{{- printf "v2" }}
+{{- else }}
+{{- printf "v1" }}
+{{- end }}
+{{- else }}
+{{- $oldTag := "" }}
+{{- if and $existing.spec $existing.spec.template $existing.spec.template.spec (gt (len $existing.spec.template.spec.containers) 0) }}
+{{- $oldImage := index $existing.spec.template.spec.containers 0 "image" }}
+{{- if $oldImage }}
+{{- $parts := splitList ":" $oldImage }}
+{{- if gt (len $parts) 1 }}
+{{- $oldTag = last $parts }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if and $oldTag (eq (include "cv.commandcenter.isTagBefore42105" (list $oldTag)) "true") }}
+{{- printf "v1" }}
+{{- else if not $oldTag }}
+{{- printf "v1" }}
+{{- else }}
+{{- printf "v2" }}
+{{- end }}
+{{- end }}
+{{- end }}
