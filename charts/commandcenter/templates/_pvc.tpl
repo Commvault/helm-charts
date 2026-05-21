@@ -155,6 +155,7 @@ storageClass:
 {{- end }}
 
 {{- define "cv.commonVolumeMounts" }}
+{{- $pathMode := include "cv.commandcenter.pathMode" . }}
         - name: podinfo
           mountPath: /etc/podinfo        
         - name: cv-storage-certsandlogs
@@ -169,9 +170,15 @@ storageClass:
           mountPath: /etc/CommVaultRegistry
           subPath: Registry
         {{- end }}
+        {{- if eq $pathMode "v1" }}
         - name: cv-storage-certsandlogs
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/appdata
           subPath: certificates
+        {{- else if eq $pathMode "v2" }}
+        - name: cv-storage-certsandlogs
+          mountPath: /var/opt/{{include "cv.utils.getOemPath" .}}/appdata
+          subPath: certificates
+        {{- end }}
         {{- if eq (include "cv.useInitContainer" .) "true" }}
         - name: cv-storage-certsandlogs
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/k8ssecrets

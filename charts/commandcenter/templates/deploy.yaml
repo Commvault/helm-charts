@@ -2,13 +2,22 @@
 {{- include "cv.utils.validateVersionAndRelease" . }}
 {{- $objectname := include "cv.metadataname" . }}
 {{- $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
+{{- $pathMode := include "cv.commandcenter.pathMode" . }}
 
 apiVersion: apps/v1 
 kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ $objectname }}
   namespace: {{ include "cv.namespace" . }}
-  {{- include "cv.deploymentannotations" . }}
+  annotations:
+    {{- if eq $pathMode "v2" }}
+    v2paths: "true"
+    {{- else }}
+    v1paths: "true"
+    {{- end }}
+    {{- if or (.Values.global).deploymentannotations .Values.deploymentannotations }}
+{{- include "cv.utils.getCombinedYaml" (list .Values.deploymentannotations (.Values.global).deploymentannotations $ 4 true) }}
+    {{- end }}
   labels:
     app.kubernetes.io/name: {{ $objectname }}
 spec:
@@ -50,7 +59,7 @@ spec:
         volumeMounts:
         # This section contains list of persistent volumes that has to be mounted onto the container.                 
         # This can be left with default settings as mentioned in this template.
-        {{- if eq (include "cv.utils.isMinVersion" (list . 11 36)) "true" }}
+        {{- if eq $pathMode "v2" }}
         - name: cv-storage-certsandlogs
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Apache/conf
           subPath: apacheconf
