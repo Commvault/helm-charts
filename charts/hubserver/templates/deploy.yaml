@@ -18,9 +18,23 @@ spec:
       name: {{ $objectname }}
       labels:
         app.kubernetes.io/name: {{ $objectname }}
+        app.kubernetes.io/component: hubserver
     spec:
       {{- include "cv.imagePullSecret" . }}
       {{- include "cv.additionalPodspecs" . }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                namespaceSelector: {}
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/component
+                      operator: In
+                      values:
+                        - hubserver
       {{- include "cv.initContainer" . }}
       containers:
       # Webserver
