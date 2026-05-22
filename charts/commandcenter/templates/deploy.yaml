@@ -28,6 +28,7 @@ spec:
     spec:
       {{- include "cv.imagePullSecret" . }}
       {{- include "cv.additionalPodspecs" . }}
+      {{- if eq (or .Values.nodeAffinityMode ((.Values).global).nodeAffinityMode) 1) }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -41,6 +42,7 @@ spec:
                       operator: In
                       values:
                         - commandcenter
+      {{- end }}
       {{- include "cv.initContainer" . }}
       containers:
       # Command center
