@@ -1,3 +1,6 @@
+# nodeAffinityMode:  # Optional. Node affinity rules mode. Values: 0 (disabled), 1 (enabled). Default is 0
+nodeAffinityMode: 0
+
 # clientName:       # Optional. Client Name. Helm Release name will be used by default
 
 # displayname:       # Optional. Client Display Name. Defaults to same value as clientName
