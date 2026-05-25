@@ -324,3 +324,59 @@ v2: /var/opt/commvault/Instance001/appdata/certificates (new path - PVC mounts d
 {{- printf "/opt/%s/appdata" (include "cv.utils.getOemPath" .) }}
 {{- end }}
 {{- end }}
+
+{{/*
+Returns the appdata base path based on layout version.
+v1: /opt/commvault/appdata
+v2: /var/opt/commvault/Instance001/appdata
+*/}}
+{{- define "cv.paths.appdata" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/appdata" (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/%s/appdata" (include "cv.utils.getOemPath" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns the jobResults path based on layout version.
+v1: /opt/commvault/iDataAgent/jobResults
+v2: /var/opt/commvault/Instance001/data/commvaultdata/jobResults
+*/}}
+{{- define "cv.paths.jobResults" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/data/commvaultdata/jobResults" (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/%s/iDataAgent/jobResults" (include "cv.utils.getOemPath" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns the IndexCache path based on layout version.
+v1: /opt/commvault/MediaAgent/IndexCache
+v2: /var/opt/commvault/Instance001/data/commvaultdata/IndexCache
+*/}}
+{{- define "cv.paths.indexCache" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/data/commvaultdata/IndexCache" (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/%s/MediaAgent/IndexCache" (include "cv.utils.getOemPath" .) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns the DDB path based on layout version.
+v1: /opt/ddb
+v2: /var/opt/commvault/Instance001/data/commvaultdata/DDB
+*/}}
+{{- define "cv.paths.ddb" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/data/commvaultdata/DDB" (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/ddb" }}
+{{- end }}
+{{- end }}

@@ -20,6 +20,8 @@ spec:
   template:
     metadata:
       name: {{ $objectname }}
+      annotations:
+        commvault.com/install-layout: {{ include "cv.installLayoutVersion" . | trim | quote }}
       labels:
         app.kubernetes.io/name: {{ $objectname }}
     spec:

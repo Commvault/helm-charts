@@ -20,6 +20,8 @@ spec:
   template:
     metadata:
       name: {{ $objectname }}
+      annotations:
+        commvault.com/install-layout: {{ include "cv.installLayoutVersion" . | trim | quote }}
       labels:
         app.kubernetes.io/name: {{ $objectname }}
     spec:
@@ -52,13 +54,13 @@ spec:
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-jobresults
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/iDataAgent/jobResults
+          mountPath: {{include "cv.paths.jobResults" .}}
           subPath: jobResults
         - name: cv-storage-indexcache
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/MediaAgent/IndexCache
+          mountPath: {{include "cv.paths.indexCache" .}}
           subPath: indexcache
         - name: cv-storage-ddb
-          mountPath: /opt/ddb
+          mountPath: {{include "cv.paths.ddb" .}}
           subPath: ddb
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
