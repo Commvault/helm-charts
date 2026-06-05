@@ -380,3 +380,57 @@ v2: /var/opt/commvault/Instance001/data/commvaultdata/DDB
 {{- printf "/opt/ddb" }}
 {{- end }}
 {{- end }}
+
+{{- define "cv.paths.registry" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/CommVaultRegistry" (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- "/etc/CommVaultRegistry" }}
+{{- end }}
+{{- end }}
+
+{{- define "cv.paths.commvaultDB" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/%sDB" (include "cv.utils.getOemPath" .) (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/%sDB" (include "cv.utils.getOemPath" .) }}
+{{- end }}
+{{- end }}
+
+{{- define "cv.paths.commvaultDR" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/%sDR" (include "cv.utils.getOemPath" .) (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/%sDR" (include "cv.utils.getOemPath" .) }}
+{{- end }}
+{{- end }}
+
+{{- define "cv.paths.sw" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/appdata/SW" (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/%s/SW" (include "cv.utils.getOemPath" .) }}
+{{- end }}
+{{- end }}
+
+{{- define "cv.paths.mongodb" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/appdata/MongoDB/Data" (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/%s/MongoDB/Data" (include "cv.utils.getOemPath" .) }}
+{{- end }}
+{{- end }}
+
+{{- define "cv.paths.dm2CacheDir" }}
+{{- $layout := include "cv.installLayoutVersion" . | trim }}
+{{- if eq $layout "v2" }}
+{{- printf "/var/opt/%s/Instance001/data/commvaultdata/jobResults/DM2CacheDir" (include "cv.utils.getOemPath" .) }}
+{{- else }}
+{{- printf "/opt/%s/iDataAgent/jobResults/%s/iDataAgent/jobResults/DM2CacheDir" (include "cv.utils.getOemPath" .) (include "cv.utils.getOemPath" .) }}
+{{- end }}
+{{- end }}
