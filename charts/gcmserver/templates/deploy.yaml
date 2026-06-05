@@ -48,10 +48,10 @@ spec:
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-cache
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/iDataAgent/jobResults/commvault/iDataAgent/jobResults/DM2CacheDir
+          mountPath: {{ include "cv.paths.dm2CacheDir" . }}
           subPath: DM2CacheDir
         - name: cv-storage-cache
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/MongoDB/Data
+          mountPath: {{ include "cv.paths.mongodb" . }}
           subPath: mongodata
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}

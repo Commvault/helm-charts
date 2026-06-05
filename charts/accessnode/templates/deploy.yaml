@@ -47,7 +47,7 @@ spec:
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-jobresults
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/iDataAgent/jobResults
+          mountPath: {{ include "cv.paths.jobResults" . }}
           subPath: jobResults
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
