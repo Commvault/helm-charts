@@ -8,7 +8,11 @@ kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ $objectname }}
   namespace: {{ include "cv.namespace" . }}
-  {{- include "cv.deploymentannotations" . }}
+  annotations:
+    commvault.com/install-layout: {{ include "cv.installLayoutVersion" . | trim | quote }}
+    {{- if or (.Values.global).deploymentannotations .Values.deploymentannotations }}
+{{- include "cv.utils.getCombinedYaml" (list .Values.deploymentannotations (.Values.global).deploymentannotations $ 4 true) }}
+    {{- end }}
   labels:
     app.kubernetes.io/name: {{ $objectname }}
 spec:
@@ -16,6 +20,8 @@ spec:
   template:
     metadata:
       name: {{ $objectname }}
+      annotations:
+        commvault.com/install-layout: {{ include "cv.installLayoutVersion" . | trim | quote }}
       labels:
         app.kubernetes.io/name: {{ $objectname }}
         app.kubernetes.io/component: hubserver
@@ -64,10 +70,10 @@ spec:
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-cache
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/iDataAgent/jobResults/commvault/iDataAgent/jobResults/DM2CacheDir
+          mountPath: {{ include "cv.paths.dm2CacheDir" . }}
           subPath: DM2CacheDir
         - name: cv-storage-cache
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/MongoDB/Data
+          mountPath: {{ include "cv.paths.mongodb" . }}
           subPath: mongodata
         - name: cv-storage-cache
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/MessageQueue/data

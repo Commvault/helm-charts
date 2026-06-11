@@ -76,8 +76,9 @@ Use "deploymentannotations" as the section name. deploymentannotations can be sp
 and will be merged to provide a single set of deployment annotations that will be added into the final deployment
 */}}
 {{- define "cv.deploymentannotations" }}
-{{- if or (.Values.global).deploymentannotations .Values.deploymentannotations }}
 {{ "annotations:" | indent 2 -}}
+{{ "commvault.com/install-layout:" | nindent 4 }} {{ include "cv.installLayoutVersion" . | trim | quote }}
+{{- if or (.Values.global).deploymentannotations .Values.deploymentannotations }}
 {{- include "cv.utils.getCombinedYaml" (list .Values.deploymentannotations (.Values.global).deploymentannotations $ 4 true) }}
 {{- end -}}
 {{ end }}
