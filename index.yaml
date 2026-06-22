@@ -54,6 +54,16 @@ entries:
   commandcenter:
   - apiVersion: v2
     appVersion: "1"
+    created: "2026-06-22T14:34:24.919352482Z"
+    description: A Helm chart for creating the command center
+    digest: 10d565c8fa89905d78a0d71d982b111aa3efe6d45d1c57c06dc07ef02ca2f8f3
+    name: commandcenter
+    type: application
+    urls:
+    - https://github.com/Commvault/helm-charts/releases/download/commandcenter-1.0.12/commandcenter-1.0.12.tgz
+    version: 1.0.12
+  - apiVersion: v2
+    appVersion: "1"
     created: "2026-06-05T21:31:58.825707228Z"
     description: A Helm chart for creating the command center
     digest: 5a76e427b486a3a4709ae1b76ece6f9e3172ef77e322a932bbc0417b81444231
@@ -563,4 +573,4 @@ entries:
     urls:
     - https://github.com/Commvault/helm-charts/releases/download/webserver-1.0.7/webserver-1.0.7.tgz
     version: 1.0.7
-generated: "2026-06-05T21:31:59.670849822Z"
+generated: "2026-06-22T14:34:24.919518653Z"
