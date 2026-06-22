@@ -8,11 +8,7 @@ kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ $objectname }}
   namespace: {{ include "cv.namespace" . }}
-  annotations:
-    commvault.com/install-layout: {{ include "cv.installLayoutVersion" . | trim | quote }}
-    {{- if or (.Values.global).deploymentannotations .Values.deploymentannotations }}
-{{- include "cv.utils.getCombinedYaml" (list .Values.deploymentannotations (.Values.global).deploymentannotations $ 4 true) }}
-    {{- end }}
+  {{- include "cv.deploymentannotations" . }}
   labels:
     app.kubernetes.io/name: {{ $objectname }}
 spec:
@@ -20,8 +16,6 @@ spec:
   template:
     metadata:
       name: {{ $objectname }}
-      annotations:
-        commvault.com/install-layout: {{ include "cv.installLayoutVersion" . | trim | quote }}
       labels:
         app.kubernetes.io/name: {{ $objectname }}
     spec:
@@ -61,7 +55,7 @@ spec:
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Apache/conf
           subPath: apacheconf
         - name: cv-storage-certsandlogs
-          mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Metrics/public
+            mountPath: {{ include "cv.paths.appdata" . | trim }}/Metrics/public
           subPath: public
         {{- end }}
         {{- include "cv.commonVolumeMounts" . }}
