@@ -61,8 +61,8 @@ spec:
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/Apache/conf
           subPath: apacheconf
         - name: cv-storage-certsandlogs
-          mountPath: {{ include "cv.paths.appdata" . | trim }}/Metrics/public
-          subPath: public
+          mountPath: {{ include "cv.paths.appdata" . | trim }}/Metrics
+          subPath: Metrics
         {{- end }}
         {{- include "cv.commonVolumeMounts" . }}
         {{- include "cv.additionalVolumeMounts" . }}
