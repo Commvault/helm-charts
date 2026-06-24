@@ -6,6 +6,8 @@
 
 # email:            # Optional. Email of the first admin user
 
+# cvUseSqlExpress: "yes" # Optional. Set to "yes" to deploy CS image with SQL Express edition.
+
 # image:            # final image value will be registry/namespace/repository:tag
   # registry:       # Optional. Overrides global value.
   # namespace:      # Optional image namespace or account. Overrides global value. Default is commvault
