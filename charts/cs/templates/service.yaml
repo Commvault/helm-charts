@@ -103,15 +103,7 @@ spec:
               kubernetes.io/metadata.name: {{ include "cv.namespace" . }}
       ports:
         - protocol: TCP
-          port: 8052
-        - protocol: TCP
-          port: 5008
-        - protocol: TCP
-          port: 27017
-        - protocol: TCP
           port: 1433
-        - protocol: TCP
-          port: 5000
         - protocol: TCP
           port: 8400      
           
