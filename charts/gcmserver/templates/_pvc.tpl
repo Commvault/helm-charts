@@ -170,8 +170,8 @@ storageClass:
           subPath: Registry
         {{- end }}
         - name: cv-storage-certsandlogs
-          mountPath: {{include "cv.paths.certMountPath" .}}
-          subPath: certificates
+          mountPath: {{include "cv.paths.appdata" .}}
+          subPath: appdata
         {{- if eq (include "cv.useInitContainer" .) "true" }}
         - name: cv-storage-certsandlogs
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/k8ssecrets
