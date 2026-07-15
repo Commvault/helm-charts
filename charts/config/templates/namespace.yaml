@@ -8,3 +8,15 @@ metadata:
 {{ end }}
 {{ end }}
 {{ end }}
+
+---
+# Default deny all ingress traffic to the release namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "cv.metadataname" . }}-default-deny-all-ingress
+  namespace: {{ include "cv.namespace" . }}
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
