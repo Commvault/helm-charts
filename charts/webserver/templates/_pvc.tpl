@@ -25,7 +25,7 @@ spec:
   {{- if $pv }}
   {{- /* Empty string must be explicitly set otherwise default StorageClass will be set */}}
   storageClassName: ""
-  volume: {{ $pv }}
+  volumeName: {{ $pv }}
   {{- /* Leave this if condition alone. otherwise it can cause problem on restart if storageClassName is blank */}}
   {{- else if $storageClass }}
   storageClassName: {{ $storageClass }} 
