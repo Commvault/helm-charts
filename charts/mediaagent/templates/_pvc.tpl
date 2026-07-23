@@ -169,9 +169,15 @@ storageClass:
           mountPath: /etc/CommVaultRegistry
           subPath: Registry
         {{- end }}
+        {{- if eq (include "cv.installLayoutVersion" . | trim) "v2" }}
         - name: cv-storage-certsandlogs
           mountPath: {{include "cv.paths.appdata" .}}
           subPath: appdata
+        {{- else }}
+        - name: cv-storage-certsandlogs
+          mountPath: {{include "cv.paths.certMountPath" .}}
+          subPath: certificates
+        {{- end }}
         {{- if eq (include "cv.useInitContainer" .) "true" }}
         - name: cv-storage-certsandlogs
           mountPath: /opt/{{include "cv.utils.getOemPath" .}}/k8ssecrets
