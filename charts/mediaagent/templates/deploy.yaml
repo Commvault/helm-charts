@@ -24,9 +24,25 @@ spec:
         commvault.com/install-layout: {{ include "cv.installLayoutVersion" . | trim | quote }}
       labels:
         app.kubernetes.io/name: {{ $objectname }}
+        app.kubernetes.io/component: mediaagent
     spec:
       {{- include "cv.imagePullSecret" . }}
       {{- include "cv.additionalPodspecs" . }}
+      {{- if eq (or .Values.nodeAffinityMode ((.Values).global).nodeAffinityMode | int) 1 }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                namespaceSelector: {}
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/component
+                      operator: In
+                      values:
+                        - mediaagent
+      {{- end }}
       {{- include "cv.initContainer" . }}
       containers:
       # Mediaagent
