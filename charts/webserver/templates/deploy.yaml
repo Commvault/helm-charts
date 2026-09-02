@@ -3,7 +3,7 @@
 {{- $objectname := include "cv.metadataname" . }}
 {{- $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
 
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ $objectname }}
@@ -46,7 +46,7 @@ spec:
       {{- include "cv.initContainer" . }}
       containers:
       # Webserver
-      - name: {{ $objectname }}        
+      - name: {{ $objectname }}
         image: {{ include "cv.image" . }}
         {{- include "cv.resources" . }}
         {{- include "cv.additionalContainerspecs" . }}
@@ -66,9 +66,9 @@ spec:
         - containerPort: 5000
         - containerPort: {{ include "cv.cvfwdport" . }}
         - containerPort: 80
-        - containerPort: 8052 
+        - containerPort: 8052
         volumeMounts:
-        # This section contains list of persistent volumes that has to be mounted onto the container.                 
+        # This section contains list of persistent volumes that has to be mounted onto the container.
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-cache
@@ -80,12 +80,20 @@ spec:
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
 
+      {{- with .Values.sidecars }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+
       volumes:
       {{- include "cv.commonVolumes" . }}
       {{- if not $statefulset }}
       {{- include "cv.deployment.volumes" (list . "certsandlogs" "10Gi") }}
       {{- include "cv.deployment.volumes" (list . "cache" "10Gi") }}
       {{- include "cv.deployment.additionalVolumes" . }}
+      {{- end }}
+
+      {{- with .Values.additionalVolumes }}
+      {{- toYaml . | nindent 6 }}
       {{- end }}
 
   {{- if $statefulset }}
