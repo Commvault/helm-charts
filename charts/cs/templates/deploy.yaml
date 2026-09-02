@@ -3,7 +3,7 @@
 {{- $objectname := include "cv.metadataname" . }}
 {{- $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
 
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: {{ if $statefulset }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ $objectname }}
@@ -51,7 +51,7 @@ spec:
         {{- include "cv.resources" . }}
         {{- include "cv.additionalContainerspecs" . }}
         envFrom:
-        {{- if eq (include "cv.useInitContainer" .) "false" }}        
+        {{- if eq (include "cv.useInitContainer" .) "false" }}
         - secretRef:
            name: {{ include "cv.metadataname2" (list . "cvcreds") }}
            optional: true
@@ -63,19 +63,19 @@ spec:
           # Optional. Email of admin user
           value: {{ .Values.email }}
         {{- end }}
-        # Ports can be left as mentioned as commserver needs all of them for correct functioning.   
+        # Ports can be left as mentioned as commserver needs all of them for correct functioning.
         ports:
-        - containerPort: 5000        
+        - containerPort: 5000
         - containerPort: 80
         - containerPort: {{ include "cv.cvfwdport" . }}
         - containerPort: 8400
         - containerPort: 8401
         - containerPort: 1433
         - containerPort: 27017
-        - containerPort: 8052        
+        - containerPort: 8052
         - containerPort: 5008
         volumeMounts:
-        # This section contains list of persistent volumes that has to be mounted onto the container.                 
+        # This section contains list of persistent volumes that has to be mounted onto the container.
         # This can be left with default settings as mentioned in this template.
         {{- include "cv.commonVolumeMounts" . }}
         - name: cv-storage-csdb
@@ -93,6 +93,10 @@ spec:
         {{- include "cv.additionalVolumeMounts" . }}
         {{ include "cv.commonContainerSpecs" . }}
 
+      {{- with .Values.sidecars }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+
       volumes:
       {{- include "cv.commonVolumes" . }}
       {{- if not $statefulset }}
@@ -101,6 +105,10 @@ spec:
       {{- include "cv.deployment.volumes" (list . "drbackups" "50Gi") }}
       {{- include "cv.deployment.volumes" (list . "cvmedia" "100Gi") }}
       {{- include "cv.deployment.additionalVolumes" . }}
+      {{- end }}
+
+      {{- with .Values.additionalVolumes }}
+      {{- toYaml . | nindent 6 }}
       {{- end }}
 
   {{- if $statefulset }}
