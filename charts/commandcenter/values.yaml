@@ -35,7 +35,7 @@ nodeAffinityMode: 0
 # ingress:
 #   enabled: false
 #   className: traefik
-#   domain: devuseast.testlab.commvault.com
+#   domain: <your-domain-here>
 #   annotations:
 #     traefik.ingress.kubernetes.io/router.entrypoints: web
 #   tls:

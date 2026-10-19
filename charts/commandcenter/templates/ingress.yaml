@@ -2,7 +2,7 @@
 {{- if and $ingress.enabled (ne .Values.create false) }}
 {{- $serviceName := include "cv.metadataname" . }}
 {{- $namespace := include "cv.namespace" . }}
-{{- $domain := $ingress.domain | default "devuseast.testlab.commvault.com" }}
+{{- $domain := $ingress.domain }}
 {{- $defaultHost := printf "%s-%s.%s" $serviceName $namespace $domain }}
 {{- $defaultHosts := list (dict "host" "" "paths" (list (dict "path" "/" "pathType" "Prefix"))) }}
 {{- $hosts := $ingress.hosts | default $defaultHosts }}
