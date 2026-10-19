@@ -1,0 +1,142 @@
+{{- $ingress := .Values.ingress | default dict }}
+{{- if and $ingress.enabled (ne .Values.create false) }}
+{{- $serviceName := include "cv.metadataname" . }}
+{{- $namespace := include "cv.namespace" . }}
+{{- $domain := $ingress.domain | default "devuseast.testlab.commvault.com" }}
+{{- $defaultHost := printf "%s-%s.%s" $serviceName $namespace $domain }}
+{{- $defaultHosts := list (dict "host" "" "paths" (list (dict "path" "/" "pathType" "Prefix"))) }}
+{{- $hosts := $ingress.hosts | default $defaultHosts }}
+{{- $tls := $ingress.tls | default dict }}
+{{- $tlsEnabled := true }}
+{{- if hasKey $tls "enabled" }}
+{{- $tlsEnabled = $tls.enabled }}
+{{- end }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $serviceName }}
+  namespace: {{ $namespace }}
+  {{- with ($ingress.annotations | default (dict "traefik.ingress.kubernetes.io/router.entrypoints" "web")) }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ $ingress.className | default "traefik" | quote }}
+  rules:
+    {{- range $host := $hosts }}
+    {{- $resolvedHost := $host.host | default $defaultHost }}
+    - host: {{ $resolvedHost | quote }}
+      http:
+        paths:
+          {{- range $host.paths }}
+          - path: {{ .path | default "/" | quote }}
+            pathType: {{ .pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ $serviceName }}
+                port:
+                  number: {{ $.Values.httpPort | default 80 }}
+          {{- else }}
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $serviceName }}
+                port:
+                  number: {{ $.Values.httpPort | default 80 }}
+          {{- end }}
+    {{- end }}
+{{- if $tlsEnabled }}
+{{- if $tls.useIngressRoute }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: {{ $serviceName }}-backend
+  namespace: {{ $namespace }}
+spec:
+  insecureSkipVerify: {{ $tls.insecureSkipVerify | default false }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ $serviceName }}-https
+  namespace: {{ $namespace }}
+  annotations:
+    kubernetes.io/ingress.class: {{ $ingress.className | default "traefik" | quote }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    {{- range $host := $hosts }}
+    {{- $resolvedHost := $host.host | default $defaultHost }}
+    {{- $paths := $host.paths | default (list (dict "path" "/" "pathType" "Prefix")) }}
+    {{- range $paths }}
+    {{- $matcher := "PathPrefix" }}
+    {{- if eq (.pathType | default "Prefix") "Exact" }}
+    {{- $matcher = "Path" }}
+    {{- end }}
+    - match: {{ printf "Host(`%s`) && %s(`%s`)" $resolvedHost $matcher (.path | default "/") | quote }}
+      kind: Rule
+      services:
+        - name: {{ $serviceName }}
+          port: {{ $tls.backendPort | default ($.Values.httpsPort | default 443) }}
+          scheme: https
+          serversTransport: {{ $serviceName }}-backend
+    {{- end }}
+    {{- end }}
+  {{- if $tls.useDefaultTLSStore }}
+  tls:
+    secretName: ""
+  {{- else }}
+  tls:
+    secretName: {{ $tls.secretName | default "testlab-selfsigned-tls" | quote }}
+  {{- end }}
+{{- else }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $serviceName }}-https
+  namespace: {{ $namespace }}
+  {{- with ($tls.annotations | default (dict "traefik.ingress.kubernetes.io/router.entrypoints" "websecure" "traefik.ingress.kubernetes.io/router.tls" "true")) }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ $ingress.className | default "traefik" | quote }}
+  tls:
+    - {{- if not $tls.useDefaultTLSStore }}
+      secretName: {{ $tls.secretName | default "testlab-selfsigned-tls" | quote }}
+      {{- end }}
+      hosts:
+        {{- range $host := $hosts }}
+        - {{ $host.host | default $defaultHost | quote }}
+        {{- end }}
+  rules:
+    {{- range $host := $hosts }}
+    {{- $resolvedHost := $host.host | default $defaultHost }}
+    - host: {{ $resolvedHost | quote }}
+      http:
+        paths:
+          {{- range $host.paths }}
+          - path: {{ .path | default "/" | quote }}
+            pathType: {{ .pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ $serviceName }}
+                port:
+                  number: {{ $tls.backendPort | default ($.Values.httpPort | default 80) }}
+          {{- else }}
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $serviceName }}
+                port:
+                  number: {{ $tls.backendPort | default ($.Values.httpPort | default 80) }}
+          {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}
+          {{- end }}

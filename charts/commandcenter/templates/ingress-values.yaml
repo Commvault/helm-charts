@@ -1,0 +1,11 @@
+# Values for AKS cluster - Traefik ingress configuration
+ingress:
+  enabled: true
+  className: traefik
+  domain: devuseast.testlab.commvault.com
+  tls:
+    enabled: true
+    useIngressRoute: true
+    useDefaultTLSStore: true
+    backendPort: 443
+    insecureSkipVerify: true
