@@ -2,15 +2,12 @@
 {{- if and $ingress.enabled (ne .Values.create false) }}
 {{- $serviceName := include "cv.metadataname" . }}
 {{- $namespace := include "cv.namespace" . }}
-{{- $domain := $ingress.domain }}
+{{- $domain := required "ingress.domain must be set when ingress is enabled" $ingress.domain }}
 {{- $defaultHost := printf "%s-%s.%s" $serviceName $namespace $domain }}
 {{- $defaultHosts := list (dict "host" "" "paths" (list (dict "path" "/" "pathType" "Prefix"))) }}
 {{- $hosts := $ingress.hosts | default $defaultHosts }}
-{{- $tls := $ingress.tls | default dict }}
-{{- $tlsEnabled := true }}
-{{- if hasKey $tls "enabled" }}
-{{- $tlsEnabled = $tls.enabled }}
-{{- end }}
+{{- $tlsDefaults := dict "enabled" true "useIngressRoute" true "useDefaultTLSStore" true "backendPort" 443 "insecureSkipVerify" false }}
+{{- $tls := mergeOverwrite $tlsDefaults ($ingress.tls | default dict) }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -46,7 +43,7 @@ spec:
                   number: {{ $.Values.httpPort | default 80 }}
           {{- end }}
     {{- end }}
-{{- if $tlsEnabled }}
+{{- if $tls.enabled }}
 {{- if $tls.useIngressRoute }}
 ---
 apiVersion: traefik.io/v1alpha1
