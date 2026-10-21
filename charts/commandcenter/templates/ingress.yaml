@@ -83,8 +83,7 @@ spec:
     {{- end }}
     {{- end }}
   {{- if $tls.useDefaultTLSStore }}
-  tls:
-    secretName: ""
+  tls: {}
   {{- else }}
   tls:
     secretName: {{ $tls.secretName | default "testlab-selfsigned-tls" | quote }}
