@@ -1,6 +1,6 @@
 {{- if ne .Values.create false -}}
-{{ $statefulset := or .Values.statefulset ((.Values).global).statefulset }}
 {{- $blockCrossNamespace := or .Values.blockCrossNamespace ((.Values.global).blockCrossNamespace) }}
+{{- $ingress := .Values.ingress | default dict }}
 apiVersion: v1 
 kind: Service 
 metadata:
@@ -10,7 +10,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ include "cv.metadataname" . }}
 spec:      
-  type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else if $statefulset }}LoadBalancer{{ else }}LoadBalancer{{ end }}
+  type: {{ if .Values.serviceType }}{{ .Values.serviceType }}{{ else if $ingress.enabled }}ClusterIP{{ else }}LoadBalancer{{ end }}
   ports:
     - name: cvfwd
       port: {{ include "cv.cvfwdport" . }}
